@@ -1,0 +1,57 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TelemetryGUI.Views"
+    xmlns:ViewModel="clr-namespace:TelemetryGUI.ViewModel" x:Class="TelemetryGUI.Views.Dashboard"
+    xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0">
+            <Label Content="Distance" IsEnabled="True"
+                       FontSize="20" />
+            <Label Content="Solar car" FontSize="30" />
+            <Label FontSize="16" Content="LAT" />
+            <Label FontSize="16" Content="LONG" />
+            <Label FontSize="16" Content="DIST" />
+            <Label FontSize="16" Content="ALT" />
+            <Label Content="Secondary GPS" FontSize="30" />
+            <Label FontSize="16" Content="LAT" />
+            <Label FontSize="16" Content="LONG" />
+            <Label FontSize="16" Content="DIST" />
+            <Label FontSize="16" Content="ALT" />
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <Label Content="{Binding DistanceBetweenGps, StringFormat=\{ 0:F4\}}"
+                       FontSize="20" />
+            <Label Content="Solar car" FontSize="30"  Visibility="Hidden"/>
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.LAT}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.LONG}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.DIST}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.ALT}" />
+            <Label Content="Secondary GPS" FontSize="30" Visibility="Hidden"/>
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.LAT}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.LONG}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.DIST}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.ALT}" />
+        </StackPanel>
+        <m:Map Name="GpsMapView" ZoomLevel="15" Center="{Binding LocationExternal}" Mode="Aerial" Grid.Column="2"
+               CredentialsProvider="s5W0gX9RtyYX2B9Tbn3Q~qO_d8j0dzipMeHZykzOUPw~AvvSFGkA50MKT-YOsMMGXTUOtNLP56QZVOZcfBkukSBVcJR057t9EQxcHWhnZBeH">
+            <m:MapPolyline Stroke="AliceBlue" Locations="{Binding LocationCollectionExternal}"/>
+            <m:MapPolyline Stroke="Yellow" Locations="{Binding LocationCollectionDirect}"/>
+            <m:Pushpin Location="{Binding LocationDirect}" Cursor="Arrow"/>
+            <m:Pushpin Content="F" Location="{Binding LocationExternal}" Cursor="Cross"/>
+        </m:Map>
+    </Grid>
+</UserControl>

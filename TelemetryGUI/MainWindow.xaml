@@ -1,0 +1,100 @@
+﻿<Window x:Class="TelemetryGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TelemetryGUI"
+        mc:Ignorable="d"
+        xmlns:uc="clr-namespace:TelemetryGUI.Views"
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+        xmlns:viewModel="clr-namespace:TelemetryGUI.ViewModel"
+        xmlns:live="clr-namespace:TelemetryGUI.Views.Live"
+        xmlns:liveModel="clr-namespace:TelemetryGUI.ViewModel.Live"
+        xmlns:strategy="clr-namespace:TelemetryGUI.Views.Strategy"
+        xmlns:dataList="clr-namespace:TelemetryGUI.Views.DataList"
+        Height="720" Width="1500" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow">
+    <Window.Resources>
+        <viewModel:AltitudeDataSetViewModel x:Key="AltitudeDataSetViewModel" />
+        <liveModel:LiveMotorViewModel x:Key="LiveMotorViewModel" />
+        <liveModel:LiveBmsViewModel x:Key="LiveBmsViewModel" />
+        <liveModel:LiveMPPTViewModel x:Key="LiveMpptViewModel" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid Height="60" VerticalAlignment="Top" Background="BlueViolet">
+            <TextBlock Text="TELEMETRY" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       FontSize="22" FontFamily="Champagne &amp; Limousines" />
+            <TextBlock Margin="10" Text="Aref Ashrafi" Foreground="White" HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       FontSize="12" FontFamily="Champagne &amp; Limousines" />
+        </Grid>
+        <Grid Margin="0 60 0 0">
+            <dragablz:TabablzControl>
+                <TabItem Header="INFO">
+                    <dragablz:TabablzControl Margin="2">
+                        <TabItem Header="Multi BMS Chart">
+                            <live:LiveBMSView DataContext="{StaticResource LiveBmsViewModel}" />
+                        </TabItem>
+                        <TabItem Header="Multi Motor Chart">
+                            <live:LiveMotorView DataContext="{StaticResource LiveMotorViewModel}" />
+                        </TabItem>
+                        <TabItem Header="Multi MPPT Chart">
+                            <live:LiveMPPTView DataContext="{StaticResource LiveMpptViewModel}" />
+                        </TabItem>
+                        <TabItem Header="Progress">
+                            <strategy:AltitudeDataSetView DataContext="{StaticResource AltitudeDataSetViewModel}" />
+                        </TabItem>
+                        <TabItem Header="History Chart">
+                            <uc:HistoryChartView />
+                        </TabItem>
+                        <TabItem Header="Energy Estimation">
+                            <strategy:EnergyEstimationChartView />
+                        </TabItem>
+                        <TabItem Header="GPS">
+                            <uc:Dashboard/>
+                        </TabItem>
+                    </dragablz:TabablzControl>
+                </TabItem>
+                <TabItem Header="DATA">
+                    <TabControl>
+                        <TabItem Header="MOTOR">
+                            <TabControl>
+                                <TabItem Header="RAW">
+                                    <dataList:MotorDataView />
+                                </TabItem>
+                            </TabControl>
+                        </TabItem>
+                        <TabItem Header="MPPT">
+                            <TabControl>
+                                <TabItem Header="RAW">
+                                    <uc:MPPTDataView />
+                                </TabItem>
+
+                            </TabControl>
+                        </TabItem>
+                        <TabItem Header="BMS">
+                            <TabControl>
+                                <TabItem Header="RAW">
+                                    <dataList:BmsDataView />
+                                </TabItem>
+                            </TabControl>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+                <TabItem Header="WEATHER">
+                    <uc:WeatherView />
+                </TabItem>
+                <TabItem Header="ERRORS">
+                    <TabControl>
+                        <TabItem Header="Errors Vehicle">
+                            <uc:ErrorSystemView />
+                        </TabItem>
+                        <TabItem Header="Errors System">
+                            <uc:ErrorSystemView />
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+            </dragablz:TabablzControl>
+        </Grid>
+    </Grid>
+</Window>

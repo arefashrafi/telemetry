@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="TelemetryGUI.Views.Strategy.AltitudeDataSetView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TelemetryGUI.Views"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <s:EffectConverter x:Key="EffectConverter" />
+        <DropShadowEffect x:Key="LegendDropShadow" BlurRadius="10" Direction="-45" ShadowDepth="5" Color="Black" />
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ext:SciChartInteractionToolbar x:Name="UserToolbar"
+                                        TargetSurface="{Binding Source={x:Reference Name=SciChart}}" />
+        <!--  Button is used to invoke a delegate in the ViewModel to append 50 points.  -->
+
+        <!--  Declare a SciChartSurface and bind to data  -->
+        <s:SciChartSurface Annotations="{Binding VerticalLineAnnotationCollection}" x:Name="SciChart" Grid.Column="1"
+                           ViewportManager="{Binding ViewportManager}">
+            <s:SciChartSurface.RenderableSeries>
+                <s:FastLineRenderableSeries StrokeThickness="1" DataSeries="{Binding ChartData}" Stroke="DarkOrange" />
+            </s:SciChartSurface.RenderableSeries>
+
+            <s:SciChartSurface.XAxis>
+                <s:NumericAxis />
+            </s:SciChartSurface.XAxis>
+
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis GrowBy="0.1, 0.1" />
+            </s:SciChartSurface.YAxis>
+
+            <s:SciChartSurface.ChartModifier>
+                <s:ModifierGroup>
+                    <s:RolloverModifier x:Name="RolloverModifier" DrawVerticalLine="True" ShowTooltipOn="MouseHover"
+                                        SourceMode="AllVisibleSeries" />
+                    <s:SeriesSelectionModifier IsEnabled="False" ReceiveHandledEvents="True" />
+                </s:ModifierGroup>
+            </s:SciChartSurface.ChartModifier>
+
+        </s:SciChartSurface>
+        <Border Grid.Column="1" Margin="23,23" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Background="#77222222" BorderBrush="#323539" BorderThickness="2" Padding="5"
+                Effect="{Binding Path=(s:EffectManager.EnableDropShadows), Converter={StaticResource EffectConverter}, ConverterParameter={StaticResource LegendDropShadow}}">
+            <ItemsControl
+                ItemsSource="{Binding Source={x:Reference Name=RolloverModifier}, Path=SeriesData.SeriesInfo}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Bind to the SeriesName using the Stroke as text foreground  -->
+                            <TextBlock Grid.Column="0"
+                                       Margin="3,3,20,3"
+                                       FontSize="13"
+                                       FontWeight="Bold"
+                                       Foreground="Green"
+                                       Text="{Binding DataSeries.SeriesName}" />
+
+                            <!--  Bind to the Series Value, using the Stroke as text foreground  -->
+
+                            <!--  When binding to XValue, YValue of type IComparable, StringFormat is mandatory due to a  -->
+                            <!--  XAML bug that cannot convert IComparable to text, even though underlying type is double  -->
+                            <StackPanel Grid.Column="1" Margin="3,3,20,3" Orientation="Horizontal">
+                                <TextBlock FontSize="13"
+                                           FontWeight="Bold"
+                                           Foreground="CadetBlue"
+                                           Text="{Binding XValue,
+                                                          StringFormat=DIST: \{0:0.00KM\}}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Margin="3,3,20,3" Orientation="Horizontal">
+                                <TextBlock FontSize="13"
+                                           FontWeight="Bold"
+                                           Foreground="BlueViolet"
+                                           Text="{Binding YValue,
+                                                          StringFormat=ALT: \{0:0.00M\}}" />
+                            </StackPanel>
+
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+    </Grid>
+</UserControl>

@@ -3,3 +3,18 @@
 ################################################################################
 
 /.idea/.idea.Telemetry
+/Telemetry.sln.DotSettings.user
+/packages
+/obj
+/.vs/Telemetry
+/TelemetryConsole/.idea/.idea.Telemetry
+/TelemetryConsole/bin/Debug
+/TelemetryConsole/obj
+/TelemetryConsole/TelemetryConsole.csproj.user
+/TelemetryDependencies/bin/Debug/netstandard2.0
+/TelemetryDependencies/obj
+/TelemetryGUI/.idea/.idea.TelemetryGUI
+/TelemetryGUI/.vs
+/TelemetryGUI/bin/Debug
+/TelemetryGUI/obj
+/TelemetryGUI/TelemetryGUI.csproj.user
