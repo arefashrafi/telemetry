@@ -12,7 +12,7 @@ namespace TelemetryGUI.Views
         public Dashboard()
         {
             InitializeComponent();
-            this.DataContext = new GPSViewModel();
+            this.DataContext = new GpsViewModel();
         }
 
     }

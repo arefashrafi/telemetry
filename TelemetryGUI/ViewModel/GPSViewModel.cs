@@ -11,10 +11,12 @@ using TelemetryGUI.Util;
 using Microsoft.Maps.MapControl.WPF;
 using System.Windows.Threading;
 using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace TelemetryGUI.ViewModel
 {
-    public class GPSViewModel
+    public class GpsViewModel
     {
         public PropertyChangedEventHandler PropertyChanged;
         private double _distanceBetweenGps;
@@ -24,10 +26,40 @@ namespace TelemetryGUI.ViewModel
         private Location _locationExternal=new Location();
         private LocationCollection _locationCollectionDirect = new LocationCollection();
         private LocationCollection _locationCollectionExternal = new LocationCollection();
-        public GPSViewModel()
+        public GpsViewModel()
         {
             WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event), OnTick);
+            LoadPreviousData();
         }
+
+        private void LoadPreviousData()
+        {
+            using TelemetryContext context = new TelemetryContext();
+            Task<List<Gps>> gpsCollection = context.GPSs.ToListAsync();
+            gpsCollection.Wait();
+            foreach (Gps item in gpsCollection.Result)
+            {
+                if (item.DeviceId == 1)
+                {
+                    _locationCollectionExternal.Add(new Location
+                    {
+                        Altitude = item.ALT,
+                        Latitude = item.LAT,
+                        Longitude = item.LONG
+                    });
+                }
+                else
+                {
+                    _locationCollectionDirect.Add(new Location
+                    {
+                        Altitude = item.ALT,
+                        Latitude = item.LAT,
+                        Longitude = item.LONG
+                    });
+                }
+            }
+        }
+
         public LocationCollection LocationCollectionExternal
         {
             get => _locationCollectionExternal;

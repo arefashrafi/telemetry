@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using Microsoft.EntityFrameworkCore;
 using SciChart.Charting.Model.ChartSeries;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.Visuals.RenderableSeries;
@@ -70,10 +72,11 @@ namespace TelemetryGUI.ViewModel.HistoryChart
             if (type == typeof(Motor))
             {
                 using var context = new TelemetryContext();
-                IQueryable<Motor> filteredMotors = context.Motors.Where(t =>
+                Task<List<Motor>> filteredMotors = context.Motors.Where(t =>
                     DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                        CultureInfo.InvariantCulture) > TimeSpan);
-                foreach (var motor in filteredMotors)
+                        CultureInfo.InvariantCulture) > TimeSpan).ToListAsync();
+                filteredMotors.Wait();
+                foreach (var motor in filteredMotors.Result)
                 {
                     
                     var dateTime = DateTime.ParseExact(motor.Time, "yyyy-MM-dd HH:mm:ss.fff",
@@ -97,10 +100,11 @@ namespace TelemetryGUI.ViewModel.HistoryChart
             if (type == typeof(Bms))
             {
                 using var context = new TelemetryContext();
-                IQueryable<Bms> filteredBms = context.BatteryManagementSystems.Where(t =>
+                Task<List<Bms>> filteredBms = context.BatteryManagementSystems.Where(t =>
                     DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                        CultureInfo.InvariantCulture) > TimeSpan);
-                foreach (var bms in filteredBms)
+                        CultureInfo.InvariantCulture) > TimeSpan).ToListAsync();
+                filteredBms.Wait();
+                foreach (var bms in filteredBms.Result)
                 {
                     var dateTime = DateTime.ParseExact(bms.Time, "yyyy-MM-dd HH:mm:ss.fff",
                         CultureInfo.InvariantCulture);

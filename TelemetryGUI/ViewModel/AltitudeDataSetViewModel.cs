@@ -43,21 +43,28 @@ namespace TelemetryGUI.ViewModel
 
 
             VerticalLinesRoutes();
-            
+            DataLoad();
+
+        }
+
+        private void DataLoad()
+        {
             using (TelemetryContext context= new TelemetryContext())
             {
-                List<Routenote> routenotes = context.Routenotes.ToList();
-                List<Bms> bmses = context.BatteryManagementSystems.ToList();
+                Task<List<Routenote>> routenotes = context.Routenotes.ToListAsync();
+                Task<List<Bms>> bmses = context.BatteryManagementSystems.ToListAsync();
+                routenotes.Wait();
+                bmses.Wait();
                 XyDataSeries<double, double> dataSeriesRoutes = new XyDataSeries<double, double>();
                 XyDataSeries<DateTime, double> dataSeriesEnergy = new XyDataSeries<DateTime, double>();
-                foreach (var item in routenotes)
+                foreach (var item in routenotes.Result)
                 {
                     dataSeriesRoutes.Append((double)item.DIST,(double)item.ALT);
                 }
-                foreach (Bms item in bmses)
+                foreach (Bms item in bmses.Result)
                 {
                     DateTime dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                                                       CultureInfo.InvariantCulture);
+                                                            CultureInfo.InvariantCulture);
                     double energy = item.Current * item.Volt;
                     dataSeriesEnergy.Append(dateTime,energy);
                 }
@@ -65,10 +72,10 @@ namespace TelemetryGUI.ViewModel
                 {
                     new FastLineRenderableSeries
                     {
-                       DataSeries = dataSeriesRoutes,
-                       Name = "Route",
-                       Stroke = Colors.Coral,
-                       XAxisId = "Numeric"
+                        DataSeries = dataSeriesRoutes,
+                        Name = "Route",
+                        Stroke = Colors.Coral,
+                        XAxisId = "Numeric"
                     },
                     new FastLineRenderableSeries
                     {
