@@ -1,4 +1,4 @@
-<UserControl x:Class="TelemetryGUI.Views.Live.LiveBMSView"
+<UserControl x:Class="TelemetryGUI.Views.Live.LiveView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -173,6 +173,25 @@
                                     </StackPanel>
                                 </ToolTipService.ToolTip>
                             </Slider>
+
+                        </StackPanel>
+                    </ext:FlyoutMenuButton.PopupContent>
+                </ext:FlyoutMenuButton>
+                <ext:FlyoutMenuButton x:Name="DataFlyoutMenuButton" HorizontalAlignment="Left" Content="Data"
+                                      Style="{StaticResource FlyoutMenuButtonStyle}"
+                                      ToolTipService.ToolTip="Data">
+
+                    <ext:FlyoutMenuButton.PopupContent>
+                        <StackPanel MinWidth="150" Orientation="Vertical">
+
+                            <TextBlock Margin="3" HorizontalAlignment="Left" Foreground="White" Text="Choose Data: " />
+
+                            <ComboBox Text="Select" Name="DataBmsSelectionComboBox" Margin="4"
+                                       SelectedItem="{Binding BmsProperty, Mode=TwoWay}" />
+                            <ComboBox Text="Select" Name="DataMotorSelectionComboBox" Margin="4"
+                                      SelectedItem="{Binding BmsProperty, Mode=TwoWay}" />
+                            <ComboBox Text="Select" Name="DataMpptSelectionComboBox" Margin="4"
+                                      SelectedItem="{Binding BmsProperty, Mode=TwoWay}" />
 
                         </StackPanel>
                     </ext:FlyoutMenuButton.PopupContent>

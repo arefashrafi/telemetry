@@ -27,13 +27,12 @@
 
         <!--  Declare a SciChartSurface and bind to data  -->
         <s:SciChartSurface Annotations="{Binding VerticalLineAnnotationCollection}" x:Name="SciChart" Grid.Column="1"
-                           ViewportManager="{Binding ViewportManager}">
-            <s:SciChartSurface.RenderableSeries>
-                <s:FastLineRenderableSeries StrokeThickness="1" DataSeries="{Binding ChartData}" Stroke="DarkOrange" />
-            </s:SciChartSurface.RenderableSeries>
+                           ViewportManager="{Binding ViewportManager}" RenderableSeries="{Binding RenderableSeries}">
 
             <s:SciChartSurface.XAxis>
-                <s:NumericAxis />
+                
+                <s:NumericAxis AxisAlignment="Bottom" Id="Numeric" AutoRange="Always"/>
+                <s:DateTimeAxis AxisAlignment="Top" Id="DateTime" AutoRange="Always"/>
             </s:SciChartSurface.XAxis>
 
             <s:SciChartSurface.YAxis>
@@ -69,7 +68,7 @@
                                        FontSize="13"
                                        FontWeight="Bold"
                                        Foreground="Green"
-                                       Text="{Binding DataSeries.SeriesName}" />
+                                       Text="Fix" />
 
                             <!--  Bind to the Series Value, using the Stroke as text foreground  -->
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Telemetry.Misc
+namespace TelemetryConsole.Misc
 {
     /// <summary>
     ///     Performs 32-bit reversed cyclic redundancy checks.

@@ -158,9 +158,11 @@
     <Compile Include="Misc\Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialReader\SerialReader.CollectionChanged.cs" />
-    <Compile Include="SerialReader\SerialReader.cs" />
-    <Compile Include="SerialReader\SerialReader.SendToDBHandler.cs" />
+    <Compile Include="Src\Database\DatabaseHandler.cs" />
+    <Compile Include="Src\Database\DatabaseParser.cs" />
+    <Compile Include="Src\Database\DataSerializer.cs" />
+    <Compile Include="Src\Gps\GpsSerialReceiver.cs" />
+    <Compile Include="Src\Wifi\AsynchronousSocketListener.cs" />
     <Compile Include="TelemetryContext.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -173,7 +175,6 @@
       <Name>TelemetryDependencies</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -3,11 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:TelemetryGUI.Views"
              xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
              xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-             xmlns:viewModel="clr-namespace:TelemetryGUI.ViewModel"
              xmlns:historyChart="clr-namespace:TelemetryGUI.ViewModel.HistoryChart"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -77,7 +74,7 @@
 
         <!--  Shows the SciChartSurface and binds ZoomHistoryManager to the instance in the viewmodel  -->
         <!--  This is what we use to control zoom history as well as Undo Redo  -->
-        <s:SciChartSurface x:Name="SciChart" Grid.Column="1"
+        <s:SciChartSurface x:Name="SciChart" Grid.Row="0" Grid.Column="1"
                            RenderableSeries="{s:SeriesBinding RenderableSeriesViewModels}">
             <!--  Create an X Axis with Growby  -->
             <s:SciChartSurface.XAxis>
@@ -99,7 +96,7 @@
                 <s:NumericAxis />
             </s:SciChartSurface.YAxis>
         </s:SciChartSurface>
-        <Border Grid.Column="1" Margin="23,23" HorizontalAlignment="Left" VerticalAlignment="Top"
+        <Border Grid.Row="0" Grid.Column="1" Margin="23,23" HorizontalAlignment="Left" VerticalAlignment="Top"
                 Background="#77222222" BorderBrush="#323539" BorderThickness="2" Padding="5"
                 Effect="{Binding Path=(s:EffectManager.EnableDropShadows), Converter={StaticResource EffectConverter}, ConverterParameter={StaticResource LegendDropShadow}}">
             <ItemsControl

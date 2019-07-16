@@ -1,4 +1,6 @@
-namespace Telemetry.Misc
+using System.Collections.Concurrent;
+
+namespace TelemetryConsole.Misc
 {
     public class Constants
     {
@@ -10,6 +12,8 @@ namespace Telemetry.Misc
         protected const int MotorIdOld = 0x71;
         protected const int BmsId = 0x70;
         protected const int GpsId = 0x73;
-        protected const int bufSize = 100;
+        protected const int BufSize = 100;
+        public static readonly ConcurrentQueue<byte> RxByteQueue = new ConcurrentQueue<byte>();
     }
+    
 }

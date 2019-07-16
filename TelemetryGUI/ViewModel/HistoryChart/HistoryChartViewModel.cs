@@ -62,7 +62,7 @@ namespace TelemetryGUI.ViewModel.HistoryChart
             }
         }
 
-        public async Task HistoryChartLoadData(Type type, string param)
+        public void HistoryChartLoadData(Type type, string param)
         {
             var r = new Random();
             XyDataSeries<DateTime, double> xyDataSeries = new XyDataSeries<DateTime, double>();

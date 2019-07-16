@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TelemetryDependencies.Models;
 
-namespace Telemetry
+namespace TelemetryConsole
 {
     public class TelemetryContext : DbContext
     {

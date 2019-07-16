@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Device.Location;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
+using SciChart.Charting.Model.ChartSeries;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.ViewportManagers;
 using SciChart.Charting.Visuals.Annotations;
+using SciChart.Charting.Visuals.RenderableSeries;
 using SciChart.Core.Extensions;
 using SciChart.Examples.ExternalDependencies.Common;
 using TelemetryDependencies.Models;
@@ -18,7 +23,6 @@ namespace TelemetryGUI.ViewModel
 {
     public class AltitudeDataSetViewModel : BaseViewModel
     {
-        private IDataSeries<double, double> _dataSeries0;
         private VerticalLineAnnotation _verticalLineAnnotationCarPosition;
         private AnnotationCollection _verticalLineAnnotationCollection = new AnnotationCollection();
 
@@ -36,17 +40,44 @@ namespace TelemetryGUI.ViewModel
 
             
             WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event), OnTick);
-            // Create a DataSeriesSet
-            _dataSeries0 = new XyDataSeries<double, double> {SeriesName = "Altitude"};
+
 
             VerticalLinesRoutes();
-            using (var context= new TelemetryContext())
+            
+            using (TelemetryContext context= new TelemetryContext())
             {
-                var data = context.Routenotes.ToList();
-                foreach (var item in data)
+                List<Routenote> routenotes = context.Routenotes.ToList();
+                List<Bms> bmses = context.BatteryManagementSystems.ToList();
+                XyDataSeries<double, double> dataSeriesRoutes = new XyDataSeries<double, double>();
+                XyDataSeries<DateTime, double> dataSeriesEnergy = new XyDataSeries<DateTime, double>();
+                foreach (var item in routenotes)
                 {
-                    _dataSeries0.Append((double)item.DIST,(double)item.ALT);
+                    dataSeriesRoutes.Append((double)item.DIST,(double)item.ALT);
                 }
+                foreach (Bms item in bmses)
+                {
+                    DateTime dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                                                       CultureInfo.InvariantCulture);
+                    double energy = item.Current * item.Volt;
+                    dataSeriesEnergy.Append(dateTime,energy);
+                }
+                RenderableSeries = new ObservableCollection<IRenderableSeries>
+                {
+                    new FastLineRenderableSeries
+                    {
+                       DataSeries = dataSeriesRoutes,
+                       Name = "Route",
+                       Stroke = Colors.Coral,
+                       XAxisId = "Numeric"
+                    },
+                    new FastLineRenderableSeries
+                    {
+                        DataSeries = dataSeriesEnergy,
+                        Name = "Energy",
+                        Stroke = Colors.Blue,
+                        XAxisId = "DateTime"
+                    }
+                };
             }
         }
 
@@ -59,15 +90,8 @@ namespace TelemetryGUI.ViewModel
 
 
         // Databound to via SciChartSurface.DataSet in the view
-        public IDataSeries<double, double> ChartData
-        {
-            get => _dataSeries0;
-            set
-            {
-                _dataSeries0 = value;
-                OnPropertyChanged("ChartData");
-            }
-        }
+        public ObservableCollection<IRenderableSeries> RenderableSeries { get; set; }
+
 
         public IViewportManager ViewportManager { get; set; }
 

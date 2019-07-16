@@ -85,10 +85,8 @@
     <Compile Include="ViewModel\EnergyEstimation\EnergyEstimationChartViewModel.cs" />
     <Compile Include="ViewModel\GPSViewModel.cs" />
     <Compile Include="ViewModel\HistoryChart\HistoryChartViewModel.cs" />
-    <Compile Include="ViewModel\Live\LiveBmsViewModel.cs" />
+    <Compile Include="ViewModel\Live\LiveViewModel.cs" />
     <Compile Include="ViewModel\Live\LiveChannelViewModel.cs" />
-    <Compile Include="ViewModel\Live\LiveMotorViewModel.cs" />
-    <Compile Include="ViewModel\Live\LiveMPPTViewModel.cs" />
     <Compile Include="Views\Dashboard.xaml.cs">
       <DependentUpon>Dashboard.xaml</DependentUpon>
     </Compile>
@@ -107,14 +105,8 @@
     <Compile Include="Views\HistoryChart\HistoryChartView.xaml.cs">
       <DependentUpon>HistoryChartView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Live\LiveBMSView.xaml.cs">
-      <DependentUpon>LiveBMSView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Live\LiveMotorView.xaml.cs">
-      <DependentUpon>LiveMotorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Live\LiveMPPTView.xaml.cs">
-      <DependentUpon>LiveMPPTView.xaml</DependentUpon>
+    <Compile Include="Views\Live\LiveView.xaml.cs">
+      <DependentUpon>LiveView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Strategy\AltitudeDataSetView.xaml.cs">
       <DependentUpon>AltitudeDataSetView.xaml</DependentUpon>
@@ -164,15 +156,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Live\LiveBMSView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Live\LiveMotorView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Live\LiveMPPTView.xaml">
+    <Page Include="Views\Live\LiveView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

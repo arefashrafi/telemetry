@@ -1,22 +1,21 @@
 using System;
 using System.Globalization;
-using Telemetry;
-using Telemetry.Misc;
+using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
 using TelemetryDependencies.Structs;
 
-namespace TelemetryConsole.SerialReader
+namespace TelemetryConsole.Src.Database
 {
-    public partial class SerialReader
+    public partial class TelemetryControl
     {
-        private static void SendToDBHandler<T>(T dataStruct)
+        public static void DatabaseParser<T>(T dataStruct)
         {
             try
             {
                 if (typeof(T) == typeof(BmsStruct))
                 {
                     var bMsStruct = (BmsStruct) (object) dataStruct;
-                    BmsList.Add(new Bms
+                    BmsCollection.Add(new Bms
                     {
                         MinVolt = bMsStruct.MinVolt,
                         MinVoltId = bMsStruct.MinVoltID,
@@ -41,7 +40,7 @@ namespace TelemetryConsole.SerialReader
                 if (typeof(T) == typeof(MotorStruct))
                 {
                     var motorStruct = (MotorStruct) (object) dataStruct;
-                    MotorList.Add(new Motor
+                    MotorCollection.Add(new Motor
                     {
                         MotorCurrent = motorStruct.MotorCurrent,
                         MotorDriveMode = motorStruct.MotorDriveMode,
@@ -63,7 +62,7 @@ namespace TelemetryConsole.SerialReader
                 if (typeof(T) == typeof(MotorStructOld))
                 {
                     var motorStruct = (MotorStructOld) (object) dataStruct;
-                    MotorList.Add(new Motor
+                    MotorCollection.Add(new Motor
                     {
                         MotorCurrent = motorStruct.MotorCurrent,
                         MotorDriveMode = motorStruct.MotorDriveMode,
@@ -85,7 +84,7 @@ namespace TelemetryConsole.SerialReader
                 if (typeof(T) == typeof(GpsStruct))
                 {
                     var gpsStruct = (GpsStruct) (object) dataStruct;
-                    GpsList.Add(new Gps
+                    GpsCollection.Add(new Gps
                     {
                         LAT = gpsStruct.latitude,
                         LONG = gpsStruct.longitude,
@@ -121,11 +120,6 @@ namespace TelemetryConsole.SerialReader
 
         private static string Time(ulong time)
         {
-            return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            var date = new DateTime(1970, 1, 1).AddMilliseconds(time);
-            string dateString = date.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            if (date < DateTime.Now.AddMinutes(2) && date > DateTime.Now.AddMinutes(-2)) return dateString;
-
             return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
         }
     }

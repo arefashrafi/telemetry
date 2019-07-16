@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Telemetry.Misc
+namespace TelemetryConsole.Misc
 {
     public static class Extensions
     {
