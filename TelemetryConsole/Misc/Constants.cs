@@ -12,7 +12,8 @@ namespace TelemetryConsole.Misc
         protected const int MotorIdOld = 0x71;
         protected const int BmsId = 0x70;
         protected const int GpsId = 0x73;
-        protected const int BufSize = 100;
+        protected const int BuffSize = 128;
+        protected const int DebugId = 0x74;
         public static readonly ConcurrentQueue<byte> RxByteQueue = new ConcurrentQueue<byte>();
     }
     

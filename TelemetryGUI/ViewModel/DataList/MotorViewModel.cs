@@ -14,7 +14,7 @@ namespace TelemetryGUI.ViewModel.DataList
         public MotorViewModel()
         {
             _motors = new ObservableCollection<Motor>();
-            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event),
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMotor),
     Instance_DataChange);
         }
 

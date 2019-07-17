@@ -11,20 +11,20 @@
         xmlns:liveModel="clr-namespace:TelemetryGUI.ViewModel.Live"
         xmlns:strategy="clr-namespace:TelemetryGUI.Views.Strategy"
         xmlns:dataList="clr-namespace:TelemetryGUI.Views.DataList"
-        xmlns:DataList="clr-namespace:TelemetryGUI.ViewModel.DataList" x:Class="TelemetryGUI.MainWindow"
+        xmlns:DataList="clr-namespace:TelemetryGUI.ViewModel.DataList"
+        xmlns:historyChart="clr-namespace:TelemetryGUI.Views.HistoryChart"
+        x:Class="TelemetryGUI.MainWindow"
         mc:Ignorable="d"
         Height="720" Width="1500" WindowStartupLocation="CenterOwner" WindowStyle="ThreeDBorderWindow">
     <Window.Resources>
         <viewModel:AltitudeDataSetViewModel x:Key="AltitudeDataSetViewModel" />
         <liveModel:LiveViewModel x:Key="LiveViewModel" />
+        <DataList:ErrorViewModel x:Key="ErrorViewModel" />
     </Window.Resources>
 
     <Grid>
 
-        <Grid Height="60" VerticalAlignment="Top" Background="BlueViolet">
-            <Grid.DataContext>
-                <DataList:ErrorViewModel/>
-            </Grid.DataContext>
+        <Grid Height="60" VerticalAlignment="Top" Background="BlueViolet" DataContext="{StaticResource ErrorViewModel}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -35,7 +35,7 @@
             <TextBlock Grid.Column="1" Margin="10" Text="JU Solar Team" Foreground="White" HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        FontSize="12" FontFamily="Champagne &amp; Limousines" />
-            <TextBlock Grid.Column="2" Margin="20" Text="{Binding Error.Message }" Visibility="{Binding ErrorVisiblity}" HorizontalAlignment="Right"
+            <TextBlock  Grid.Column="2" Margin="20" Text="{Binding Errors.Count, Mode=OneWay}" HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        FontSize="12" FontFamily="Champagne &amp; Limousines" >
             </TextBlock>
@@ -51,13 +51,13 @@
                             <strategy:AltitudeDataSetView DataContext="{StaticResource AltitudeDataSetViewModel}" />
                         </TabItem>
                         <TabItem Header="History Chart">
-                            <uc:HistoryChartView />
+                            <historyChart:HistoryChartView />
                         </TabItem>
                         <TabItem Header="Energy Estimation">
                             <strategy:EnergyEstimationChartView />
                         </TabItem>
                         <TabItem Header="GPS">
-                            <uc:Dashboard />
+                            <uc:GpsView/>
                         </TabItem>
                     </dragablz:TabablzControl>
                 </TabItem>

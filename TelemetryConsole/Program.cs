@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using TelemetryConsole.SerialReader;
-using TelemetryConsole.Src.Database;
 using TelemetryConsole.Src.Wifi;
+using TelemetryControl = TelemetryConsole.Database.TelemetryControl;
 
 namespace TelemetryConsole
 {
@@ -14,13 +14,14 @@ namespace TelemetryConsole
             Thread databaseSerializerThread = new Thread(TelemetryControl.DataSerializer);
             Console.WriteLine(DateTime.Now);
             
-            
-            AsynchronousSocketListener.StartListening();
-            GpsSerialReceiver.StartListening();
-            
-            
             databaseHandlerThread.Start();
             databaseSerializerThread.Start();
+            GpsSerialReceiver.StartListening();
+            AsynchronousSocketListener.StartListening();
+
+            
+            
+
             
             
             Console.ForegroundColor = ConsoleColor.Green;

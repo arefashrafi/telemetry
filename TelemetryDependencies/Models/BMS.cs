@@ -8,6 +8,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System.ComponentModel.DataAnnotations;
+
 namespace TelemetryDependencies.Models
 {
     /// <summary>
@@ -18,6 +20,7 @@ namespace TelemetryDependencies.Models
         /// <summary>
         ///     Gets or sets the id.
         /// </summary>
+        [Key]
         public int Id { get; set; }
 
         public uint MinVolt { get; set; }

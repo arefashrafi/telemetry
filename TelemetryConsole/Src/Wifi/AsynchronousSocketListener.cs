@@ -94,10 +94,11 @@ namespace TelemetryConsole.Src.Wifi
             // from the asynchronous state object.  
             StateObject state = (StateObject)ar.AsyncState;
             Socket handler = state.WorkSocket;
-
+            
             // Read data from the client socket.   
             int bytesRead = handler.EndReceive(ar);
-
+            Console.Write("Received");
+            Console.Write(new String(' ', Console.BufferWidth));
             if (bytesRead > 0)
             {
                 foreach (byte item in state.Buffer)
@@ -105,7 +106,8 @@ namespace TelemetryConsole.Src.Wifi
                     RxByteQueue.Enqueue(item);
                 }
             }
+            handler.BeginReceive(state.Buffer, 0, StateObject.BufferSize, 0,
+                                   new AsyncCallback(ReadCallback), state);
         }
-
     }
 }

@@ -19,5 +19,10 @@ namespace TelemetryGUI.Views.DataList
         {
             if (DataGrid.Items.Count > 0) DataGrid.ScrollIntoView(DataGrid.Items[DataGrid.Items.Count - 1]);
         }
+
+        private void BmsDataView_OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

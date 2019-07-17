@@ -77,6 +77,7 @@ namespace TelemetryGUI.ViewModel.Live
                 OnPropertyChanged("ChannelViewModels");
             }
         }
+
         public string BmsProperty
         {
             get => _bmsProperty;
@@ -87,7 +88,6 @@ namespace TelemetryGUI.ViewModel.Live
                 OnPropertyChanged("BmsProperty");
             }
         }
-
 
 
         public ICommand StartCommand => _startCommand;
@@ -135,8 +135,10 @@ namespace TelemetryGUI.ViewModel.Live
             {
                 IsRunning = true;
                 IsReset = false;
+                WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventBms), OnTick);
 
-                WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event), OnTick);
+
+                WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMotor), OnTick);
             }
         }
 
@@ -144,7 +146,10 @@ namespace TelemetryGUI.ViewModel.Live
         {
             if (IsRunning)
             {
-                WeakEventManager<EventSource, EntityEventArgs>.RemoveHandler(null, nameof(EventSource.Event), OnTick);
+                WeakEventManager<EventSource, EntityEventArgs>.RemoveHandler(null, nameof(EventSource.EventBms),
+                    OnTick);
+                WeakEventManager<EventSource, EntityEventArgs>.RemoveHandler(null, nameof(EventSource.EventMotor),
+                    OnTick);
                 IsRunning = false;
             }
         }
@@ -162,22 +167,25 @@ namespace TelemetryGUI.ViewModel.Live
 
             lock (_syncRoot)
             {
-                foreach (var channel in _channelViewModels)
+                foreach (LiveChannelViewModel channel in _channelViewModels)
                 {
+                    if (e.Data.GetType().GetProperty(channel.ChannelName).CanRead == false) return;
+
                     IXyDataSeries<DateTime, double> dataSeries = channel.ChannelDataSeries;
-                    var dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                    DateTime dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
                         CultureInfo.InvariantCulture);
                     try
                     {
-                        if ( dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
+                        if (dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
                         {
-                            dataSeries.Append(dateTime,double.NaN);
+                            dataSeries.Append(dateTime, double.NaN);
                             _firstRead = true;
                         }
                         else
                         {
-                            double yValue =
-                                Convert.ToDouble(e.Data.GetType().GetProperty(channel.ChannelName)?.GetValue(e.Data, null));
+                            var yValue =
+                                Convert.ToDouble(e.Data.GetType().GetProperty(channel.ChannelName)
+                                    ?.GetValue(e.Data, null));
                             // Append block of values
 
                             dataSeries.Append(dateTime, yValue);
@@ -193,11 +201,13 @@ namespace TelemetryGUI.ViewModel.Live
             }
         }
 
-        private void AddToChannelViewModels(string value)
+        private void AddToChannelViewModels(string channelName)
         {
+
+
             _channelViewModels.Add(new LiveChannelViewModel(Size, _colors[4])
             {
-                ChannelName = value
+                ChannelName = channelName
             });
         }
     }

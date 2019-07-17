@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Device.Location;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 using SciChart.Charting.Model.ChartSeries;
@@ -14,7 +11,6 @@ using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.ViewportManagers;
 using SciChart.Charting.Visuals.Annotations;
 using SciChart.Charting.Visuals.RenderableSeries;
-using SciChart.Core.Extensions;
 using SciChart.Examples.ExternalDependencies.Common;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
@@ -24,6 +20,8 @@ namespace TelemetryGUI.ViewModel
     public class AltitudeDataSetViewModel : BaseViewModel
     {
         private VerticalLineAnnotation _verticalLineAnnotationCarPosition;
+        private XyDataSeries<double, double> _routeDataSeries = new XyDataSeries<double, double>();
+        private XyDataSeries<DateTime, double> _energyDataSeries = new XyDataSeries<DateTime, double>();
         private AnnotationCollection _verticalLineAnnotationCollection = new AnnotationCollection();
 
         public AltitudeDataSetViewModel()
@@ -38,68 +36,53 @@ namespace TelemetryGUI.ViewModel
                 ShowLabel = true
             };
 
-            
-            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event), OnTick);
+
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventGps), OnTick);
 
 
             VerticalLinesRoutes();
             DataLoad();
-
         }
 
-        private void DataLoad()
+        private async Task DataLoad()
         {
-            using (TelemetryContext context= new TelemetryContext())
+            using (TelemetryContext context = new TelemetryContext())
             {
-                Task<List<Routenote>> routenotes = context.Routenotes.ToListAsync();
-                Task<List<Bms>> bmses = context.BatteryManagementSystems.ToListAsync();
-                routenotes.Wait();
-                bmses.Wait();
-                XyDataSeries<double, double> dataSeriesRoutes = new XyDataSeries<double, double>();
-                XyDataSeries<DateTime, double> dataSeriesEnergy = new XyDataSeries<DateTime, double>();
-                foreach (var item in routenotes.Result)
+                List<Routenote> routenotes = await context.Routenotes.ToListAsync();
+                List<Bms> bms = await context.BatteryManagementSystems.ToListAsync();
+                _routeDataSeries = new XyDataSeries<double, double>();
+                _energyDataSeries = new XyDataSeries<DateTime, double>
                 {
-                    dataSeriesRoutes.Append((double)item.DIST,(double)item.ALT);
+                    AcceptsUnsortedData = true
+                };
+                foreach (Routenote item in routenotes)
+                {
+                    _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
                 }
-                foreach (Bms item in bmses.Result)
+
+                foreach (Bms item in bms)
                 {
                     DateTime dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                                                            CultureInfo.InvariantCulture);
+                        CultureInfo.InvariantCulture);
                     double energy = item.Current * item.Volt;
-                    dataSeriesEnergy.Append(dateTime,energy);
+
+                    _energyDataSeries.Append(dateTime, energy);
                 }
-                RenderableSeries = new ObservableCollection<IRenderableSeries>
-                {
-                    new FastLineRenderableSeries
-                    {
-                        DataSeries = dataSeriesRoutes,
-                        Name = "Route",
-                        Stroke = Colors.Coral,
-                        XAxisId = "Numeric"
-                    },
-                    new FastLineRenderableSeries
-                    {
-                        DataSeries = dataSeriesEnergy,
-                        Name = "Energy",
-                        Stroke = Colors.Blue,
-                        XAxisId = "DateTime"
-                    }
-                };
+
+
+                EnergyDataSeries = _energyDataSeries;
+                RouteDataSeries = _routeDataSeries;
             }
         }
 
         private void OnTick(object sender, EntityEventArgs e)
         {
-            Gps gps = e.Data as Gps;
-            if (gps == null || gps.DeviceId!=0) return;
+            if (!(e.Data is Gps gps) || gps.DeviceId != 0) return;
             _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
         }
 
-
-        // Databound to via SciChartSurface.DataSet in the view
-        public ObservableCollection<IRenderableSeries> RenderableSeries { get; set; }
-
-
+        public IDataSeries<DateTime, double> EnergyDataSeries { get; set; }
+        public IDataSeries<double, double> RouteDataSeries { get; set; }
         public IViewportManager ViewportManager { get; set; }
 
         public AnnotationCollection VerticalLineAnnotationCollection

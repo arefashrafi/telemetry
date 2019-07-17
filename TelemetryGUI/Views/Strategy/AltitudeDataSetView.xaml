@@ -27,13 +27,33 @@
 
         <!--  Declare a SciChartSurface and bind to data  -->
         <s:SciChartSurface Annotations="{Binding VerticalLineAnnotationCollection}" x:Name="SciChart" Grid.Column="1"
-                           ViewportManager="{Binding ViewportManager}" RenderableSeries="{Binding RenderableSeries}">
-
-            <s:SciChartSurface.XAxis>
-                
-                <s:NumericAxis AxisAlignment="Bottom" Id="Numeric" AutoRange="Always"/>
-                <s:DateTimeAxis AxisAlignment="Top" Id="DateTime" AutoRange="Always"/>
-            </s:SciChartSurface.XAxis>
+                           ViewportManager="{Binding ViewportManager}">
+            <s:SciChartSurface.RenderableSeries>
+            <s:FastLineRenderableSeries DataSeries="{Binding RouteDataSeries, Mode=OneWay}"
+                                        Stroke="#FFFC9C29"
+                                        StrokeThickness="1"
+                                        XAxisId="Numeric"/>
+            <s:FastLineRenderableSeries DataSeries="{Binding EnergyDataSeries, Mode=OneWay}"
+                                        Stroke="#FF4083B7"
+                                        StrokeThickness="1"
+                                        XAxisId="DateTime"/>
+            </s:SciChartSurface.RenderableSeries>
+                <s:SciChartSurface.XAxes>
+                    <s:NumericAxis AxisAlignment="Bottom"
+                                AxisTitle="Bottom Axis"
+                                BorderBrush="#FFFF1919"
+                                BorderThickness="0,1,0,0"
+                                Id="Numeric"
+                                AutoRange="Always"
+                                TickTextBrush="#FFFF1919" />
+                    <s:DateTimeAxis AxisAlignment="Top"
+                                AxisTitle="Top Axis"
+                                BorderBrush="#FF279B27"
+                                BorderThickness="0,0,0,1"
+                                Id="DateTime"
+                                AutoRange="Always"
+                                TickTextBrush="#FF279B27" />
+                </s:SciChartSurface.XAxes>
 
             <s:SciChartSurface.YAxis>
                 <s:NumericAxis GrowBy="0.1, 0.1" />

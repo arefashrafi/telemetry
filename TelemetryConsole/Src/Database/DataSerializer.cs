@@ -13,7 +13,7 @@ using System.Linq;
 using TelemetryConsole.Misc;
 using TelemetryDependencies.Structs;
 
-namespace TelemetryConsole.Src.Database
+namespace TelemetryConsole.Database
 {
     /// <summary>
     ///     Class for reading from the serial port and inserting to the database using EF Core
@@ -25,7 +25,7 @@ namespace TelemetryConsole.Src.Database
         /// <summary>
         ///     This method will start a thread that starts reading the receiveQueue to insert data into the local database
         /// </summary>
-        public static  void DataSerializer()
+        public static void DataSerializer()
         {
             // Create thread for handling data from receiveQueue
             // Input will be faster than processing, thread is needed to process data so data loss is not happening
@@ -36,8 +36,22 @@ namespace TelemetryConsole.Src.Database
                 byte[] packetArray;
                 lock (RxByteQueue)
                 {
-                    if (RxByteQueue.Count < BufSize) continue;
-                    packetArray = RxByteQueue.Take(BufSize).ToArray();
+                    try
+                    {
+                        if (RxByteQueue.Count > BuffSize)
+                        {
+                            packetArray = RxByteQueue.Take(BuffSize).ToArray();
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
                 }
 
                 byte startByte = packetArray[StartByteIndex];
@@ -46,57 +60,72 @@ namespace TelemetryConsole.Src.Database
 
                 if (startByte == ExpectedStartByte && dataLength <= packetArray.Length)
                 {
-                    byte[] dataSubsetPacket = packetArray.RangeSubset(3, dataLength);
-                    byte[] crcSubsetPacket = packetArray.RangeSubset(dataLength + 3, 4);
-                    if (crcSubsetPacket == BitConverter.GetBytes(new Crc32().Get(dataSubsetPacket))) continue;
-
-                    if (id == BmsId)
+                    try
                     {
-                        if (dataLength <= 40)
+                        byte[] dataSubsetPacket = packetArray.RangeSubset(3, dataLength);
+                        byte[] crcSubsetPacket = packetArray.RangeSubset(dataLength + 3, 4);
+                        if (crcSubsetPacket == BitConverter.GetBytes(new Crc32().Get(dataSubsetPacket))) continue;
+
+                        if (id == BmsId)
                         {
-                            var bMsStruct = Extensions.ByteArrayToStructure<BmsStruct>(dataSubsetPacket);
-                            DatabaseParser(bMsStruct);
+                            if (dataLength <= 40)
+                            {
+                                var bMsStruct = Extensions.ByteArrayToStructure<BmsStruct>(dataSubsetPacket);
+                                DatabaseParser(bMsStruct);
+                            }
+                        }
+
+                        else if (id == DebugId)
+                        {
+                            if (dataLength == 8)
+                            {
+                            }
+                        }
+
+
+                        else if (id == MotorId)
+                        {
+                            if (dataLength == 28)
+                            {
+                                var motorStruct = Extensions.ByteArrayToStructure<MotorStruct>(dataSubsetPacket);
+                                DatabaseParser(motorStruct);
+                            }
+                        }
+
+
+                        else if (id == MotorIdOld)
+                        {
+                            if (dataLength <= 32)
+                            {
+                                var motorStructOld =
+                                    Extensions.ByteArrayToStructure<MotorStructOld>(dataSubsetPacket);
+                                DatabaseParser(motorStructOld);
+                            }
+                        }
+
+                        else if (id == GpsId)
+                        {
+                            if (dataLength <= 32)
+                            {
+                                var gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
+                                DatabaseParser(gpsStruct);
+                            }
+                        }
+
+                        int length = dataLength + 3 + 4; // +3+3 is for crc and start byte etc
+                        int totalLength = length;
+                        for (int i = 0; i < totalLength; i++)
+                        {
+                            lock (RxByteQueue)
+                            {
+                                RxByteQueue.TryDequeue(out _);
+                            }
                         }
                     }
-
-
-                    else if (id == MotorId)
+                    catch (Exception e)
                     {
-                        if (dataLength == 28)
-                        {
-                            var motorStruct = Extensions.ByteArrayToStructure<MotorStruct>(dataSubsetPacket);
-                            DatabaseParser(motorStruct);
-                        }
-                    }
-
-
-                    else if (id == MotorIdOld)
-                    {
-                        if (dataLength <= 32)
-                        {
-                            var motorStructOld =
-                                Extensions.ByteArrayToStructure<MotorStructOld>(dataSubsetPacket);
-                            DatabaseParser(motorStructOld);
-                        }
-                    }
-
-                    else if (id == GpsId)
-                    {
-                        if (dataLength <= 32)
-                        {
-                            var gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
-                            DatabaseParser(gpsStruct);
-                        }
-                    }
-
-                    int length = dataLength + 3 + 4; // +3+3 is for crc and start byte etc
-                    int totalLength = length;
-                    for (int i = 0; i < totalLength; i++)
-                    {
-                        lock (RxByteQueue)
-                        {
-                            RxByteQueue.TryDequeue(out _);
-                        }
+                        Console.WriteLine(e);
+                        throw;
                     }
                 }
                 else

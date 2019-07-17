@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 using TelemetryDependencies.Models;
-using TelemetryGUI.ViewModel;
 using TelemetryGUI.ViewModel.HistoryChart;
 
-namespace TelemetryGUI.Views
+namespace TelemetryGUI.Views.HistoryChart
 {
     /// <summary>
     ///     Interaction logic for HistoryChartView.xaml
@@ -17,35 +18,35 @@ namespace TelemetryGUI.Views
         {
             InitializeComponent();
             _historyChartViewModel = (HistoryChartViewModel) DataContext;
+            foreach (PropertyInfo parameter in new Bms().GetType().GetProperties())
+                ParameterComboBoxBms.Items.Add(parameter.Name);
+            foreach (PropertyInfo parameter in new Motor().GetType().GetProperties())
+                ParameterComboBoxMotor.Items.Add(parameter.Name);
         }
 
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TextBoxBase_OnSelectionChanged(object sender, TextChangedEventArgs e)
         {
-            var comboBox = (ComboBox) sender;
+            TextBox textBox = (TextBox) sender;
+            double number;
+            if (!double.TryParse(textBox.Text, out number)) return;
+            DateTime dateTimeDiff = DateTime.Now.AddHours(number * -1); //-1 because we need it to be negative.
+            _historyChartViewModel.TimeSpan = dateTimeDiff;
+        }
+
+        private void ParameterComboBoxBms_OnSelected(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox) sender;
             switch (comboBox.Name)
             {
-                case "ParameterComboBoxBms" when comboBox.Text == "Select":
-                    return;
                 case "ParameterComboBoxBms":
                     _historyChartViewModel.HistoryChartLoadData(typeof(Bms),
                         ParameterComboBoxBms.SelectedItem.ToString());
                     break;
-                case "ParameterComboBoxMotor" when comboBox.Text == "Select":
-                    return;
                 case "ParameterComboBoxMotor":
                     _historyChartViewModel.HistoryChartLoadData(typeof(Motor),
                         ParameterComboBoxMotor.SelectedItem.ToString());
                     break;
             }
-        }
-
-        private void TextBoxBase_OnSelectionChanged(object sender, TextChangedEventArgs e)
-        {
-            var textBox = (TextBox) sender;
-            double number;
-            if (!double.TryParse(textBox.Text, out number)) return;
-            var dateTimeDiff = DateTime.Now.AddHours(number * -1); //-1 because we need it to be negative.
-            _historyChartViewModel.TimeSpan = dateTimeDiff;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace TelemetryGUI.ViewModel.DataList
         public BmsViewModel()
         {
             _bmSs = new ObservableCollection<Bms>();
-            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event),
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventBms),
     Instance_DataChange);
         }
 

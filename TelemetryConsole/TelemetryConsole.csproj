@@ -148,9 +148,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\20190714190816_pela321.cs" />
-    <Compile Include="Migrations\20190714190816_pela321.designer.cs">
-      <DependentUpon>20190714190816_pela321.cs</DependentUpon>
+    <Compile Include="Migrations\20190717200032_updatgefortest.cs" />
+    <Compile Include="Migrations\20190717200032_updatgefortest.designer.cs">
+      <DependentUpon>20190717200032_updatgefortest.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\TelemetryContextModelSnapshot.cs" />
     <Compile Include="Misc\Constants.cs" />

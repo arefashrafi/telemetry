@@ -4,7 +4,7 @@ using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
 using TelemetryDependencies.Structs;
 
-namespace TelemetryConsole.Src.Database
+namespace TelemetryConsole.Database
 {
     public partial class TelemetryControl
     {

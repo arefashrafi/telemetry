@@ -7,27 +7,9 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-        </Grid.RowDefinitions>
-        <StackPanel Name="StackPanel" Grid.Row="0">
-            <TextBlock Name="WeatherAPIString" />
-        </StackPanel>
-        <DockPanel Grid.Row="1" Grid.Column="1">
-            <WrapPanel DockPanel.Dock="Bottom">
-                <Button Margin="5" Click="visit">Go to:</Button>
-                <TextBox x:Name="tb" Margin="5" Width="250" />
-                <Button Margin="5" Click="back">Back</Button>
-                <Button Margin="5" Click="forward">Forward</Button>
-                <Label VerticalAlignment="Center">History:</Label>
-                <ComboBox x:Name="cb" Width="150" Margin="5" SelectionChanged="cb_SelectionChanged" />
-            </WrapPanel>
-            <WebBrowser x:Name="wb"
-                        Navigated="wb_Navigated" />
+
+        <DockPanel>
+            <WebBrowser x:Name="WeatherBrowser"/>
         </DockPanel>
     </Grid>
 </UserControl>

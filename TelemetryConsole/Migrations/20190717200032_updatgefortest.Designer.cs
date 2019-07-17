@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using TelemetryConsole;
 
 namespace TelemetryConsole.Migrations
 {
     [DbContext(typeof(TelemetryContext))]
-    [Migration("20190714190816_pela321")]
-    partial class pela321
+    [Migration("20190717200032_updatgefortest")]
+    partial class updatgefortest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
