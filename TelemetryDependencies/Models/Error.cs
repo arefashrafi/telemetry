@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace TelemetryDependencies.Models
 {
     public class Error
@@ -14,6 +16,7 @@ namespace TelemetryDependencies.Models
         /// <summary>
         ///     Gets or sets the id.
         /// </summary>
+        [Key]
         public int Id { get; set; }
 
         /// <summary>

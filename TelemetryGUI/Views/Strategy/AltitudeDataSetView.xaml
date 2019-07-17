@@ -29,12 +29,31 @@
         <s:SciChartSurface Annotations="{Binding VerticalLineAnnotationCollection}" x:Name="SciChart" Grid.Column="1"
                            ViewportManager="{Binding ViewportManager}">
             <s:SciChartSurface.RenderableSeries>
-                <s:FastLineRenderableSeries StrokeThickness="1" DataSeries="{Binding ChartData}" Stroke="DarkOrange" />
+            <s:FastLineRenderableSeries DataSeries="{Binding RouteDataSeries, Mode=OneWay}"
+                                        Stroke="#FFFC9C29"
+                                        StrokeThickness="1"
+                                        XAxisId="Numeric"/>
+            <s:FastLineRenderableSeries DataSeries="{Binding EnergyDataSeries, Mode=OneWay}"
+                                        Stroke="#FF4083B7"
+                                        StrokeThickness="1"
+                                        XAxisId="DateTime"/>
             </s:SciChartSurface.RenderableSeries>
-
-            <s:SciChartSurface.XAxis>
-                <s:NumericAxis />
-            </s:SciChartSurface.XAxis>
+                <s:SciChartSurface.XAxes>
+                    <s:NumericAxis AxisAlignment="Bottom"
+                                AxisTitle="Bottom Axis"
+                                BorderBrush="#FFFF1919"
+                                BorderThickness="0,1,0,0"
+                                Id="Numeric"
+                                AutoRange="Always"
+                                TickTextBrush="#FFFF1919" />
+                    <s:DateTimeAxis AxisAlignment="Top"
+                                AxisTitle="Top Axis"
+                                BorderBrush="#FF279B27"
+                                BorderThickness="0,0,0,1"
+                                Id="DateTime"
+                                AutoRange="Always"
+                                TickTextBrush="#FF279B27" />
+                </s:SciChartSurface.XAxes>
 
             <s:SciChartSurface.YAxis>
                 <s:NumericAxis GrowBy="0.1, 0.1" />
@@ -69,7 +88,7 @@
                                        FontSize="13"
                                        FontWeight="Bold"
                                        Foreground="Green"
-                                       Text="{Binding DataSeries.SeriesName}" />
+                                       Text="Fix" />
 
                             <!--  Bind to the Series Value, using the Stroke as text foreground  -->
 

@@ -13,6 +13,8 @@ namespace TelemetryGUI.ViewModel.DataList
         public MPPTViewModel()
         {
             _mppts = new ObservableCollection<MPPT>();
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMppt),
+    Instance_DataChange);
         }
 
         public MPPT MPPT { get; set; }
@@ -106,18 +108,6 @@ namespace TelemetryGUI.ViewModel.DataList
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public void AddEventManager()
-        {
-            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event),
-                Instance_DataChange);
-        }
-
-        public void RemoveEventManager()
-        {
-            WeakEventManager<EventSource, EntityEventArgs>.RemoveHandler(null, nameof(EventSource.Event),
-                Instance_DataChange);
-        }
 
         private void Instance_DataChange(object sender, EntityEventArgs e)
         {

@@ -8,6 +8,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System.ComponentModel.DataAnnotations;
+
 namespace TelemetryDependencies.Models
 {
     /// <summary>
@@ -15,6 +17,7 @@ namespace TelemetryDependencies.Models
     /// </summary>
     public class Motor
     {
+        [Key]
         public int Id { get; set; }
         public int BatteryVoltage { get; set; }
         public int BatteryCurrent { get; set; }

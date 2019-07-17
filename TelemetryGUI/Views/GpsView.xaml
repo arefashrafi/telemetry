@@ -3,12 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:TelemetryGUI.Views"
-    xmlns:ViewModel="clr-namespace:TelemetryGUI.ViewModel" x:Class="TelemetryGUI.Views.Dashboard"
     xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+    xmlns:viewModel="clr-namespace:TelemetryGUI.ViewModel"
+    x:Class="TelemetryGUI.Views.GpsView"
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="800">
-
+    <UserControl.DataContext>
+        <viewModel:GpsViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -36,22 +38,22 @@
             <Label Content="{Binding DistanceBetweenGps, StringFormat=\{ 0:F4\}}"
                        FontSize="20" />
             <Label Content="Solar car" FontSize="30"  Visibility="Hidden"/>
-            <Label FontSize="16" Content="{Binding GpsSourceDirect.LAT}" />
-            <Label FontSize="16" Content="{Binding GpsSourceDirect.LONG}" />
-            <Label FontSize="16" Content="{Binding GpsSourceDirect.DIST}" />
-            <Label FontSize="16" Content="{Binding GpsSourceDirect.ALT}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.LAT, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.LONG, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.DIST, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.ALT, Mode=OneWay}" />
             <Label Content="Secondary GPS" FontSize="30" Visibility="Hidden"/>
-            <Label FontSize="16" Content="{Binding GpsSourceExternal.LAT}" />
-            <Label FontSize="16" Content="{Binding GpsSourceExternal.LONG}" />
-            <Label FontSize="16" Content="{Binding GpsSourceExternal.DIST}" />
-            <Label FontSize="16" Content="{Binding GpsSourceExternal.ALT}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.LAT, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.LONG, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.DIST, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.ALT, Mode=OneWay}" />
         </StackPanel>
-        <m:Map Name="GpsMapView" ZoomLevel="15" Center="{Binding LocationExternal}" Mode="Aerial" Grid.Column="2"
+        <m:Map x:Name="GpsMapView" ZoomLevel="10" Center="{Binding LocationExternal, Mode=OneWay}" Grid.Column="2" TargetUpdated="GpsMapView_OnTargetUpdated"
                CredentialsProvider="s5W0gX9RtyYX2B9Tbn3Q~qO_d8j0dzipMeHZykzOUPw~AvvSFGkA50MKT-YOsMMGXTUOtNLP56QZVOZcfBkukSBVcJR057t9EQxcHWhnZBeH">
-            <m:MapPolyline Stroke="AliceBlue" Locations="{Binding LocationCollectionExternal}"/>
-            <m:MapPolyline Stroke="Yellow" Locations="{Binding LocationCollectionDirect}"/>
-            <m:Pushpin Location="{Binding LocationDirect}" Cursor="Arrow"/>
-            <m:Pushpin Content="F" Location="{Binding LocationExternal}" Cursor="Cross"/>
+            <m:MapPolyline Stroke="Blue" StrokeThickness="3" Locations="{Binding LocationCollectionExternal}"/>
+            <m:MapPolyline Stroke="Yellow" StrokeThickness="3" Locations="{Binding LocationCollectionDirect}"/>
+            <m:Pushpin Content="S" Location="{Binding LocationDirect, Mode=OneWay}"/>
+            <m:Pushpin Content="F" Location="{Binding LocationExternal, Mode=OneWay}"/>
         </m:Map>
     </Grid>
 </UserControl>

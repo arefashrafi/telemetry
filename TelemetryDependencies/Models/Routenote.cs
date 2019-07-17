@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace TelemetryDependencies.Models
 {
     /// <summary>
@@ -17,6 +19,7 @@ namespace TelemetryDependencies.Models
         /// <summary>
         ///     Gets or sets the id.
         /// </summary>
+        [Key]
         public int ID { get; set; }
 
         public int UNIX_TIME { get; set; }

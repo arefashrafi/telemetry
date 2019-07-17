@@ -19,22 +19,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using FastMember;
 using SciChart.Charting.Common.Helpers;
 using SciChart.Charting.Model.DataSeries;
+using SciChart.Core.Extensions;
 using SciChart.Examples.ExternalDependencies.Common;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
 
 namespace TelemetryGUI.ViewModel.Live
 {
-    public class LiveMPPTViewModel : BaseViewModel
+    public class LiveViewModel : BaseViewModel
     {
-        private const int ChannelCount = 18; // Number of channels to render
-        private const int Size = 1000; // Size of each channel in points (FIFO Buffer)
+        private const int Size = 1000000; // Size of each channel in points (FIFO Buffer)
 
         private readonly IList<Color> _colors = new[]
         {
@@ -48,21 +48,20 @@ namespace TelemetryGUI.ViewModel.Live
         };
 
         private readonly ActionCommand _resetCommand;
-
         private readonly ActionCommand _startCommand;
         private readonly ActionCommand _stopCommand;
+        private string _bmsProperty;
         private ObservableCollection<LiveChannelViewModel> _channelViewModels;
         private volatile int _currentSize;
         private bool _isReset;
-        private MPPT _mppt = new MPPT();
-        
+
         // X, Y buffers used to buffer data into the Scichart instances in blocks of BufferSize
 
         private bool _running;
         private readonly object _syncRoot = new object();
-        private bool firstRead=false;
+        private bool _firstRead;
 
-        public LiveMPPTViewModel()
+        public LiveViewModel()
         {
             _startCommand = new ActionCommand(Start, () => !IsRunning);
             _stopCommand = new ActionCommand(Stop, () => IsRunning);
@@ -79,13 +78,23 @@ namespace TelemetryGUI.ViewModel.Live
             }
         }
 
+        public string BmsProperty
+        {
+            get => _bmsProperty;
+            set
+            {
+                _bmsProperty = value;
+                AddToChannelViewModels(value);
+                OnPropertyChanged("BmsProperty");
+            }
+        }
+
+
         public ICommand StartCommand => _startCommand;
 
         public ICommand StopCommand => _stopCommand;
 
         public ICommand ResetCommand => _resetCommand;
-
-        public int PointCount => _currentSize * ChannelCount;
 
 
         public bool IsReset
@@ -126,8 +135,10 @@ namespace TelemetryGUI.ViewModel.Live
             {
                 IsRunning = true;
                 IsReset = false;
+                WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventBms), OnTick);
 
-                WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event), OnTick);
+
+                WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMotor), OnTick);
             }
         }
 
@@ -135,7 +146,10 @@ namespace TelemetryGUI.ViewModel.Live
         {
             if (IsRunning)
             {
-                WeakEventManager<EventSource, EntityEventArgs>.RemoveHandler(null, nameof(EventSource.Event), OnTick);
+                WeakEventManager<EventSource, EntityEventArgs>.RemoveHandler(null, nameof(EventSource.EventBms),
+                    OnTick);
+                WeakEventManager<EventSource, EntityEventArgs>.RemoveHandler(null, nameof(EventSource.EventMotor),
+                    OnTick);
                 IsRunning = false;
             }
         }
@@ -143,54 +157,58 @@ namespace TelemetryGUI.ViewModel.Live
         private void Reset()
         {
             Stop();
-
-            // Initialize N EEGChannelViewModels. Each of these will be represented as a single channel
-            // of the EEG on the view. One channel = one SciChartSurface instance
             ChannelViewModels = new ObservableCollection<LiveChannelViewModel>();
-            int i = 0;
-            foreach (var propertyInfo in new Motor().GetType().GetProperties())
-            {
-                i++;
-                var channelViewModel = new LiveChannelViewModel(Size, _colors[i % 16])
-                    {ChannelName = propertyInfo.Name};
-                ChannelViewModels.Add(channelViewModel);
-            }
-
             IsReset = true;
         }
 
         private void OnTick(object sender, EntityEventArgs e)
         {
-            // Ensure only one timer Tick processed at a time
+            if (_channelViewModels.IsEmpty()) return;
+
             lock (_syncRoot)
             {
-                _mppt = e.Data as MPPT;
-                if (_mppt == null) return;
-
-                foreach (var channel in _channelViewModels)
+                foreach (LiveChannelViewModel channel in _channelViewModels)
                 {
-                    var dataSeries = channel.ChannelDataSeries;
-                    if (channel.ChannelName == "Time") continue;
-                    var dateTime = DateTime.ParseExact(_mppt.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                    if (e.Data.GetType().GetProperty(channel.ChannelName).CanRead == false) return;
+
+                    IXyDataSeries<DateTime, double> dataSeries = channel.ChannelDataSeries;
+                    DateTime dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
                         CultureInfo.InvariantCulture);
-                    if ( dateTime>dataSeries.XValues.LastOrDefault().AddSeconds(20) || !firstRead)
+                    try
                     {
-                        dataSeries.Append(dateTime,double.NaN);
-                        firstRead = true;
+                        if (dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
+                        {
+                            dataSeries.Append(dateTime, double.NaN);
+                            _firstRead = true;
+                        }
+                        else
+                        {
+                            var yValue =
+                                Convert.ToDouble(e.Data.GetType().GetProperty(channel.ChannelName)
+                                    ?.GetValue(e.Data, null));
+                            // Append block of values
+
+                            dataSeries.Append(dateTime, yValue);
+                            // For reporting current size to GUI
+                            _currentSize = dataSeries.Count;
+                        }
                     }
-                    else
+                    catch (Exception exception)
                     {
-                        double data =
-                            Convert.ToDouble(_mppt.GetType().GetProperty(channel.ChannelName)?.GetValue(_mppt, null));
-                        // Append block of values
-
-                        dataSeries.Append(dateTime, data);
-                        // For reporting current size to GUI
-                        _currentSize = dataSeries.Count;
+                        throw;
                     }
-
                 }
             }
+        }
+
+        private void AddToChannelViewModels(string channelName)
+        {
+
+
+            _channelViewModels.Add(new LiveChannelViewModel(Size, _colors[4])
+            {
+                ChannelName = channelName
+            });
         }
     }
 }

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
-using System.Linq;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
+using SciChart.Charting.Model.ChartSeries;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.ViewportManagers;
 using SciChart.Charting.Visuals.Annotations;
-using SciChart.Core.Extensions;
+using SciChart.Charting.Visuals.RenderableSeries;
 using SciChart.Examples.ExternalDependencies.Common;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
@@ -18,8 +19,9 @@ namespace TelemetryGUI.ViewModel
 {
     public class AltitudeDataSetViewModel : BaseViewModel
     {
-        private IDataSeries<double, double> _dataSeries0;
         private VerticalLineAnnotation _verticalLineAnnotationCarPosition;
+        private XyDataSeries<double, double> _routeDataSeries = new XyDataSeries<double, double>();
+        private XyDataSeries<DateTime, double> _energyDataSeries = new XyDataSeries<DateTime, double>();
         private AnnotationCollection _verticalLineAnnotationCollection = new AnnotationCollection();
 
         public AltitudeDataSetViewModel()
@@ -34,41 +36,53 @@ namespace TelemetryGUI.ViewModel
                 ShowLabel = true
             };
 
-            
-            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event), OnTick);
-            // Create a DataSeriesSet
-            _dataSeries0 = new XyDataSeries<double, double> {SeriesName = "Altitude"};
+
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventGps), OnTick);
+
 
             VerticalLinesRoutes();
-            using (var context= new TelemetryContext())
+            DataLoad();
+        }
+
+        private async Task DataLoad()
+        {
+            using (TelemetryContext context = new TelemetryContext())
             {
-                var data = context.Routenotes.ToList();
-                foreach (var item in data)
+                List<Routenote> routenotes = await context.Routenotes.ToListAsync();
+                List<Bms> bms = await context.BatteryManagementSystems.ToListAsync();
+                _routeDataSeries = new XyDataSeries<double, double>();
+                _energyDataSeries = new XyDataSeries<DateTime, double>
                 {
-                    _dataSeries0.Append((double)item.DIST,(double)item.ALT);
+                    AcceptsUnsortedData = true
+                };
+                foreach (Routenote item in routenotes)
+                {
+                    _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
                 }
+
+                foreach (Bms item in bms)
+                {
+                    DateTime dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                        CultureInfo.InvariantCulture);
+                    double energy = item.Current * item.Volt;
+
+                    _energyDataSeries.Append(dateTime, energy);
+                }
+
+
+                EnergyDataSeries = _energyDataSeries;
+                RouteDataSeries = _routeDataSeries;
             }
         }
 
         private void OnTick(object sender, EntityEventArgs e)
         {
-            Gps gps = e.Data as Gps;
-            if (gps == null || gps.DeviceId!=0) return;
+            if (!(e.Data is Gps gps) || gps.DeviceId != 0) return;
             _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
         }
 
-
-        // Databound to via SciChartSurface.DataSet in the view
-        public IDataSeries<double, double> ChartData
-        {
-            get => _dataSeries0;
-            set
-            {
-                _dataSeries0 = value;
-                OnPropertyChanged("ChartData");
-            }
-        }
-
+        public IDataSeries<DateTime, double> EnergyDataSeries { get; set; }
+        public IDataSeries<double, double> RouteDataSeries { get; set; }
         public IViewportManager ViewportManager { get; set; }
 
         public AnnotationCollection VerticalLineAnnotationCollection

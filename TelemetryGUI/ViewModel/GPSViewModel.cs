@@ -1,22 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Device.Location;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using TelemetryDependencies.Models;
-using TelemetryGUI.Util;
-using Microsoft.Maps.MapControl.WPF;
 using System.Windows.Threading;
-using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Maps.MapControl.WPF;
+using TelemetryDependencies.Models;
+using TelemetryGUI.Annotations;
+using TelemetryGUI.Util;
 
 namespace TelemetryGUI.ViewModel
 {
-    public class GPSViewModel
+    public class GpsViewModel:INotifyPropertyChanged
     {
-        public PropertyChangedEventHandler PropertyChanged;
+
         private double _distanceBetweenGps;
         private Gps _gpsDirect = new Gps();
         private Gps _gpsExternal = new Gps();
@@ -24,17 +24,46 @@ namespace TelemetryGUI.ViewModel
         private Location _locationExternal=new Location();
         private LocationCollection _locationCollectionDirect = new LocationCollection();
         private LocationCollection _locationCollectionExternal = new LocationCollection();
-        public GPSViewModel()
+        public GpsViewModel()
         {
-            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event), OnTick);
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventGps), OnTick);
+            LoadPreviousData();
         }
+
+        private async Task LoadPreviousData()
+        {
+            using TelemetryContext context = new TelemetryContext();
+            List<Gps> gpsCollection = await context.GPSs.ToListAsync();
+            foreach (Gps item in gpsCollection)
+            {
+                if (item.DeviceId == 1)
+                {
+                    _locationCollectionExternal.Add(new Location
+                    {
+                        Altitude = item.ALT,
+                        Latitude = item.LAT,
+                        Longitude = item.LONG
+                    });
+                }
+                else
+                {
+                    _locationCollectionDirect.Add(new Location
+                    {
+                        Altitude = item.ALT,
+                        Latitude = item.LAT,
+                        Longitude = item.LONG
+                    });
+                }
+            }
+        }
+
         public LocationCollection LocationCollectionExternal
         {
             get => _locationCollectionExternal;
             set
             {
                 _locationCollectionExternal = value;
-                OnPropertyChanged("LocationCollectionExternal");
+                OnPropertyChanged();
             }
         }
         public LocationCollection LocationCollectionDirect
@@ -43,7 +72,7 @@ namespace TelemetryGUI.ViewModel
             set
             {
                 _locationCollectionDirect = value;
-                OnPropertyChanged("LocationCollectionDirect");
+                OnPropertyChanged();
             }
         }
         public Location LocationDirect
@@ -52,7 +81,7 @@ namespace TelemetryGUI.ViewModel
             set
             {
                 _locationDirect = value;
-                OnPropertyChanged("LocationDirect");
+                OnPropertyChanged();
             }
         }
         public Location LocationExternal
@@ -61,7 +90,7 @@ namespace TelemetryGUI.ViewModel
             set
             {
                 _locationExternal = value;
-                OnPropertyChanged("LocationExternal");
+                OnPropertyChanged();
             }
         }
         public Gps GpsSourceDirect
@@ -70,7 +99,7 @@ namespace TelemetryGUI.ViewModel
             set
             {
                 _gpsDirect = value;
-                OnPropertyChanged("GpsSourceDirect");
+                OnPropertyChanged();
             }
         }
 
@@ -80,7 +109,7 @@ namespace TelemetryGUI.ViewModel
             set
             {
                 _gpsExternal = value;
-                OnPropertyChanged("GpsSourceExternal");
+                OnPropertyChanged();
             }
         }
 
@@ -90,7 +119,7 @@ namespace TelemetryGUI.ViewModel
             set
             {
                 _distanceBetweenGps = value;
-                OnPropertyChanged("DistanceBetweenGPS");
+                OnPropertyChanged();
             }
         }
 
@@ -102,6 +131,7 @@ namespace TelemetryGUI.ViewModel
             if (gps.DeviceId == 0)
             {
                 _gpsDirect = gps;
+                GpsSourceDirect = _gpsDirect;
                 _locationDirect.Altitude = _gpsDirect.ALT;
                 _locationDirect.Latitude = _gpsDirect.LAT;
                 _locationDirect.Longitude = _gpsDirect.LONG;
@@ -114,6 +144,7 @@ namespace TelemetryGUI.ViewModel
             else if (gps.DeviceId == 1)
             {
                 _gpsExternal = gps;
+                GpsSourceExternal = _gpsExternal;
                 _locationExternal.Altitude = _gpsExternal.ALT;
                 _locationExternal.Latitude = _gpsExternal.LAT;
                 _locationExternal.Longitude = _gpsExternal.LONG;
@@ -135,17 +166,16 @@ namespace TelemetryGUI.ViewModel
             var externalGps = new GeoCoordinate(_gpsExternal.LAT, _gpsExternal.LONG);
 
             _distanceBetweenGps = externalGps.GetDistanceTo(directGps);
+            DistanceBetweenGps = _distanceBetweenGps;
         }
-       
-        // Create the OnPropertyChanged method to raise the event
-        // Create the OnPropertyChanged method to raise the event
-        protected void OnPropertyChanged(string name)
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

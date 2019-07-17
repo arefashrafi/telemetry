@@ -13,6 +13,8 @@ namespace TelemetryGUI.ViewModel.DataList
         public BmsViewModel()
         {
             _bmSs = new ObservableCollection<Bms>();
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventBms),
+    Instance_DataChange);
         }
 
         public Bms Bms { get; set; }
@@ -211,20 +213,10 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void AddEventManager()
-        {
-            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event),
-                Instance_DataChange);
-        }
-
-        public void RemoveEventManager()
-        {
-            WeakEventManager<EventSource, EntityEventArgs>.RemoveHandler(null, nameof(EventSource.Event),
-                Instance_DataChange);
-        }
 
         private void Instance_DataChange(object sender, EntityEventArgs e)
         {
+
             Bms = e.Data as Bms;
             if (Bms == null) return;
             Application.Current.Dispatcher.Invoke(delegate // <--- HERE

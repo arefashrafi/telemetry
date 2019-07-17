@@ -12,7 +12,7 @@ namespace TelemetryGUI.Util
         private static readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        public async Task Broker()
+        public void Broker()
         {
             SqlTableDependency<Motor> motordep = new SqlTableDependency<Motor>(ConnectionString, "Motors");
             motordep.OnChanged += ChangedMotor;
@@ -26,34 +26,43 @@ namespace TelemetryGUI.Util
             SqlTableDependency<MPPT> mpptdep = new SqlTableDependency<MPPT>(ConnectionString, "MPPTs");
             mpptdep.OnChanged += ChangedMppt;
             mpptdep.Start();
+            SqlTableDependency<Error> errordep = new SqlTableDependency<Error>(ConnectionString, "Errors");
+            errordep.OnChanged += ChangedError;
+            errordep.Start();
         }
 
         private void ChangedMotor(object sender, RecordChangedEventArgs<Motor> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
             var changedEntity = e.Entity;
-            EventSource.RaiseEvent(changedEntity);
+            EventSource.RaiseEvent(changedEntity,changedEntity.Time);
         }
 
         private void ChangedGps(object sender, RecordChangedEventArgs<Gps> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
             var changedEntity = e.Entity;
-            EventSource.RaiseEvent(changedEntity);
+            EventSource.RaiseEvent(changedEntity,changedEntity.TimeStamp);
         }
 
         private void ChangedBms(object sender, RecordChangedEventArgs<Bms> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
             var changedEntity = e.Entity;
-            EventSource.RaiseEvent(changedEntity);
+            EventSource.RaiseEvent(changedEntity,changedEntity.Time);
         }
 
         private void ChangedMppt(object sender, RecordChangedEventArgs<MPPT> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
             var changedEntity = e.Entity;
-            EventSource.RaiseEvent(changedEntity);
+            EventSource.RaiseEvent(changedEntity,changedEntity.Time);
+        }
+        private void ChangedError(object sender, RecordChangedEventArgs<Error> e)
+        {
+            if (e.ChangeType != ChangeType.Insert) return;
+            var changedEntity = e.Entity;
+            EventSource.RaiseEvent(changedEntity,changedEntity.Time);
         }
     }
 }

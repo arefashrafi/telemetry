@@ -14,6 +14,8 @@ namespace TelemetryGUI.ViewModel.DataList
         public MotorViewModel()
         {
             _motors = new ObservableCollection<Motor>();
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMotor),
+    Instance_DataChange);
         }
 
         public Motor Motor
@@ -246,17 +248,7 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void AddEventManager()
-        {
-            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.Event),
-                Instance_DataChange);
-        }
 
-        public void RemoveEventManager()
-        {
-            WeakEventManager<EventSource, EntityEventArgs>.RemoveHandler(null, nameof(EventSource.Event),
-                Instance_DataChange);
-        }
 
         private void Instance_DataChange(object sender, EntityEventArgs e)
         {

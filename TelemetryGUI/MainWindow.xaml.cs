@@ -13,7 +13,7 @@ namespace TelemetryGUI
         public MainWindow()
         {
             InitializeComponent();
-            var serviceBroker = new ServiceBroker();
+            ServiceBroker serviceBroker = new ServiceBroker();
             serviceBroker.Broker();
         }
 
