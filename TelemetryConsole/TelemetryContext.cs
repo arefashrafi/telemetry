@@ -20,6 +20,7 @@ namespace TelemetryConsole
         public DbSet<Error> Errors { get; set; }
 
         public DbSet<Gps> GPSs { get; set; }
+        public DbSet<Debug> Debugs { get; set; }
 
         /// <summary>
         ///     Gets or sets the battery management system #1.

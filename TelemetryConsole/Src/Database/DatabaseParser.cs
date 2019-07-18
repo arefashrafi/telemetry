@@ -103,6 +103,16 @@ namespace TelemetryConsole.Database
                         TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
                 }
+                if (typeof(T) == typeof(DebugStruct))
+                {
+                    var debugStruct = (DebugStruct)(object)dataStruct;
+                    DebugCollection.Add(new Debug
+                    {
+                        ExceptionSource = "smn",
+                        Message = debugStruct.rssi.ToString(),
+                        Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
+                    });
+                }
             }
             catch (Exception ex)
             {

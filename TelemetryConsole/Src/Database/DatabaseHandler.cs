@@ -46,6 +46,11 @@ namespace TelemetryConsole.Database
                                 await context.BulkInsertAsync(new List<Error>(ErrorCollection));
                                 ErrorCollection.Clear();
                             }
+                            if (DebugCollection.Count > 0)
+                            {
+                                await context.BulkInsertAsync(new List<Debug>(DebugCollection));
+                                DebugCollection.Clear();
+                            }
                         }
                         catch (Exception e)
                         {

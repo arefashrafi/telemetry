@@ -24,5 +24,6 @@ namespace TelemetryConsole.Misc
         public static readonly ObservableCollection<Bms> BmsCollection = new ObservableCollection<Bms>();
         public static readonly ObservableCollection<Gps> GpsCollection = new ObservableCollection<Gps>();
         public static readonly ObservableCollection<Error> ErrorCollection = new ObservableCollection<Error>();
+        public static readonly ObservableCollection<Debug> DebugCollection = new ObservableCollection<Debug>();
     }
 }

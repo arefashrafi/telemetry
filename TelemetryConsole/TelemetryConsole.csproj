@@ -28,7 +28,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -286,6 +286,10 @@
     <Compile Include="Migrations\20190718122323_fuckthisshitimout.cs" />
     <Compile Include="Migrations\20190718122323_fuckthisshitimout.designer.cs">
       <DependentUpon>20190718122323_fuckthisshitimout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190718155118_smh.cs" />
+    <Compile Include="Migrations\20190718155118_smh.designer.cs">
+      <DependentUpon>20190718155118_smh.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\TelemetryContextModelSnapshot.cs" />
     <Compile Include="Misc\Constants.cs" />

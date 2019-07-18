@@ -63,6 +63,23 @@ namespace TelemetryConsole.Migrations
                     b.ToTable("BatteryManagementSystems");
                 });
 
+            modelBuilder.Entity("TelemetryDependencies.Models.Debug", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ExceptionSource");
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("Time");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Debugs");
+                });
+
             modelBuilder.Entity("TelemetryDependencies.Models.Error", b =>
                 {
                     b.Property<int>("Id")
