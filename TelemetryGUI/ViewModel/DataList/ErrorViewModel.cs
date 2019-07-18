@@ -8,18 +8,20 @@ namespace TelemetryGUI.ViewModel.DataList
 {
     public class ErrorViewModel : INotifyPropertyChanged
     {
+        private Error _error = new Error();
         private ObservableCollection<Error> _errors;
-        private Error _error=new Error();
+        public Visibility Visibility = Visibility.Hidden;
+
         public ErrorViewModel()
-        { 
+        {
             _errors = new ObservableCollection<Error>();
             WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventError),
-    Instance_DataChange);
+                Instance_DataChange);
             ResetCommand = new RelayCommand(ResetErrors);
-
         }
+
         public RelayCommand ResetCommand { get; set; }
-        public Visibility Visibility = Visibility.Hidden;
+
         public Error Error
         {
             get => _error;
@@ -66,11 +68,11 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
 
         private void Instance_DataChange(object sender, EntityEventArgs e)
         {
-            
             _error = e.Data as Error;
             if (_error == null) return;
             Application.Current.Dispatcher.Invoke(delegate // <--- HERE
@@ -81,15 +83,11 @@ namespace TelemetryGUI.ViewModel.DataList
             });
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-    
 
         protected virtual void OnPropertyChanged(string propertyName = null)
         {
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-        
 
 
         private void ResetErrors()

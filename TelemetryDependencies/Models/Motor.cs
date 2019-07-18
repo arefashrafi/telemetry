@@ -17,8 +17,8 @@ namespace TelemetryDependencies.Models
     /// </summary>
     public class Motor
     {
-        [Key]
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
+
         public int BatteryVoltage { get; set; }
         public int BatteryCurrent { get; set; }
         public int CurrentDirection { get; set; }

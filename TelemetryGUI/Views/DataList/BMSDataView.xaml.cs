@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
-using TelemetryGUI.ViewModel.DataList;
 
 namespace TelemetryGUI.Views.DataList
 {
@@ -9,7 +9,6 @@ namespace TelemetryGUI.Views.DataList
     /// </summary>
     public partial class BmsDataView : UserControl
     {
-
         public BmsDataView()
         {
             InitializeComponent();
@@ -18,11 +17,6 @@ namespace TelemetryGUI.Views.DataList
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DataGrid.Items.Count > 0) DataGrid.ScrollIntoView(DataGrid.Items[DataGrid.Items.Count - 1]);
-        }
-
-        private void BmsDataView_OnUnloaded(object sender, RoutedEventArgs e)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

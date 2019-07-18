@@ -9,7 +9,7 @@
     <Grid>
 
         <DockPanel>
-            <WebBrowser x:Name="WeatherBrowser"/>
+            <WebBrowser x:Name="WeatherBrowser" />
         </DockPanel>
     </Grid>
 </UserControl>

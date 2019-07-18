@@ -20,10 +20,11 @@ namespace TelemetryGUI
         private static readonly int R_COUNT = 5;
         private static readonly int Y_COUNT = 63;
 
+        #pragma warning disable 414
         private static int L_MAX_SUBCOUNT = 64;
         private static int B_MAX_SUBCOUNT = 5;
         private static int R_MAX_SUBCOUNT = 40;
-
+        #pragma warning restore 414
         private static readonly int[] l_subcount = {64, 34, 20, 7, 3, 1};
         private static readonly int[] b_subcount = {5, 2};
         private static readonly int[] r_subcount = {40, 10, 6, 2, 1};

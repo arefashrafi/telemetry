@@ -33,19 +33,19 @@ namespace TelemetryConsole.Database
             // Loop if receiveQueue contains data while serial port is open
             do
             {
-                byte[] packetArray;
+                byte[] packetArray = new byte[128];
                 lock (RxByteQueue)
                 {
                     try
                     {
                         if (RxByteQueue.Count > BuffSize)
-                        {
                             packetArray = RxByteQueue.Take(BuffSize).ToArray();
-                        }
                         else
-                        {
                             continue;
-                        }
+                    }
+                    catch (IndexOutOfRangeException e)
+                    {
+                        Console.WriteLine("Index out of range");
                     }
                     catch (Exception e)
                     {
@@ -59,7 +59,6 @@ namespace TelemetryConsole.Database
                 byte dataLength = packetArray[DataLengthIndex];
 
                 if (startByte == ExpectedStartByte && dataLength <= packetArray.Length)
-                {
                     try
                     {
                         byte[] dataSubsetPacket = packetArray.RangeSubset(3, dataLength);
@@ -68,7 +67,7 @@ namespace TelemetryConsole.Database
 
                         if (id == BmsId)
                         {
-                            if (dataLength <= 40)
+                            if (dataLength ==38)
                             {
                                 var bMsStruct = Extensions.ByteArrayToStructure<BmsStruct>(dataSubsetPacket);
                                 DatabaseParser(bMsStruct);
@@ -115,26 +114,20 @@ namespace TelemetryConsole.Database
                         int length = dataLength + 3 + 4; // +3+3 is for crc and start byte etc
                         int totalLength = length;
                         for (int i = 0; i < totalLength; i++)
-                        {
                             lock (RxByteQueue)
                             {
                                 RxByteQueue.TryDequeue(out _);
                             }
-                        }
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
-                        throw;
+                        Console.WriteLine(e+"Dataserializer");
                     }
-                }
                 else
-                {
                     lock (RxByteQueue)
                     {
                         RxByteQueue.TryDequeue(out byte _); // do this until we find startByte
                     }
-                }
             } while (true);
         }
     }

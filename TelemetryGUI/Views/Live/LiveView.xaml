@@ -187,7 +187,7 @@
                             <TextBlock Margin="3" HorizontalAlignment="Left" Foreground="White" Text="Choose Data: " />
 
                             <ComboBox Text="Select" Name="DataBmsSelectionComboBox" Margin="4"
-                                       SelectedItem="{Binding BmsProperty, Mode=TwoWay}" />
+                                      SelectedItem="{Binding BmsProperty, Mode=TwoWay}" />
                             <ComboBox Text="Select" Name="DataMotorSelectionComboBox" Margin="4"
                                       SelectedItem="{Binding BmsProperty, Mode=TwoWay}" />
                             <ComboBox Text="Select" Name="DataMpptSelectionComboBox" Margin="4"

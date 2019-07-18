@@ -4,8 +4,8 @@ namespace TelemetryDependencies.Models
 {
     public class MPPT
     {
-        [Key]
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
+
         public int DeviceId { get; set; }
         public int InputCurrent { get; set; }
         public int InputVoltage { get; set; }

@@ -9,7 +9,6 @@ namespace TelemetryGUI.Views
     /// </summary>
     public partial class GpsView : UserControl
     {
-        
         public GpsView()
         {
             InitializeComponent();
@@ -17,7 +16,7 @@ namespace TelemetryGUI.Views
 
         private void GpsMapView_OnTargetUpdated(object sender, DataTransferEventArgs e)
         {
-            GpsViewModel gpsViewModel = this.DataContext as GpsViewModel;
+            var gpsViewModel = DataContext as GpsViewModel;
             if (gpsViewModel != null) GpsMapView.SetView(gpsViewModel.LocationExternal, 10);
         }
     }

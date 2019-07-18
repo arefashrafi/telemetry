@@ -232,6 +232,9 @@
     <PackageReference Include="System.Configuration.ConfigurationManager">
       <Version>4.5.0</Version>
     </PackageReference>
+    <PackageReference Include="Z.EntityFramework.Extensions.EFCore">
+      <Version>2.6.5</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TelemetryDependencies\TelemetryDependencies.csproj">

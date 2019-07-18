@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
@@ -20,10 +18,10 @@ namespace TelemetryGUI.ViewModel.HistoryChart
 {
     public class HistoryChartViewModel : BaseViewModel
     {
+        private bool _firstReadBms = true;
+        private bool _firstReadMotor = true;
         private ObservableCollection<IRenderableSeriesViewModel> _renderableSeriesViewModels;
         private DateRange _xVisibleRange;
-        private bool _firstReadMotor=true;
-        private bool _firstReadBms=true;
 
 
         public HistoryChartViewModel()
@@ -32,7 +30,6 @@ namespace TelemetryGUI.ViewModel.HistoryChart
             ParameterCollectionBms = new ObservableCollection<string>();
             ParameterCollectionMotor = new ObservableCollection<string>();
             DeleteCommand = new RelayCommand(DeleteSeriesClick);
-
         }
 
         public ObservableCollection<string> ParameterCollectionMotor { get; set; }
@@ -63,27 +60,27 @@ namespace TelemetryGUI.ViewModel.HistoryChart
             }
         }
 
-        public async Task HistoryChartLoadData(Type type, string param)
+        public async void HistoryChartLoadData(Type type, string param)
         {
-            Random r = new Random();
+            var r = new Random();
             XyDataSeries<DateTime, double> xyDataSeries = new XyDataSeries<DateTime, double>();
 
             if (type == typeof(Motor))
             {
-                using TelemetryContext context = new TelemetryContext();
+                using var context = new TelemetryContext();
                 List<Motor> dataList = await context.Motors.ToListAsync();
-                
+
                 List<Motor> filteredMotors = dataList.Where(t =>
-                    DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) > TimeSpan).ToList();
-                foreach (Motor motor in filteredMotors)
+                        DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) > TimeSpan)
+                    .ToList();
+                foreach (var motor in filteredMotors)
                 {
-                    
-                    DateTime dateTime = DateTime.ParseExact(motor.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                    var dateTime = DateTime.ParseExact(motor.Time, "yyyy-MM-dd HH:mm:ss.fff",
                         CultureInfo.InvariantCulture);
-                    
+
                     if (dateTime > xyDataSeries.XValues.LastOrDefault().AddMinutes(10) || _firstReadMotor)
                     {
-                        xyDataSeries.Append(dateTime,double.NaN);
+                        xyDataSeries.Append(dateTime, double.NaN);
                         _firstReadMotor = false;
                     }
                     else
@@ -92,36 +89,36 @@ namespace TelemetryGUI.ViewModel.HistoryChart
                         xyDataSeries.XValues.Add(dateTime);
                         xyDataSeries.YValues.Add(paramValue);
                     }
-
                 }
             }
 
             if (type == typeof(Bms))
             {
-                using TelemetryContext context = new TelemetryContext();
+                using var context = new TelemetryContext();
                 List<Bms> dataList = await context.BatteryManagementSystems.ToListAsync();
-                
+
                 List<Bms> filteredBms = dataList.Where(t =>
-                    DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) > TimeSpan).ToList();
-                foreach (Bms bms in filteredBms)
+                        DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) > TimeSpan)
+                    .ToList();
+                foreach (var bms in filteredBms)
                 {
-                    DateTime dateTime = DateTime.ParseExact(bms.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                    var dateTime = DateTime.ParseExact(bms.Time, "yyyy-MM-dd HH:mm:ss.fff",
                         CultureInfo.InvariantCulture);
                     if (dateTime > xyDataSeries.XValues.LastOrDefault().AddMinutes(10) || _firstReadBms)
                     {
-                        xyDataSeries.Append(dateTime,double.NaN);
+                        xyDataSeries.Append(dateTime, double.NaN);
                         _firstReadBms = false;
                     }
                     else
                     {
-                        var paramValue = Convert.ToDouble(bms.GetType().GetProperty(param)?.GetValue(bms, null));
+                        double paramValue = Convert.ToDouble(bms.GetType().GetProperty(param)?.GetValue(bms, null));
                         xyDataSeries.XValues.Add(dateTime);
                         xyDataSeries.YValues.Add(paramValue);
                     }
                 }
             }
 
-            Color color = Color.FromRgb(Convert.ToByte(r.Next(256)), Convert.ToByte(r.Next(256)),
+            var color = Color.FromRgb(Convert.ToByte(r.Next(256)), Convert.ToByte(r.Next(256)),
                 Convert.ToByte(r.Next(256)));
             _renderableSeriesViewModels.Add(new LineRenderableSeriesViewModel
             {
@@ -133,7 +130,7 @@ namespace TelemetryGUI.ViewModel.HistoryChart
 
         private void DeleteSeriesClick()
         {
-            IRenderableSeriesViewModel rSeries = RenderableSeriesViewModels.LastOrDefault();
+            var rSeries = RenderableSeriesViewModels.LastOrDefault();
             if (rSeries?.DataSeries == null)
                 return;
 

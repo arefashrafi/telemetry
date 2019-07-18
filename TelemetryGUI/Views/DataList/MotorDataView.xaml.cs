@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using TelemetryGUI.ViewModel.DataList;
+﻿using System.Windows.Controls;
 
 namespace TelemetryGUI.Views.DataList
 {
@@ -9,7 +7,6 @@ namespace TelemetryGUI.Views.DataList
     /// </summary>
     public partial class MotorDataView : UserControl
     {
-
         public MotorDataView()
         {
             InitializeComponent();
@@ -19,7 +16,5 @@ namespace TelemetryGUI.Views.DataList
         {
             if (DataGrid.Items.Count > 0) DataGrid.ScrollIntoView(DataGrid.Items[DataGrid.Items.Count - 1]);
         }
-
-
     }
 }

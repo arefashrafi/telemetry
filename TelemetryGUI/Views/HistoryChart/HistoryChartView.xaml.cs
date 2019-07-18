@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reflection;
-using System.Windows;
 using System.Windows.Controls;
 using TelemetryDependencies.Models;
 using TelemetryGUI.ViewModel.HistoryChart;
@@ -18,24 +16,24 @@ namespace TelemetryGUI.Views.HistoryChart
         {
             InitializeComponent();
             _historyChartViewModel = (HistoryChartViewModel) DataContext;
-            foreach (PropertyInfo parameter in new Bms().GetType().GetProperties())
+            foreach (var parameter in new Bms().GetType().GetProperties())
                 ParameterComboBoxBms.Items.Add(parameter.Name);
-            foreach (PropertyInfo parameter in new Motor().GetType().GetProperties())
+            foreach (var parameter in new Motor().GetType().GetProperties())
                 ParameterComboBoxMotor.Items.Add(parameter.Name);
         }
 
         private void TextBoxBase_OnSelectionChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox textBox = (TextBox) sender;
+            var textBox = (TextBox) sender;
             double number;
             if (!double.TryParse(textBox.Text, out number)) return;
-            DateTime dateTimeDiff = DateTime.Now.AddHours(number * -1); //-1 because we need it to be negative.
+            var dateTimeDiff = DateTime.Now.AddHours(number * -1); //-1 because we need it to be negative.
             _historyChartViewModel.TimeSpan = dateTimeDiff;
         }
 
         private void ParameterComboBoxBms_OnSelected(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox comboBox = (ComboBox) sender;
+            var comboBox = (ComboBox) sender;
             switch (comboBox.Name)
             {
                 case "ParameterComboBoxBms":

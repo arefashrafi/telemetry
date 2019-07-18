@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using TelemetryGUI.ViewModel.DataList;
+﻿using System.Windows.Controls;
 
 namespace TelemetryGUI.Views
 {
@@ -9,13 +7,10 @@ namespace TelemetryGUI.Views
     /// </summary>
     public partial class MPPTDataView : UserControl
     {
-
         public MPPTDataView()
         {
             InitializeComponent();
-
         }
-
 
 
         private void DataGrid_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

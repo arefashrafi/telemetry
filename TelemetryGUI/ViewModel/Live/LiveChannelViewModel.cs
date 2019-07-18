@@ -66,7 +66,7 @@ namespace TelemetryGUI.ViewModel.Live
                 OnPropertyChanged("ChannelDataSeries");
             }
         }
-
+        
         public void Reset()
         {
             _channelDataSeries.Clear();

@@ -14,7 +14,7 @@ namespace TelemetryGUI.ViewModel.DataList
         {
             _mppts = new ObservableCollection<MPPT>();
             WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMppt),
-    Instance_DataChange);
+                Instance_DataChange);
         }
 
         public MPPT MPPT { get; set; }

@@ -1,22 +1,19 @@
 using System;
+using System.Configuration;
 using System.Globalization;
 using System.IO.Ports;
 using NmeaParser;
 using NmeaParser.Nmea;
+using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
 
 namespace TelemetryConsole.SerialReader
 {
-    public class GpsSerialReceiver
+    public class GpsSerialReceiver:Constants
     {
-        public GpsSerialReceiver()
-        {
-
-        }
-
         public static void StartListening()
         {
-            string portName = System.Configuration.ConfigurationManager.AppSettings["COMPORT"];
+            string portName = ConfigurationManager.AppSettings["COMPORT"];
             try
             {
                 var port = new SerialPort(portName, 9600); //change parameters to match your serial port
@@ -35,8 +32,7 @@ namespace TelemetryConsole.SerialReader
             try
             {
                 if (!(args.Message is Gga gngga)) return;
-                using var context = new TelemetryContext();
-                context.GPSs.Add(new Gps
+                GpsCollection.Add(new Gps
                 {
                     DeviceId = 1,
                     LAT = gngga.Latitude,
@@ -55,19 +51,10 @@ namespace TelemetryConsole.SerialReader
                     SPEED = 0,
                     TimeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                 });
-                try
-                {
-                    context.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                Console.WriteLine(e+"GPS Parsing");
             }
         }
     }

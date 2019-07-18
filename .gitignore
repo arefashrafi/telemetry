@@ -18,3 +18,5 @@
 /TelemetryGUI/bin/Debug
 /TelemetryGUI/obj
 /TelemetryGUI/TelemetryGUI.csproj.user
+/.vs
+/Telemetry.sln.DotSettings

@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
-using SciChart.Charting.Model.ChartSeries;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.ViewportManagers;
 using SciChart.Charting.Visuals.Annotations;
-using SciChart.Charting.Visuals.RenderableSeries;
 using SciChart.Examples.ExternalDependencies.Common;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
@@ -19,9 +16,9 @@ namespace TelemetryGUI.ViewModel
 {
     public class AltitudeDataSetViewModel : BaseViewModel
     {
-        private VerticalLineAnnotation _verticalLineAnnotationCarPosition;
-        private XyDataSeries<double, double> _routeDataSeries = new XyDataSeries<double, double>();
         private XyDataSeries<DateTime, double> _energyDataSeries = new XyDataSeries<DateTime, double>();
+        private XyDataSeries<double, double> _routeDataSeries = new XyDataSeries<double, double>();
+        private VerticalLineAnnotation _verticalLineAnnotationCarPosition;
         private AnnotationCollection _verticalLineAnnotationCollection = new AnnotationCollection();
 
         public AltitudeDataSetViewModel()
@@ -42,43 +39,6 @@ namespace TelemetryGUI.ViewModel
 
             VerticalLinesRoutes();
             DataLoad();
-        }
-
-        private async Task DataLoad()
-        {
-            using (TelemetryContext context = new TelemetryContext())
-            {
-                List<Routenote> routenotes = await context.Routenotes.ToListAsync();
-                List<Bms> bms = await context.BatteryManagementSystems.ToListAsync();
-                _routeDataSeries = new XyDataSeries<double, double>();
-                _energyDataSeries = new XyDataSeries<DateTime, double>
-                {
-                    AcceptsUnsortedData = true
-                };
-                foreach (Routenote item in routenotes)
-                {
-                    _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
-                }
-
-                foreach (Bms item in bms)
-                {
-                    DateTime dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                        CultureInfo.InvariantCulture);
-                    double energy = item.Current * item.Volt;
-
-                    _energyDataSeries.Append(dateTime, energy);
-                }
-
-
-                EnergyDataSeries = _energyDataSeries;
-                RouteDataSeries = _routeDataSeries;
-            }
-        }
-
-        private void OnTick(object sender, EntityEventArgs e)
-        {
-            if (!(e.Data is Gps gps) || gps.DeviceId != 0) return;
-            _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
         }
 
         public IDataSeries<DateTime, double> EnergyDataSeries { get; set; }
@@ -103,6 +63,35 @@ namespace TelemetryGUI.ViewModel
                 _verticalLineAnnotationCarPosition = value;
                 OnPropertyChanged("VerticalLineAnnotationCarPosition");
             }
+        }
+
+        private async void DataLoad()
+        {
+            using var context = new TelemetryContext();
+            List<Routenote> routenotes = await context.Routenotes.ToListAsync();
+            List<Bms> bms = await context.BatteryManagementSystems.ToListAsync();
+            _routeDataSeries = new XyDataSeries<double, double>();
+            _energyDataSeries = new XyDataSeries<DateTime, double> {AcceptsUnsortedData = true};
+            foreach (var item in routenotes) _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
+
+            foreach (var item in bms)
+            {
+                var dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                    CultureInfo.InvariantCulture);
+                double energy = item.Current * item.Volt;
+
+                _energyDataSeries.Append(dateTime, energy);
+            }
+
+
+            EnergyDataSeries = _energyDataSeries;
+            RouteDataSeries = _routeDataSeries;
+        }
+
+        private void OnTick(object sender, EntityEventArgs e)
+        {
+            if (!(e.Data is Gps gps) || gps.DeviceId != 0) return;
+            _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
         }
 
         public void VerticalLinesRoutes()

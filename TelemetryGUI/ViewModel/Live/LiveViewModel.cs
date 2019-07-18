@@ -19,12 +19,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using SciChart.Charting.Common.Helpers;
 using SciChart.Charting.Model.DataSeries;
+using SciChart.Charting.Visuals;
 using SciChart.Core.Extensions;
 using SciChart.Examples.ExternalDependencies.Common;
 using TelemetryDependencies.Models;
@@ -34,7 +34,7 @@ namespace TelemetryGUI.ViewModel.Live
 {
     public class LiveViewModel : BaseViewModel
     {
-        private const int Size = 1000000; // Size of each channel in points (FIFO Buffer)
+        private const int Size = 100000; // Size of each channel in points (FIFO Buffer)
 
         private readonly IList<Color> _colors = new[]
         {
@@ -50,19 +50,21 @@ namespace TelemetryGUI.ViewModel.Live
         private readonly ActionCommand _resetCommand;
         private readonly ActionCommand _startCommand;
         private readonly ActionCommand _stopCommand;
+        private readonly object _syncRoot = new object();
         private string _bmsProperty;
         private ObservableCollection<LiveChannelViewModel> _channelViewModels;
         private volatile int _currentSize;
+        private bool _firstRead;
         private bool _isReset;
 
         // X, Y buffers used to buffer data into the Scichart instances in blocks of BufferSize
 
         private bool _running;
-        private readonly object _syncRoot = new object();
-        private bool _firstRead;
+        private SciChartSurface _sciChartSurface;
 
         public LiveViewModel()
         {
+            _sciChartSurface = new SciChartSurface();
             _startCommand = new ActionCommand(Start, () => !IsRunning);
             _stopCommand = new ActionCommand(Stop, () => IsRunning);
             _resetCommand = new ActionCommand(Reset, () => !IsRunning && !IsReset);
@@ -86,6 +88,16 @@ namespace TelemetryGUI.ViewModel.Live
                 _bmsProperty = value;
                 AddToChannelViewModels(value);
                 OnPropertyChanged("BmsProperty");
+            }
+        }
+
+        public SciChartSurface SciChartSurface
+        {
+            get => _sciChartSurface;
+            set
+            {
+                _sciChartSurface = value;
+                OnPropertyChanged("SciChartSurface");
             }
         }
 
@@ -163,48 +175,39 @@ namespace TelemetryGUI.ViewModel.Live
 
         private void OnTick(object sender, EntityEventArgs e)
         {
-            if (_channelViewModels.IsEmpty()) return;
-
             lock (_syncRoot)
             {
-                foreach (LiveChannelViewModel channel in _channelViewModels)
+                if (_channelViewModels.IsEmpty()) return;
+                foreach (var channel in _channelViewModels)
                 {
-                    if (e.Data.GetType().GetProperty(channel.ChannelName).CanRead == false) return;
-
+                    if (!(e.Data is Motor motor)) continue;
+                    // ReSharper disable once PossibleNullReferenceException
+                    if (motor.GetType().GetProperty(channel.ChannelName).CanRead == false) continue;
                     IXyDataSeries<DateTime, double> dataSeries = channel.ChannelDataSeries;
-                    DateTime dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                    var dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
                         CultureInfo.InvariantCulture);
-                    try
+                    if (dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
                     {
-                        if (dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
-                        {
-                            dataSeries.Append(dateTime, double.NaN);
-                            _firstRead = true;
-                        }
-                        else
-                        {
-                            var yValue =
-                                Convert.ToDouble(e.Data.GetType().GetProperty(channel.ChannelName)
-                                    ?.GetValue(e.Data, null));
-                            // Append block of values
-
-                            dataSeries.Append(dateTime, yValue);
-                            // For reporting current size to GUI
-                            _currentSize = dataSeries.Count;
-                        }
+                        channel.ChannelDataSeries.Append(dateTime, double.NaN);
+                        _firstRead = true;
                     }
-                    catch (Exception exception)
+                    else
                     {
-                        throw;
+                        double yValue =
+                            Convert.ToDouble(e.Data.GetType().GetProperty(channel.ChannelName)
+                                ?.GetValue(e.Data, null));
+                        // Append block of values
+                        channel.ChannelDataSeries.Append(dateTime, yValue);
+                        // For reporting current size to GUI
+                        _currentSize = dataSeries.Count;
                     }
                 }
             }
+            
         }
 
         private void AddToChannelViewModels(string channelName)
         {
-
-
             _channelViewModels.Add(new LiveChannelViewModel(Size, _colors[4])
             {
                 ChannelName = channelName

@@ -52,7 +52,7 @@
                         <ComboBox Text="Select" Name="ParameterComboBoxBms" Margin="4"
                                   SelectionChanged="ParameterComboBoxBms_OnSelected" />
                         <ComboBox Text="Select" Name="ParameterComboBoxMotor" Margin="4"
-                                   SelectionChanged="ParameterComboBoxBms_OnSelected" />
+                                  SelectionChanged="ParameterComboBoxBms_OnSelected" />
                         <TextBox Text="Hours" Margin="4" TextChanged="TextBoxBase_OnSelectionChanged" />
                     </StackPanel>
 
@@ -115,11 +115,7 @@
                                        Foreground="{Binding Stroke,
                                                             Converter={StaticResource ColorToBrushConverter}}"
                                        Text="{Binding SeriesName}" />
-
-                            <!--  Bind to the Series Value, using the Stroke as text foreground  -->
-
-                            <!--  When binding to XValue, YValue of type IComparable, StringFormat is mandatory due to a  -->
-                            <!--  XAML bug that cannot convert IComparable to text, even though underlying type is double  -->
+                            
                             <StackPanel Grid.Column="1" Margin="3,3,20,3" Orientation="Horizontal">
                                 <TextBlock FontSize="13"
                                            FontWeight="Bold"
