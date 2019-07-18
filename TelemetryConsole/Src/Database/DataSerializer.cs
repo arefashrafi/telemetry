@@ -9,8 +9,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.IO;
 using System.Linq;
 using TelemetryConsole.Misc;
+using TelemetryDependencies.Models;
 using TelemetryDependencies.Structs;
 
 namespace TelemetryConsole.Database
@@ -76,8 +78,18 @@ namespace TelemetryConsole.Database
 
                         else if (id == DebugId)
                         {
-                            if (dataLength == 8)
+                            if (dataLength == 1)
                             {
+                                var debugStruct = Extensions.ByteArrayToStructure<DebugStruct>(dataSubsetPacket);
+                                DatabaseParser(debugStruct);
+                            }
+                        }
+                        else if (id == GpsId)
+                        {
+                            if (dataLength == 53)
+                            {
+                                var gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
+                                DatabaseParser(gpsStruct);
                             }
                         }
 

@@ -9,7 +9,7 @@ using TelemetryDependencies.Models;
 
 namespace TelemetryConsole.SerialReader
 {
-    public class GpsSerialReceiver:Constants
+    public class GpsSerialReceiver : Constants
     {
         public static void StartListening()
         {
@@ -32,29 +32,32 @@ namespace TelemetryConsole.SerialReader
             try
             {
                 if (!(args.Message is Gga gngga)) return;
-                GpsCollection.Add(new Gps
+                using (var context = new TelemetryContext())
                 {
-                    DeviceId = 1,
-                    LAT = gngga.Latitude,
-                    LONG = gngga.Longitude,
-                    ALT = gngga.Altitude,
-                    DIST = 0,
-                    TDIST = 0,
-                    GYRX = 0,
-                    GYRY = 0,
-                    GYRZ = 0,
-                    GPSFIX = 0,
-                    ACCX = 0,
-                    ACCY = 0,
-                    ACCZ = 0,
-                    HEADING = 0,
-                    SPEED = 0,
-                    TimeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
-                });
+                    context.GPSs.Add(new Gps
+                    {
+                        DeviceName = 1,
+                        LAT = gngga.Latitude,
+                        LONG = gngga.Longitude,
+                        ALT = gngga.Altitude,
+                        DIST = 0,
+                        TDIST = 0,
+                        GYRX = 0,
+                        GYRY = 0,
+                        GYRZ = 2,
+                        GPSFIX = 0,
+                        ACCX = 0,
+                        ACCY = 0,
+                        ACCZ = 0,
+                        HEADING = 0,
+                        SPEED = 0,
+                        TimeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
+                    });
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e+"GPS Parsing");
+                Console.WriteLine(e + "GPS Parsing");
             }
         }
     }

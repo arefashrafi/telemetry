@@ -22,8 +22,7 @@ namespace TelemetryGUI.Util
                 SqlTableDependency<Gps> gpsdep = new SqlTableDependency<Gps>(ConnectionString, "GPSs");
                 gpsdep.OnChanged += ChangedGps;
                 gpsdep.Start();
-                SqlTableDependency<Bms> bmsdep =
-                    new SqlTableDependency<Bms>(ConnectionString, "BatteryManagementSystems");
+                SqlTableDependency<Bms> bmsdep = new SqlTableDependency<Bms>(ConnectionString, "BatteryManagementSystems");
                 bmsdep.OnChanged += ChangedBms;
                 bmsdep.Start();
                 SqlTableDependency<MPPT> mpptdep = new SqlTableDependency<MPPT>(ConnectionString, "MPPTs");

@@ -97,7 +97,7 @@ namespace TelemetryGUI.ViewModel
 
         private void OnTick(object sender, EntityEventArgs e)
         {
-            if (!(e.Data is Gps gps) || gps.DeviceId != 0) return;
+            if (!(e.Data is Gps gps) || gps.DeviceName != 0) return;
             _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
         }
 

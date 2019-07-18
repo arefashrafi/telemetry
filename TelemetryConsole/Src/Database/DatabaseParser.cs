@@ -86,11 +86,10 @@ namespace TelemetryConsole.Database
                     var gpsStruct = (GpsStruct) (object) dataStruct;
                     GpsCollection.Add(new Gps
                     {
-                        LAT = gpsStruct.latitude,
-                        LONG = gpsStruct.longitude,
-                        ALT = gpsStruct.altitude,
+                        LAT = (double)gpsStruct.latitude/100000,
+                        LONG = (double)gpsStruct.longitude/100000,
+                        ALT = (double)gpsStruct.altitude/10,
                         SPEED = gpsStruct.speed,
-                        HEADING = gpsStruct.heading_vehicle,
                         GPSFIX = gpsStruct.gps_fix,
                         DIST = gpsStruct.distance,
                         TDIST = gpsStruct.total_distance,
@@ -100,20 +99,13 @@ namespace TelemetryConsole.Database
                         GYRX = gpsStruct.x_gyro,
                         GYRY = gpsStruct.y_gyro,
                         GYRZ = gpsStruct.z_gyro,
-                        DeviceId = 0,
-                        TimeStamp = Time(gpsStruct.TimeStamp)
+                        DeviceName = 0,
+                        TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
                 }
             }
             catch (Exception ex)
             {
-                using var context = new TelemetryContext();
-                context.Errors.Add(new Error
-                {
-                    ExceptionSource = ex.Source,
-                    Message = ex.Message,
-                    Time = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
-                });
                 Extensions.PrintProperties(ex);
             }
         }

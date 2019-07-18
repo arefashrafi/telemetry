@@ -48,13 +48,16 @@
             <Label FontSize="16" Content="{Binding GpsSourceExternal.DIST, Mode=OneWay}" />
             <Label FontSize="16" Content="{Binding GpsSourceExternal.ALT, Mode=OneWay}" />
         </StackPanel>
-        <m:Map x:Name="GpsMapView" ZoomLevel="10" Center="{Binding LocationExternal, Mode=OneWay}" Grid.Column="2"
+        <m:Map  x:Name="GpsMapView" ZoomLevel="10" Center="{Binding LocationExternal, Mode=OneWay}" Grid.Column="2"
                TargetUpdated="GpsMapView_OnTargetUpdated"
                CredentialsProvider="s5W0gX9RtyYX2B9Tbn3Q~qO_d8j0dzipMeHZykzOUPw~AvvSFGkA50MKT-YOsMMGXTUOtNLP56QZVOZcfBkukSBVcJR057t9EQxcHWhnZBeH">
-            <m:MapPolyline Stroke="Blue" StrokeThickness="1" Locations="{Binding LocationCollectionExternal}" />
-            <m:MapPolyline Stroke="Yellow" StrokeThickness="1" Locations="{Binding LocationCollectionDirect}" />
-            <m:Pushpin Content="S" Location="{Binding LocationDirect, Mode=OneWay}" />
-            <m:Pushpin Content="F" Location="{Binding LocationExternal, Mode=OneWay}" />
+            <m:Map.Children>
+                <m:MapPolyline Stroke="Blue" StrokeThickness="1" Locations="{Binding LocationCollectionExternal}" />
+                <m:MapPolyline Stroke="Yellow" StrokeThickness="1" Locations="{Binding LocationCollectionDirect}" />
+                <m:Pushpin Content="S" Location="{Binding LocationDirect, Mode=OneWay}" />
+                <m:Pushpin Content="F" Location="{Binding LocationExternal, Mode=OneWay}" />
+            </m:Map.Children>
         </m:Map>
+
     </Grid>
 </UserControl>

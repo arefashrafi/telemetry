@@ -5,6 +5,7 @@ using System.Device.Location;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Maps.MapControl.WPF;
@@ -99,8 +100,7 @@ namespace TelemetryGUI.ViewModel
                 OnPropertyChanged();
             }
         }
-
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         private async void LoadPreviousData()
@@ -112,7 +112,7 @@ namespace TelemetryGUI.ViewModel
             }
              
             foreach (var item in gpsCollection)
-                if (item.DeviceId == 1)
+                if (item.DeviceName == 1)
                     _locationCollectionExternal.Add(new Location
                     {
                         Altitude = item.ALT,
@@ -134,7 +134,8 @@ namespace TelemetryGUI.ViewModel
 
             
             if (!(e.Data is Gps gps)) return;
-            if (gps.DeviceId == 0)
+            
+            if (gps.DeviceName == 0)
             {
                 _gpsDirect = gps;
                 GpsSourceDirect = _gpsDirect;
@@ -146,7 +147,7 @@ namespace TelemetryGUI.ViewModel
                 ));
 
             }
-            else if (gps.DeviceId == 1)
+            else if (gps.DeviceName == 1)
             {
                 _gpsExternal = gps;
                 GpsSourceExternal = _gpsExternal;
@@ -170,7 +171,6 @@ namespace TelemetryGUI.ViewModel
             var externalGps = new GeoCoordinate(_gpsExternal.LAT, _gpsExternal.LONG);
 
             _distanceBetweenGps = externalGps.GetDistanceTo(directGps);
-            DistanceBetweenGps = _distanceBetweenGps;
         }
 
         [NotifyPropertyChangedInvocator]

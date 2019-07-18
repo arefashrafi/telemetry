@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Data;
+using Microsoft.Maps.MapControl.WPF;
 using TelemetryGUI.ViewModel;
 
 namespace TelemetryGUI.Views
@@ -17,7 +18,10 @@ namespace TelemetryGUI.Views
         private void GpsMapView_OnTargetUpdated(object sender, DataTransferEventArgs e)
         {
             var gpsViewModel = DataContext as GpsViewModel;
-            if (gpsViewModel != null) GpsMapView.SetView(gpsViewModel.LocationExternal, 10);
+            if (gpsViewModel != null)
+            {
+                GpsMapView.SetView(gpsViewModel.LocationExternal, 10);
+            }
         }
     }
 }
