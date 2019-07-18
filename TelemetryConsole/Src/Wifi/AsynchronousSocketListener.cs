@@ -28,87 +28,43 @@ namespace TelemetryConsole.Src.Wifi
 
     public class AsynchronousSocketListener : Constants
     {
-        // Thread signal.  
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        private Socket _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        private const int bufSize = 8 * 1024;
+        private State state = new State();
+        private EndPoint epFrom = new IPEndPoint(IPAddress.Any, 0);
+        private AsyncCallback recv = null;
 
-        public static void StartListening()
+        public class State
         {
-            string configIp = ConfigurationManager.AppSettings["IP"];
-            var ipAddress = IPAddress.Parse(configIp);
-            var localEndPoint = new IPEndPoint(ipAddress, 20526);
-
-            // Create a TCP/IP socket.  
-            var listener = new Socket(ipAddress.AddressFamily,
-                SocketType.Stream, ProtocolType.Tcp);
-
-            // Bind the socket to the local endpoint and listen for incoming connections.  
-            try
-            {
-                listener.Bind(localEndPoint);
-                listener.Listen(100);
-
-                while (true)
-                {
-                    // Set the event to nonsignaled state.  
-                    allDone.Reset();
-
-                    // Start an asynchronous socket to listen for connections.  
-                    Console.WriteLine("Waiting for a connection...");
-                    listener.BeginAccept(
-                        AcceptCallback,
-                        listener);
-
-                    // Wait until a connection is made before continuing.  
-                    allDone.WaitOne();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-
-            Console.WriteLine("\nPress ENTER to continue...");
-            Console.Read();
+            public byte[] buffer = new byte[bufSize];
         }
 
-        public static void AcceptCallback(IAsyncResult ar)
+        public void Server(string address, int port)
         {
-            // Signal the main thread to continue.  
-            allDone.Set();
-
-            // Get the socket that handles the client request.  
-            var listener = (Socket) ar.AsyncState;
-            var handler = listener.EndAccept(ar);
-
-            // Create the state object.  
-            var state = new StateObject();
-            state.WorkSocket = handler;
-            handler.BeginReceive(state.Buffer, 0, StateObject.BufferSize, 0,
-                ReadCallback, state);
+            _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
+            _socket.Bind(new IPEndPoint(IPAddress.Parse(address), port));
+            Receive();            
         }
 
-        public static void ReadCallback(IAsyncResult ar)
-        {
-            // Retrieve the state object and the handler socket  
-            // from the asynchronous state object.  
-            var state = (StateObject) ar.AsyncState;
-            var handler = state.WorkSocket;
-
-            // Read data from the client socket.   
-            int bytesRead = handler.EndReceive(ar);
-
-            if (bytesRead > 0)
+        private void Receive()
+        {            
+            _socket.BeginReceiveFrom(state.buffer, 0, bufSize, SocketFlags.None, ref epFrom, recv = (ar) =>
             {
-                Console.Write("Received");
-                Console.Write(new string(' ', Console.BufferWidth));
-                foreach (byte item in state.Buffer)
+                State so = (State)ar.AsyncState;
+                int bytes = _socket.EndReceiveFrom(ar, ref epFrom);
+                _socket.BeginReceiveFrom(so.buffer, 0, bufSize, SocketFlags.None, ref epFrom, recv, so);
+                Console.WriteLine("Received");
+                foreach (byte item in so.buffer)
                 {
                     RxByteQueue.Enqueue(item);
                 }
-                handler.BeginReceive(state.Buffer, 0, StateObject.BufferSize, 0,
-                    ReadCallback, state);
-            }
+            }, state);
+        }
 
+        public static void StartListening()
+        {
+            AsynchronousSocketListener s = new AsynchronousSocketListener();
+            s.Server("192.168.137.1",20526);
         }
     }
 }
