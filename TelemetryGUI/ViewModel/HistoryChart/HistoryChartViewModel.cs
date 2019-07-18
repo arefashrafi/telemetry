@@ -67,9 +67,11 @@ namespace TelemetryGUI.ViewModel.HistoryChart
 
             if (type == typeof(Motor))
             {
-                using var context = new TelemetryContext();
-                List<Motor> dataList = await context.Motors.ToListAsync();
-
+                List<Motor> dataList;
+                using (var context = new TelemetryContext())
+                {
+                   dataList = await context.Motors.ToListAsync();
+                }
                 List<Motor> filteredMotors = dataList.Where(t =>
                         DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) > TimeSpan)
                     .ToList();
@@ -94,9 +96,11 @@ namespace TelemetryGUI.ViewModel.HistoryChart
 
             if (type == typeof(Bms))
             {
-                using var context = new TelemetryContext();
-                List<Bms> dataList = await context.BatteryManagementSystems.ToListAsync();
-
+                List<Bms> dataList;
+                using(var context = new TelemetryContext())
+                {
+                   dataList = await context.BatteryManagementSystems.ToListAsync();
+                }
                 List<Bms> filteredBms = dataList.Where(t =>
                         DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) > TimeSpan)
                     .ToList();

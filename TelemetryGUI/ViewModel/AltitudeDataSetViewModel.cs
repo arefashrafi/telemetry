@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -67,11 +68,17 @@ namespace TelemetryGUI.ViewModel
 
         private async void DataLoad()
         {
-            using var context = new TelemetryContext();
-            List<Routenote> routenotes = await context.Routenotes.ToListAsync();
-            List<Bms> bms = await context.BatteryManagementSystems.ToListAsync();
+            List<Routenote> routenotes;
+            List<Bms> bms;
+            using (var context = new TelemetryContext())
+            {
+                routenotes = await context.Routenotes.ToListAsync();
+                bms = await context.BatteryManagementSystems.ToListAsync();
+            }
+
             _routeDataSeries = new XyDataSeries<double, double>();
             _energyDataSeries = new XyDataSeries<DateTime, double> {AcceptsUnsortedData = true};
+            
             foreach (var item in routenotes) _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
 
             foreach (var item in bms)

@@ -105,8 +105,12 @@ namespace TelemetryGUI.ViewModel
 
         private async void LoadPreviousData()
         {
-            using var context = new TelemetryContext();
-            List<Gps> gpsCollection = await context.GPSs.ToListAsync();
+            List<Gps> gpsCollection;
+            using (var context = new TelemetryContext())
+            {
+               gpsCollection = await context.GPSs.ToListAsync();
+            }
+             
             foreach (var item in gpsCollection)
                 if (item.DeviceId == 1)
                     _locationCollectionExternal.Add(new Location

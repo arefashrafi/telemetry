@@ -54,6 +54,8 @@ namespace TelemetryConsole.Database
                     if (GpsCollection.Count > 0)
                     {
                         await context.BulkInsertAsync(new List<Gps>(GpsCollection));
+                        
+                    
                         GpsCollection.Clear();
                     }
                     if (ErrorCollection.Count > 0)
