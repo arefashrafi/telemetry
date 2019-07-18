@@ -33,6 +33,7 @@ namespace TelemetryConsole.Src.Wifi
         private State state = new State();
         private EndPoint epFrom = new IPEndPoint(IPAddress.Any, 0);
         private AsyncCallback recv = null;
+        public int counter;
 
         public class State
         {
@@ -53,7 +54,7 @@ namespace TelemetryConsole.Src.Wifi
                 State so = (State)ar.AsyncState;
                 int bytes = _socket.EndReceiveFrom(ar, ref epFrom);
                 _socket.BeginReceiveFrom(so.buffer, 0, bufSize, SocketFlags.None, ref epFrom, recv, so);
-                Console.WriteLine("Received");
+                Console.WriteLine("Received"+counter++);
                 foreach (byte item in so.buffer)
                 {
                     RxByteQueue.Enqueue(item);

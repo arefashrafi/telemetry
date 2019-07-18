@@ -34,7 +34,7 @@ namespace TelemetryConsole.SerialReader
                 if (!(args.Message is Gga gngga)) return;
                 using (var context = new TelemetryContext())
                 {
-                    context.GPSs.Add(new Gps
+                    context.GPSs.AddAsync(new Gps
                     {
                         DeviceName = 1,
                         LAT = gngga.Latitude,

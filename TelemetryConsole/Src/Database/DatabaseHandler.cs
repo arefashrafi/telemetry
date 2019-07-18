@@ -19,31 +19,40 @@ namespace TelemetryConsole.Database
                 {
                     using (var context = new TelemetryContext())
                     {
-                        if (BmsCollection.Count > 0)
+                        try
                         {
-                            await context.BulkInsertAsync(new List<Bms>(BmsCollection));
-                            BmsCollection.Clear();
+                            if (BmsCollection.Count > 0)
+                            {
+                                await context.BulkInsertAsync(new List<Bms>(BmsCollection));
+                                BmsCollection.Clear();
+                            }
+                            if (MotorCollection.Count > 0)
+                            {
+                                await context.BulkInsertAsync(new List<Motor>(MotorCollection));
+                                MotorCollection.Clear();
+                            }
+                            if (MpptCollection.Count > 0)
+                            {
+                                await context.BulkInsertAsync(new List<MPPT>(MpptCollection));
+                                MpptCollection.Clear();
+                            }
+                            if (GpsCollection.Count > 0)
+                            { 
+                                await context.BulkInsertAsync(new List<Gps>(GpsCollection));
+                                GpsCollection.Clear();
+                            }
+                            if (ErrorCollection.Count > 0)
+                            {
+                                await context.BulkInsertAsync(new List<Error>(ErrorCollection));
+                                ErrorCollection.Clear();
+                            }
                         }
-                        if (MotorCollection.Count > 0)
+                        catch (Exception e)
                         {
-                            await context.BulkInsertAsync(new List<Motor>(MotorCollection));
-                            MotorCollection.Clear();
+                            Console.WriteLine(e);
+                            throw;
                         }
-                        if (MpptCollection.Count > 0)
-                        {
-                            await context.BulkInsertAsync(new List<MPPT>(MpptCollection));
-                            MpptCollection.Clear();
-                        }
-                        if (GpsCollection.Count > 0)
-                        { 
-                            context.BulkInsert(new List<Gps>(GpsCollection));
-                            GpsCollection.Clear();
-                        }
-                        if (ErrorCollection.Count > 0)
-                        {
-                            await context.BulkInsertAsync(new List<Error>(ErrorCollection));
-                            ErrorCollection.Clear();
-                        }
+                        
                     }
                         
                 }
