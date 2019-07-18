@@ -127,6 +127,8 @@ namespace TelemetryGUI.ViewModel
 
         private void OnTick(object sender, EntityEventArgs e)
         {
+
+            
             if (!(e.Data is Gps gps)) return;
             if (gps.DeviceId == 0)
             {
@@ -138,6 +140,7 @@ namespace TelemetryGUI.ViewModel
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(
                     () => _locationCollectionDirect.Add(_locationDirect)
                 ));
+
             }
             else if (gps.DeviceId == 1)
             {
@@ -150,7 +153,8 @@ namespace TelemetryGUI.ViewModel
                     () => _locationCollectionExternal.Add(_locationExternal)
                 ));
             }
-
+            if (_locationCollectionExternal.Count > 10000) _locationCollectionExternal.RemoveAt(0);
+            if (_locationCollectionDirect.Count > 10000) _locationCollectionDirect.RemoveAt(0);
             CalculateDistance();
         }
 

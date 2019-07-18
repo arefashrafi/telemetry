@@ -9,7 +9,7 @@ using TelemetryDependencies.Models;
 
 namespace TelemetryConsole.Database
 {
-    public partial class TelemetryControl:Constants
+    public partial class TelemetryControl
     {
         public static async void DatabaseHandler()
         {
@@ -17,6 +17,24 @@ namespace TelemetryConsole.Database
             {
                 try
                 {
+                    MotorCollection.Add(new Motor
+                    {
+                        BatteryVoltage = 32,
+                        BatteryCurrent = 32,
+                        CurrentDirection = 32,
+                        MotorCurrent = 32,
+                        TempControl = 32,
+                        TempMotor = 32,
+                        MotorRPM = 32,
+                        OutputDuty = 32,
+                        OutputDutyType = 32,
+                        MotorDriveMode = 32,
+                        FailModeInfo1 = 32,
+                        FailModeInfo2 = 32,
+                        PresentCorePos = 32,
+                        FailModeInfo = 32,
+                        Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
+                    });
                     using var context = new TelemetryContext();
                     if (BmsCollection.Count > 0)
                     {
