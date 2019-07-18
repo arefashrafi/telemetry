@@ -291,6 +291,10 @@
     <Compile Include="Migrations\20190718155118_smh.designer.cs">
       <DependentUpon>20190718155118_smh.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190718210227_updatetoday.cs" />
+    <Compile Include="Migrations\20190718210227_updatetoday.designer.cs">
+      <DependentUpon>20190718210227_updatetoday.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\TelemetryContextModelSnapshot.cs" />
     <Compile Include="Misc\Constants.cs" />
     <Compile Include="Misc\CRC32.cs" />

@@ -14,7 +14,7 @@ namespace TelemetryConsole.Database
             {
                 if (typeof(T) == typeof(BmsStruct))
                 {
-                    var bMsStruct = (BmsStruct) (object) dataStruct;
+                    BmsStruct bMsStruct = (BmsStruct) (object) dataStruct;
                     BmsCollection.Add(new Bms
                     {
                         MinVolt = bMsStruct.MinVolt,
@@ -39,7 +39,7 @@ namespace TelemetryConsole.Database
 
                 if (typeof(T) == typeof(MotorStruct))
                 {
-                    var motorStruct = (MotorStruct) (object) dataStruct;
+                    MotorStruct motorStruct = (MotorStruct) (object) dataStruct;
                     MotorCollection.Add(new Motor
                     {
                         MotorCurrent = motorStruct.MotorCurrent,
@@ -61,7 +61,7 @@ namespace TelemetryConsole.Database
 
                 if (typeof(T) == typeof(MotorStructOld))
                 {
-                    var motorStruct = (MotorStructOld) (object) dataStruct;
+                    MotorStructOld motorStruct = (MotorStructOld) (object) dataStruct;
                     MotorCollection.Add(new Motor
                     {
                         MotorCurrent = motorStruct.MotorCurrent,
@@ -83,11 +83,11 @@ namespace TelemetryConsole.Database
 
                 if (typeof(T) == typeof(GpsStruct))
                 {
-                    var gpsStruct = (GpsStruct) (object) dataStruct;
+                    GpsStruct gpsStruct = (GpsStruct) (object) dataStruct;
                     GpsCollection.Add(new Gps
                     {
-                        LAT = (double)gpsStruct.latitude/100000,
-                        LONG = (double)gpsStruct.longitude/100000,
+                        LAT = (double)gpsStruct.latitude/10000000,
+                        LONG = (double)gpsStruct.longitude/10000000,
                         ALT = (double)gpsStruct.altitude/10,
                         SPEED = gpsStruct.speed,
                         GPSFIX = gpsStruct.gps_fix,
@@ -99,13 +99,13 @@ namespace TelemetryConsole.Database
                         GYRX = gpsStruct.x_gyro,
                         GYRY = gpsStruct.y_gyro,
                         GYRZ = gpsStruct.z_gyro,
-                        DeviceName = 0,
+                        DeviceId = 0,
                         TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
                 }
                 if (typeof(T) == typeof(DebugStruct))
                 {
-                    var debugStruct = (DebugStruct)(object)dataStruct;
+                    DebugStruct debugStruct = (DebugStruct)(object)dataStruct;
                     DebugCollection.Add(new Debug
                     {
                         ExceptionSource = "smn",

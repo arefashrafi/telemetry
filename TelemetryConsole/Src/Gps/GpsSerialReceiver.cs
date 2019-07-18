@@ -36,7 +36,7 @@ namespace TelemetryConsole.SerialReader
                 {
                     context.GPSs.AddAsync(new Gps
                     {
-                        DeviceName = 1,
+                        DeviceId = 1,
                         LAT = gngga.Latitude,
                         LONG = gngga.Longitude,
                         ALT = gngga.Altitude,
@@ -57,7 +57,7 @@ namespace TelemetryConsole.SerialReader
             }
             catch (Exception e)
             {
-                Console.WriteLine(e + "GPS Parsing");
+                Console.WriteLine("GPS Parsing most likely database");
             }
         }
     }

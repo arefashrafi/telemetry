@@ -42,9 +42,17 @@ namespace TelemetryConsole.Src.Wifi
 
         public void Server(string address, int port)
         {
-            _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
-            _socket.Bind(new IPEndPoint(IPAddress.Parse(address), port));
-            Receive();            
+            try
+            {
+                _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
+                _socket.Bind(new IPEndPoint(IPAddress.Parse(address), port));
+                Receive();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+         
         }
 
         private void Receive()

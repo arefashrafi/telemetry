@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.ViewportManagers;
 using SciChart.Charting.Visuals.Annotations;
+using SciChart.Core.Extensions;
 using SciChart.Examples.ExternalDependencies.Common;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
@@ -68,28 +69,45 @@ namespace TelemetryGUI.ViewModel
 
         private async void DataLoad()
         {
-            List<Routenote> routenotes;
-            List<Bms> bms;
-            using (var context = new TelemetryContext())
+
+            List<Routenote> routenotes = new List<Routenote>();
+            List<Bms> bms = new List<Bms>();
+            try
             {
-                routenotes = await context.Routenotes.ToListAsync();
-                bms = await context.BatteryManagementSystems.ToListAsync();
+                using (TelemetryContext context = new TelemetryContext())
+                {
+                    routenotes = await context.Routenotes.ToListAsync();
+                    bms = await context.BatteryManagementSystems.ToListAsync();
+                }
+
+            }
+            catch
+            {
+                if (routenotes.IsNullOrEmptyList() || bms.IsNullOrEmptyList())
+                {
+                    MessageBox.Show("Lists are empty");
+                }
             }
 
             _routeDataSeries = new XyDataSeries<double, double>();
             _energyDataSeries = new XyDataSeries<DateTime, double> {AcceptsUnsortedData = true};
             
-            foreach (var item in routenotes) _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
-
-            foreach (var item in bms)
+            foreach (Routenote item in routenotes) _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
+            try
             {
-                var dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                    CultureInfo.InvariantCulture);
-                double energy = item.Current * item.Volt;
+                foreach (Bms item in bms)
+                {
+                    DateTime dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                                                            CultureInfo.InvariantCulture);
+                    double energy = item.Current * item.Volt;
 
-                _energyDataSeries.Append(dateTime, energy);
+                    _energyDataSeries.Append(dateTime, energy);
+                }
             }
-
+            catch
+            {
+                MessageBox.Show("Could not parse datetime");
+            }
 
             EnergyDataSeries = _energyDataSeries;
             RouteDataSeries = _routeDataSeries;
@@ -97,7 +115,7 @@ namespace TelemetryGUI.ViewModel
 
         private void OnTick(object sender, EntityEventArgs e)
         {
-            if (!(e.Data is Gps gps) || gps.DeviceName != 0) return;
+            if (!(e.Data is Gps gps) || gps.DeviceId != 0) return;
             _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
         }
 

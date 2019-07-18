@@ -7,7 +7,7 @@ namespace TelemetryDependencies.Models
     {
         [Key] public int Id { get; set; }
 
-        public int DeviceName { get; set; }
+        public int DeviceId { get; set; }
         public double LAT { get; set; }
         public double LONG { get; set; }
         public double ALT { get; set; }

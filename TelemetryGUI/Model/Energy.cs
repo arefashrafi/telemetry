@@ -1,4 +1,4 @@
-﻿namespace TelemetryGUI
+﻿namespace TelemetryGUI.Model
 {
     public class Energy
     {

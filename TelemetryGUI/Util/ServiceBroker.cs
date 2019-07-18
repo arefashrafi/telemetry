@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Configuration;
+using System.Windows;
+using SharpDX.Direct3D11;
 using TableDependency.SqlClient;
 using TableDependency.SqlClient.Base.Enums;
 using TableDependency.SqlClient.Base.EventArgs;
@@ -32,9 +34,9 @@ namespace TelemetryGUI.Util
                 errordep.OnChanged += ChangedError;
                 errordep.Start();
             }
-            catch (Exception exception)
+            catch
             {
-                Console.WriteLine(exception);
+                MessageBox.Show("Could not setup sqltabledependency");
             }
         }
 

@@ -148,8 +148,6 @@ namespace TelemetryGUI.ViewModel.Live
                 IsRunning = true;
                 IsReset = false;
                 WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventBms), OnTick);
-
-
                 WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMotor), OnTick);
             }
         }

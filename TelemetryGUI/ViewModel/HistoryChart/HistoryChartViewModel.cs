@@ -4,13 +4,16 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 using SciChart.Charting.Model.ChartSeries;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.Visuals.RenderableSeries;
+using SciChart.Core.Extensions;
 using SciChart.Data.Model;
 using SciChart.Examples.ExternalDependencies.Common;
+using SharpDX.Direct3D11;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
 
@@ -62,68 +65,106 @@ namespace TelemetryGUI.ViewModel.HistoryChart
 
         public async void HistoryChartLoadData(Type type, string param)
         {
-            var r = new Random();
+            Random r = new Random();
             XyDataSeries<DateTime, double> xyDataSeries = new XyDataSeries<DateTime, double>();
-
             if (type == typeof(Motor))
             {
                 List<Motor> dataList;
-                using (var context = new TelemetryContext())
+                try
                 {
-                   dataList = await context.Motors.ToListAsync();
+                    using (TelemetryContext context = new TelemetryContext())
+                    {
+                        dataList = await context.Motors.ToListAsync();
+                    }
                 }
-                List<Motor> filteredMotors = dataList.Where(t =>
-                        DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) > TimeSpan)
-                    .ToList();
-                foreach (var motor in filteredMotors)
+                catch
                 {
-                    var dateTime = DateTime.ParseExact(motor.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                        CultureInfo.InvariantCulture);
+                    MessageBox.Show("Failed to get motor data");
+                    return;
+                }
 
-                    if (dateTime > xyDataSeries.XValues.LastOrDefault().AddMinutes(10) || _firstReadMotor)
+                try
+                {
+                    List<Motor> filteredMotors = dataList.Where(t =>
+                                                                    DateTime.ParseExact(t.Time,
+                                                                                        "yyyy-MM-dd HH:mm:ss.fff",
+                                                                                        CultureInfo.InvariantCulture) >
+                                                                    TimeSpan)
+                                                         .ToList();
+                    foreach (Motor motor in filteredMotors)
                     {
-                        xyDataSeries.Append(dateTime, double.NaN);
-                        _firstReadMotor = false;
+                        DateTime dateTime = DateTime.ParseExact(motor.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                                                                CultureInfo.InvariantCulture);
+
+                        if (dateTime > xyDataSeries.XValues.LastOrDefault().AddMinutes(10) || _firstReadMotor)
+                        {
+                            xyDataSeries.Append(dateTime, double.NaN);
+                            _firstReadMotor = false;
+                        }
+                        else
+                        {
+                            double paramValue =
+                                Convert.ToDouble(motor.GetType().GetProperty(param)?.GetValue(motor, null));
+                            xyDataSeries.XValues.Add(dateTime);
+                            xyDataSeries.YValues.Add(paramValue);
+                        }
                     }
-                    else
-                    {
-                        double paramValue = Convert.ToDouble(motor.GetType().GetProperty(param)?.GetValue(motor, null));
-                        xyDataSeries.XValues.Add(dateTime);
-                        xyDataSeries.YValues.Add(paramValue);
-                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Filtering motor data failed");
                 }
             }
 
             if (type == typeof(Bms))
             {
                 List<Bms> dataList;
-                using(var context = new TelemetryContext())
+                try
                 {
-                   dataList = await context.BatteryManagementSystems.ToListAsync();
+                    using (TelemetryContext context = new TelemetryContext())
+                    {
+                        dataList = await context.BatteryManagementSystems.ToListAsync();
+                    }
                 }
-                List<Bms> filteredBms = dataList.Where(t =>
-                        DateTime.ParseExact(t.Time, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) > TimeSpan)
-                    .ToList();
-                foreach (var bms in filteredBms)
+                catch
                 {
-                    var dateTime = DateTime.ParseExact(bms.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                        CultureInfo.InvariantCulture);
-                    if (dateTime > xyDataSeries.XValues.LastOrDefault().AddMinutes(10) || _firstReadBms)
+                    MessageBox.Show("Failed bms to get data");
+                    return;
+                }
+
+                try
+                {
+                    List<Bms> bmses = dataList.Where(t => DateTime.ParseExact(t.Time,
+                                                                             "yyyy-MM-dd HH:mm:ss.fff",
+                                                                             CultureInfo.InvariantCulture) > TimeSpan)
+                                                            .ToList();
+                    foreach (Bms motor in bmses)
                     {
-                        xyDataSeries.Append(dateTime, double.NaN);
-                        _firstReadBms = false;
+                        DateTime dateTime = DateTime.ParseExact(motor.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                                                                CultureInfo.InvariantCulture);
+
+                        if (dateTime > xyDataSeries.XValues.LastOrDefault().AddMinutes(10) || _firstReadBms)
+                        {
+                            xyDataSeries.Append(dateTime, double.NaN);
+                            _firstReadBms = false;
+                        }
+                        else
+                        {
+                            double paramValue =
+                                Convert.ToDouble(motor.GetType().GetProperty(param)?.GetValue(motor, null));
+                            xyDataSeries.XValues.Add(dateTime);
+                            xyDataSeries.YValues.Add(paramValue);
+                        }
                     }
-                    else
-                    {
-                        double paramValue = Convert.ToDouble(bms.GetType().GetProperty(param)?.GetValue(bms, null));
-                        xyDataSeries.XValues.Add(dateTime);
-                        xyDataSeries.YValues.Add(paramValue);
-                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Filtering bms data failed");
                 }
             }
 
-            var color = Color.FromRgb(Convert.ToByte(r.Next(256)), Convert.ToByte(r.Next(256)),
-                Convert.ToByte(r.Next(256)));
+            Color color = Color.FromRgb(Convert.ToByte(r.Next(256)), Convert.ToByte(r.Next(256)),
+                                      Convert.ToByte(r.Next(256)));
             _renderableSeriesViewModels.Add(new LineRenderableSeriesViewModel
             {
                 DrawNaNAs = LineDrawMode.Gaps,

@@ -52,7 +52,6 @@ namespace TelemetryConsole.Database
                     catch (Exception e)
                     {
                         Console.WriteLine(e);
-                        throw;
                     }
                 }
 

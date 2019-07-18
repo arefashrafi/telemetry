@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Maps.MapControl.WPF;
+using SharpDX.Direct3D11;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Annotations;
 using TelemetryGUI.Util;
@@ -106,57 +107,73 @@ namespace TelemetryGUI.ViewModel
         private async void LoadPreviousData()
         {
             List<Gps> gpsCollection;
-            using (var context = new TelemetryContext())
+            try
             {
-               gpsCollection = await context.GPSs.ToListAsync();
+                using (TelemetryContext context = new TelemetryContext())
+                {
+                    gpsCollection = await context.GPSs.ToListAsync();
+                }
             }
-             
-            foreach (var item in gpsCollection)
-                if (item.DeviceName == 1)
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return;
+            }
+
+            foreach (Gps item in gpsCollection)
+            {
+                if (item.DeviceId == 1)
+                {
                     _locationCollectionExternal.Add(new Location
                     {
                         Altitude = item.ALT,
                         Latitude = item.LAT,
                         Longitude = item.LONG
                     });
+                }
                 else
+                {
                     _locationCollectionDirect.Add(new Location
                     {
                         Altitude = item.ALT,
                         Latitude = item.LAT,
                         Longitude = item.LONG
                     });
+                }
+
+            }
+
         }
 
 
         private void OnTick(object sender, EntityEventArgs e)
         {
 
-            
+            var x = e.Data;
             if (!(e.Data is Gps gps)) return;
             
-            if (gps.DeviceName == 0)
+            switch (gps.DeviceId)
             {
-                _gpsDirect = gps;
-                GpsSourceDirect = _gpsDirect;
-                _locationDirect.Altitude = _gpsDirect.ALT;
-                _locationDirect.Latitude = _gpsDirect.LAT;
-                _locationDirect.Longitude = _gpsDirect.LONG;
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(
-                    () => _locationCollectionDirect.Add(_locationDirect)
-                ));
-
-            }
-            else if (gps.DeviceName == 1)
-            {
-                _gpsExternal = gps;
-                GpsSourceExternal = _gpsExternal;
-                _locationExternal.Altitude = _gpsExternal.ALT;
-                _locationExternal.Latitude = _gpsExternal.LAT;
-                _locationExternal.Longitude = _gpsExternal.LONG;
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(
-                    () => _locationCollectionExternal.Add(_locationExternal)
-                ));
+                case 0:
+                    _gpsDirect = gps;
+                    GpsSourceDirect = _gpsDirect;
+                    _locationDirect.Altitude = _gpsDirect.ALT;
+                    _locationDirect.Latitude = _gpsDirect.LAT;
+                    _locationDirect.Longitude = _gpsDirect.LONG;
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(
+                                                                                                () => _locationCollectionDirect.Add(_locationDirect)
+                                                                                               ));
+                    break;
+                case 1:
+                    _gpsExternal = gps;
+                    GpsSourceExternal = _gpsExternal;
+                    _locationExternal.Altitude = _gpsExternal.ALT;
+                    _locationExternal.Latitude = _gpsExternal.LAT;
+                    _locationExternal.Longitude = _gpsExternal.LONG;
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(
+                                                                                                () => _locationCollectionExternal.Add(_locationExternal)
+                                                                                               ));
+                    break;
             }
             if (_locationCollectionExternal.Count > 10000) _locationCollectionExternal.RemoveAt(0);
             if (_locationCollectionDirect.Count > 10000) _locationCollectionDirect.RemoveAt(0);
@@ -167,8 +184,8 @@ namespace TelemetryGUI.ViewModel
         {
             if (_gpsDirect == null) return;
             if (_gpsExternal == null) return;
-            var directGps = new GeoCoordinate(_gpsDirect.LAT, _gpsDirect.LONG);
-            var externalGps = new GeoCoordinate(_gpsExternal.LAT, _gpsExternal.LONG);
+            GeoCoordinate directGps = new GeoCoordinate(_gpsDirect.LAT, _gpsDirect.LONG);
+            GeoCoordinate externalGps = new GeoCoordinate(_gpsExternal.LAT, _gpsExternal.LONG);
 
             _distanceBetweenGps = externalGps.GetDistanceTo(directGps);
         }
