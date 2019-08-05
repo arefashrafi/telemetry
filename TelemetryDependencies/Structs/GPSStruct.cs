@@ -5,6 +5,7 @@ namespace TelemetryDependencies.Structs
     [StructLayout(LayoutKind.Explicit, Size = 53)]
     public struct GpsStruct
     {
+        
         [MarshalAs(UnmanagedType.I4)][FieldOffset(0)] public int latitude;
 
         [MarshalAs(UnmanagedType.I4)][FieldOffset(4)] public int longitude;

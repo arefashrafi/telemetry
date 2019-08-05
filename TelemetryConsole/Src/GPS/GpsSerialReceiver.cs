@@ -13,7 +13,7 @@ namespace TelemetryConsole.SerialReader
     {
         public static void StartListening()
         {
-            string portName = ConfigurationManager.AppSettings["COMPORT"];
+            string portName = ConfigurationManager.AppSettings["GPSCOMPORT"];
             try
             {
                 var port = new SerialPort(portName, 9600); //change parameters to match your serial port

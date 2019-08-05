@@ -18,44 +18,6 @@ namespace TelemetryConsole.Database
             {
                 try
                 {
-/*                    BmsCollection.Add(new Bms
-                    {
-                        MinVolt = 32,
-                        MinVoltId = 23,
-                        MaxVolt = 13,
-                        MaxVoltId = 31,
-                        Volt = 33,
-                        Current = 22,
-                        Status = 15,
-                        Soc = 57,
-                        MinTemp = 7,
-                        MinTempId = 6,
-                        MaxTemp = 76,
-                        MaxTempId = 56,
-                        FWVersion = 24,
-                        CycleTime = 45,
-                        MCUTemp = 5,
-                        RoundtripTm = 13,
-                        Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
-                    });*/
-                    MotorCollection.Add(new Motor
-                    {
-                        BatteryVoltage = 32,
-                        BatteryCurrent = 31,
-                        CurrentDirection = 2,
-                        MotorCurrent = 5,
-                        TempControl = 35,
-                        TempMotor = 1111,
-                        MotorRPM = 333,
-                        OutputDuty = 23,
-                        OutputDutyType = 32,
-                        MotorDriveMode = 31,
-                        FailModeInfo1 = 66,
-                        FailModeInfo2 = 65,
-                        PresentCorePos = 54,
-                        FailModeInfo = 312,
-                        Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
-                    });
                     GpsCollection.Add(new Gps
                     {
                         DeviceId = 1,

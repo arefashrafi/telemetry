@@ -304,8 +304,8 @@
     <Compile Include="Src\Database\DatabaseHandler.cs" />
     <Compile Include="Src\Database\DatabaseParser.cs" />
     <Compile Include="Src\Database\DataSerializer.cs" />
-    <Compile Include="Src\Gps\GpsSerialReceiver.cs" />
-    <Compile Include="Src\Wifi\AsynchronousSocketListener.cs" />
+    <Compile Include="Src\DataReader.cs" />
+    <Compile Include="Src\GPS\GpsSerialReceiver.cs" />
     <Compile Include="TelemetryContext.cs" />
   </ItemGroup>
   <ItemGroup>

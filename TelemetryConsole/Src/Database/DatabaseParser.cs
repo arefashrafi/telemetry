@@ -99,7 +99,6 @@ namespace TelemetryConsole.Database
                         GYRX = gpsStruct.x_gyro,
                         GYRY = gpsStruct.y_gyro,
                         GYRZ = gpsStruct.z_gyro,
-                        DeviceId = 0,
                         TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
                 }
