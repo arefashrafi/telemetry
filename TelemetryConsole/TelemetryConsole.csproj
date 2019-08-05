@@ -68,6 +68,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentValidation, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0">
+      <HintPath>..\packages\FluentValidation.8.4.0\lib\net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore, Version=2.2.6.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.EntityFrameworkCore.2.2.6\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
     </Reference>
@@ -304,6 +308,7 @@
     <Compile Include="Src\Database\DatabaseParser.cs" />
     <Compile Include="Src\Database\DataSerializer.cs" />
     <Compile Include="Src\DataReader.cs" />
+    <Compile Include="Src\DataValidator.cs" />
     <Compile Include="Src\GPS\GpsSerialReceiver.cs" />
     <Compile Include="TelemetryContext.cs" />
   </ItemGroup>

@@ -25,5 +25,11 @@ namespace TelemetryConsole.Misc
         public static readonly ObservableCollection<Gps> GpsCollection = new ObservableCollection<Gps>();
         public static readonly ObservableCollection<Error> ErrorCollection = new ObservableCollection<Error>();
         public static readonly ObservableCollection<Debug> DebugCollection = new ObservableCollection<Debug>();
+        
+        
+        public static MotorValidator MotorValidation = new MotorValidator();
+        public static BmsValidator BmsValidation = new BmsValidator();
+        public static MpptValidator MpptValidation = new MpptValidator();
+        public static GpsValidator GpsValidation = new GpsValidator();
     }
 }

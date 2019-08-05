@@ -23,22 +23,22 @@ namespace TelemetryDependencies.Models
         [Key]
         public int Id { get; set; }
 
-        public uint MinVolt { get; set; }
-        public uint MinVoltId { get; set; }
-        public uint MaxVolt { get; set; }
-        public uint MaxVoltId { get; set; }
-        public uint Volt { get; set; }
+        public int MinVolt { get; set; }
+        public int MinVoltId { get; set; }
+        public int MaxVolt { get; set; }
+        public int MaxVoltId { get; set; }
+        public int Volt { get; set; }
         public int Current { get; set; }
-        public uint Status { get; set; }
-        public uint Soc { get; set; }
+        public int Status { get; set; }
+        public int Soc { get; set; }
         public int MinTemp { get; set; }
         public int MinTempId { get; set; }
         public int MaxTemp { get; set; }
         public int MaxTempId { get; set; }
-        public uint FWVersion { get; set; }
-        public uint CycleTime { get; set; }
+        public int FWVersion { get; set; }
+        public int CycleTime { get; set; }
         public int MCUTemp { get; set; }
-        public uint RoundtripTm { get; set; }
+        public int RoundtripTm { get; set; }
         public string Time { get; set; }
     }
 }

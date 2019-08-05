@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
@@ -15,7 +16,7 @@ namespace TelemetryConsole.Database
                 if (typeof(T) == typeof(BmsStruct))
                 {
                     BmsStruct bMsStruct = (BmsStruct) (object) dataStruct;
-                    BmsCollection.Add(new Bms
+                    var bms = new Bms
                     {
                         MinVolt = bMsStruct.MinVolt,
                         MinVoltId = bMsStruct.MinVoltID,
@@ -23,7 +24,7 @@ namespace TelemetryConsole.Database
                         MaxVoltId = bMsStruct.MaxVoltID,
                         Volt = bMsStruct.Volt,
                         Current = bMsStruct.Current,
-                        Status = bMsStruct.Status,
+                        Status = (int) bMsStruct.Status,
                         Soc = bMsStruct.SOC,
                         MinTemp = bMsStruct.MinTemp,
                         MinTempId = bMsStruct.MinTempID,
@@ -34,13 +35,18 @@ namespace TelemetryConsole.Database
                         MCUTemp = bMsStruct.MCUTemp,
                         RoundtripTm = bMsStruct.RoundtripTm,
                         Time = Time(bMsStruct.TimeStamp)
-                    });
+                    };
+                    if (BmsValidation.Validate(bms).IsValid)
+                    {
+                        BmsCollection.Add(bms);
+                    }
+                    
                 }
 
                 if (typeof(T) == typeof(MotorStruct))
                 {
                     MotorStruct motorStruct = (MotorStruct) (object) dataStruct;
-                    MotorCollection.Add(new Motor
+                    var motor = new Motor
                     {
                         MotorCurrent = motorStruct.MotorCurrent,
                         MotorDriveMode = motorStruct.MotorDriveMode,
@@ -56,7 +62,11 @@ namespace TelemetryConsole.Database
                         TempControl = motorStruct.TempControl,
                         TempMotor = motorStruct.TempMotor,
                         Time = Time(motorStruct.TimeStamp)
-                    });
+                    };
+                    if (MotorValidation.Validate(motor).IsValid)
+                    {
+                        MotorCollection.Add(motor);
+                    }
                 }
 
                 if (typeof(T) == typeof(MotorStructOld))
@@ -79,6 +89,7 @@ namespace TelemetryConsole.Database
                         TempMotor = motorStruct.TempMotor,
                         Time = Time(motorStruct.Time)
                     });
+                    
                 }
 
                 if (typeof(T) == typeof(GpsStruct))

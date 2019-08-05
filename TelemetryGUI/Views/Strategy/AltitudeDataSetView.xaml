@@ -36,6 +36,7 @@
                 <s:FastLineRenderableSeries DataSeries="{Binding EnergyDataSeries, Mode=OneWay}"
                                             Stroke="#FF4083B7"
                                             StrokeThickness="1"
+                                            DrawNaNAs="Gaps"
                                             XAxisId="DateTime" />
             </s:SciChartSurface.RenderableSeries>
             <s:SciChartSurface.XAxes>

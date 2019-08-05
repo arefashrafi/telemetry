@@ -42,7 +42,7 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
-        public uint MinVolt
+        public int MinVolt
         {
             get => Bms.MinVolt;
             set
@@ -55,7 +55,7 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
-        public uint MaxVolt
+        public int MaxVolt
         {
             get => Bms.MaxVolt;
             set
@@ -68,7 +68,7 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
-        public uint MinVoltId
+        public int MinVoltId
         {
             get => Bms.MinVoltId;
             set
@@ -81,7 +81,7 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
-        public uint MaxVoltId
+        public int MaxVoltId
         {
             get => Bms.MaxVoltId;
             set
@@ -94,7 +94,7 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
-        public uint Volt
+        public int Volt
         {
             get => Bms.Volt;
             set
@@ -120,7 +120,7 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
-        public uint Soc
+        public int Soc
         {
             get => Bms.Soc;
             set
@@ -185,7 +185,7 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
-        public uint Status
+        public int Status
         {
             get => Bms.Status;
             set

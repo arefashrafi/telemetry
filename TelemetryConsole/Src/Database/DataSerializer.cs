@@ -9,10 +9,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.IO;
 using System.Linq;
 using TelemetryConsole.Misc;
-using TelemetryDependencies.Models;
 using TelemetryDependencies.Structs;
 
 namespace TelemetryConsole.Database
@@ -54,7 +52,7 @@ namespace TelemetryConsole.Database
                         Console.WriteLine(e);
                     }
                 }
-
+                //Identify packet
                 byte startByte = packetArray[StartByteIndex];
                 byte id = packetArray[IdIndex];
                 byte dataLength = packetArray[DataLengthIndex];
@@ -68,7 +66,7 @@ namespace TelemetryConsole.Database
 
                         if (id == BmsId)
                         {
-                            if (dataLength ==38)
+                            if (dataLength == 38)
                             {
                                 var bMsStruct = Extensions.ByteArrayToStructure<BmsStruct>(dataSubsetPacket);
                                 DatabaseParser(bMsStruct);

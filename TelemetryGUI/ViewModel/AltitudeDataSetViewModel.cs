@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -23,6 +24,7 @@ namespace TelemetryGUI.ViewModel
         private XyDataSeries<double, double> _routeDataSeries = new XyDataSeries<double, double>();
         private VerticalLineAnnotation _verticalLineAnnotationCarPosition;
         private AnnotationCollection _verticalLineAnnotationCollection = new AnnotationCollection();
+        private bool _firstRead = false;
 
         public AltitudeDataSetViewModel()
         {
@@ -96,12 +98,23 @@ namespace TelemetryGUI.ViewModel
             {
                 foreach (Bms item in bms)
                 {
+
                     DateTime dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
                                                             CultureInfo.InvariantCulture);
-                    double energy = item.Current * item.Volt;
+                    if (dateTime > _energyDataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
+                    {
+                        _energyDataSeries.Append(dateTime, double.NaN);
+                        _firstRead = true;
+                    }
+                    else
+                    {
+                        double energy = item.Current * item.Volt;
 
-                    _energyDataSeries.Append(dateTime, energy);
+                        _energyDataSeries.Append(dateTime, energy);
+                    }
                 }
+                EnergyDataSeries = _energyDataSeries;
+                RouteDataSeries = _routeDataSeries;
             }
             catch
             {
@@ -112,7 +125,14 @@ namespace TelemetryGUI.ViewModel
         private void OnTick(object sender, EntityEventArgs e)
         {
             if (!(e.Data is Gps gps) || gps.DeviceId != 0) return;
-            //_verticalLineAnnotationCarPosition.X1 = gps.TDIST;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _verticalLineAnnotationCollection.Remove(_verticalLineAnnotationCarPosition);
+                _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
+                _verticalLineAnnotationCollection.Add(_verticalLineAnnotationCarPosition);
+            });
+
+
         }
 
         public void VerticalLinesRoutes()
