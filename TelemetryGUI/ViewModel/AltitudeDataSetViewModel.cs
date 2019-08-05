@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.ViewportManagers;
@@ -26,6 +27,7 @@ namespace TelemetryGUI.ViewModel
         public AltitudeDataSetViewModel()
         {
             ViewportManager = new DefaultViewportManager();
+
             _verticalLineAnnotationCarPosition = new VerticalLineAnnotation
             {
                 LabelValue = "Car",
@@ -35,12 +37,9 @@ namespace TelemetryGUI.ViewModel
                 ShowLabel = true
             };
 
-
-            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventGps), OnTick);
-
-
             VerticalLinesRoutes();
             DataLoad();
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventGps), OnTick);
         }
 
         public IDataSeries<DateTime, double> EnergyDataSeries { get; set; }
@@ -108,15 +107,12 @@ namespace TelemetryGUI.ViewModel
             {
                 MessageBox.Show("Could not parse datetime");
             }
-
-            EnergyDataSeries = _energyDataSeries;
-            RouteDataSeries = _routeDataSeries;
         }
 
         private void OnTick(object sender, EntityEventArgs e)
         {
             if (!(e.Data is Gps gps) || gps.DeviceId != 0) return;
-            _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
+            //_verticalLineAnnotationCarPosition.X1 = gps.TDIST;
         }
 
         public void VerticalLinesRoutes()
@@ -238,7 +234,6 @@ namespace TelemetryGUI.ViewModel
                 IsEditable = false,
                 ShowLabel = true
             });
-            _verticalLineAnnotationCollection.Add(_verticalLineAnnotationCarPosition);
         }
     }
 }

@@ -17,11 +17,6 @@ namespace TelemetryGUI.Views
 
         private void GpsMapView_OnTargetUpdated(object sender, DataTransferEventArgs e)
         {
-            var gpsViewModel = DataContext as GpsViewModel;
-            if (gpsViewModel != null)
-            {
-                GpsMapView.SetView(gpsViewModel.LocationExternal, 10);
-            }
         }
     }
 }

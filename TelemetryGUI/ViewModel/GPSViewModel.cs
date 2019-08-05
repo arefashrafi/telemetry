@@ -37,8 +37,8 @@ namespace TelemetryGUI.ViewModel
             get => _locationCollectionExternal;
             set
             {
-                _locationCollectionExternal = value;
-                OnPropertyChanged();
+                this._locationCollectionExternal = value;
+                OnPropertyChanged("LocationCollectionExternal");
             }
         }
 
@@ -47,8 +47,8 @@ namespace TelemetryGUI.ViewModel
             get => _locationCollectionDirect;
             set
             {
-                _locationCollectionDirect = value;
-                OnPropertyChanged();
+                this._locationCollectionDirect = value;
+                OnPropertyChanged("LocationCollectionDirect");
             }
         }
 
@@ -57,8 +57,8 @@ namespace TelemetryGUI.ViewModel
             get => _locationDirect;
             set
             {
-                _locationDirect = value;
-                OnPropertyChanged();
+                this._locationDirect = value;
+                OnPropertyChanged("LocationDirect");
             }
         }
 
@@ -67,8 +67,8 @@ namespace TelemetryGUI.ViewModel
             get => _locationExternal;
             set
             {
-                _locationExternal = value;
-                OnPropertyChanged();
+                this._locationExternal = value;
+                OnPropertyChanged("LocationExternal");
             }
         }
 
@@ -77,8 +77,8 @@ namespace TelemetryGUI.ViewModel
             get => _gpsDirect;
             set
             {
-                _gpsDirect = value;
-                OnPropertyChanged();
+                this._gpsDirect = value;
+                OnPropertyChanged("GpsSourceDirect");
             }
         }
 
@@ -87,8 +87,8 @@ namespace TelemetryGUI.ViewModel
             get => _gpsExternal;
             set
             {
-                _gpsExternal = value;
-                OnPropertyChanged();
+                this._gpsExternal = value;
+                OnPropertyChanged("GpsSourceExternal");
             }
         }
 
@@ -97,8 +97,8 @@ namespace TelemetryGUI.ViewModel
             get => _distanceBetweenGps;
             set
             {
-                _distanceBetweenGps = value;
-                OnPropertyChanged();
+                this._distanceBetweenGps = value;
+                OnPropertyChanged("DistanceBetweenGps");
             }
         }
         
@@ -148,35 +148,39 @@ namespace TelemetryGUI.ViewModel
 
         private void OnTick(object sender, EntityEventArgs e)
         {
-
-            var x = e.Data;
             if (!(e.Data is Gps gps)) return;
-            
-            switch (gps.DeviceId)
+
+            if (gps.DeviceId == 0)
             {
-                case 0:
-                    _gpsDirect = gps;
-                    GpsSourceDirect = _gpsDirect;
-                    _locationDirect.Altitude = _gpsDirect.ALT;
-                    _locationDirect.Latitude = _gpsDirect.LAT;
-                    _locationDirect.Longitude = _gpsDirect.LONG;
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(
-                                                                                                () => _locationCollectionDirect.Add(_locationDirect)
-                                                                                               ));
-                    break;
-                case 1:
-                    _gpsExternal = gps;
-                    GpsSourceExternal = _gpsExternal;
-                    _locationExternal.Altitude = _gpsExternal.ALT;
-                    _locationExternal.Latitude = _gpsExternal.LAT;
-                    _locationExternal.Longitude = _gpsExternal.LONG;
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(
-                                                                                                () => _locationCollectionExternal.Add(_locationExternal)
-                                                                                               ));
-                    break;
+                _gpsDirect = gps;
+                GpsSourceDirect = _gpsDirect;
+                _locationDirect.Altitude = _gpsDirect.ALT;
+                _locationDirect.Latitude = _gpsDirect.LAT;
+                _locationDirect.Longitude = _gpsDirect.LONG;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _locationCollectionDirect.Add(_locationDirect);
+                });
             }
-            if (_locationCollectionExternal.Count > 10000) _locationCollectionExternal.RemoveAt(0);
-            if (_locationCollectionDirect.Count > 10000) _locationCollectionDirect.RemoveAt(0);
+            else if (gps.DeviceId == 1)
+            {
+                _gpsExternal = gps;
+                GpsSourceExternal = _gpsExternal;
+                _locationExternal.Altitude = _gpsExternal.ALT;
+                _locationExternal.Latitude = _gpsExternal.LAT;
+                _locationExternal.Longitude = _gpsExternal.LONG;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _locationCollectionExternal.Add(_locationExternal);
+                });
+                
+            }
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (_locationCollectionExternal.Count > 10000) _locationCollectionExternal.RemoveAt(0);
+                if (_locationCollectionDirect.Count > 10000) _locationCollectionDirect.RemoveAt(0);
+            });
+
             CalculateDistance();
         }
 
@@ -189,11 +193,13 @@ namespace TelemetryGUI.ViewModel
 
             _distanceBetweenGps = externalGps.GetDistanceTo(directGps);
         }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged(string name)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 }

@@ -53,11 +53,12 @@ namespace TelemetryConsole.SerialReader
                         SPEED = 0,
                         TimeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
+                    context.SaveChangesAsync();
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("GPS Parsing most likely database");
+                Console.WriteLine("GPS Parsing, most likely database");
             }
         }
     }

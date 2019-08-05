@@ -18,45 +18,6 @@ namespace TelemetryConsole.Database
             {
                 try
                 {
-                    GpsCollection.Add(new Gps
-                    {
-                        DeviceId = 1,
-                        LAT = 53.3123,
-                        LONG = 14.1551,
-                        ALT = 111,
-                        SPEED = 321,
-                        HEADING = 3,
-                        GPSFIX = 3,
-                        DIST = 321,
-                        TDIST = 32,
-                        ACCX = 321,
-                        ACCY = 13,
-                        ACCZ = 3,
-                        GYRX = 3,
-                        GYRY = 3,
-                        GYRZ = 3,
-                        TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
-                    });
-                    GpsCollection.Add(new Gps
-                    {
-                        DeviceId = 0,
-                        LAT = 53.3123,
-                        LONG = 14.1551,
-                        ALT = 111,
-                        SPEED = 321,
-                        HEADING = 3,
-                        GPSFIX = 3,
-                        DIST = 321,
-                        TDIST = 32,
-                        ACCX = 321,
-                        ACCY = 13,
-                        ACCZ = 3,
-                        GYRX = 3,
-                        GYRY = 3,
-                        GYRZ = 3,
-                        TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
-                    });
-                    Thread.Sleep(500);
                     using (TelemetryContext context = new TelemetryContext())
                     {
                         try
@@ -91,6 +52,8 @@ namespace TelemetryConsole.Database
                                 await context.BulkInsertAsync(new List<Debug>(DebugCollection));
                                 DebugCollection.Clear();
                             }
+
+                            await context.SaveChangesAsync();
                         }
                         catch (Exception e)
                         {
