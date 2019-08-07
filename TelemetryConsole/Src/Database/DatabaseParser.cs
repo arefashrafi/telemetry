@@ -9,6 +9,8 @@ namespace TelemetryConsole.Database
 {
     public partial class TelemetryControl
     {
+        private static int countcorrect = 0;
+        private static int countwrong = 0;
         public static void DatabaseParser<T>(T dataStruct)
         {
             try
@@ -39,8 +41,9 @@ namespace TelemetryConsole.Database
                     if (BmsValidation.Validate(bms).IsValid)
                     {
                         BmsCollection.Add(bms);
+                        Console.WriteLine("Correct"+countcorrect++ + "\n");
                     }
-                    
+
                 }
 
                 if (typeof(T) == typeof(MotorStruct))
@@ -50,9 +53,10 @@ namespace TelemetryConsole.Database
                     {
                         MotorCurrent = motorStruct.MotorCurrent,
                         MotorDriveMode = motorStruct.MotorDriveMode,
-                        MotorRPM = motorStruct.MotorRpm,
+                        MotorRpm = motorStruct.MotorRpm,
                         BatteryCurrent = motorStruct.BatteryCurrent,
-                        CurrentDirection = motorStruct.BatteryCurrent,
+                        BatteryCurrentDir = motorStruct.BatteryCurrentDir,
+                        MotorCurrentDir = motorStruct.MotorCurrentDir,
                         OutputDuty = motorStruct.OutputDuty,
                         OutputDutyType = motorStruct.OutputDutyType,
                         BatteryVoltage = motorStruct.BatteryVoltage,
@@ -67,34 +71,8 @@ namespace TelemetryConsole.Database
                     if (MotorValidation.Validate(motor).IsValid)
                     {
                         MotorCollection.Add(motor);
+                        Console.WriteLine("Correct"+countcorrect++ + "\n");
                     }
-                    else
-                    {
-                        var x = 0;
-                    }
-                }
-
-                if (typeof(T) == typeof(MotorStructOld))
-                {
-                    MotorStructOld motorStruct = (MotorStructOld) (object) dataStruct;
-                    MotorCollection.Add(new Motor
-                    {
-                        MotorCurrent = motorStruct.MotorCurrent,
-                        MotorDriveMode = motorStruct.MotorDriveMode,
-                        MotorRPM = motorStruct.MotorRPM,
-                        BatteryCurrent = motorStruct.BatteryCurrent,
-                        CurrentDirection = motorStruct.BatteryCurrentDir2,
-                        OutputDuty = motorStruct.OutputDuty,
-                        OutputDutyType = motorStruct.OutputDutyType,
-                        BatteryVoltage = motorStruct.BatteryVoltage,
-                        FailModeInfo = motorStruct.FailModeInfo1,
-                        FailModeInfo2 = motorStruct.FailModeInfo2,
-                        PresentCorePos = motorStruct.PresentCorePos,
-                        TempControl = motorStruct.TempControl,
-                        TempMotor = motorStruct.TempMotor,
-                        Time = Time(motorStruct.Time)
-                    });
-                    
                 }
 
                 if (typeof(T) == typeof(GpsStruct))
@@ -102,10 +80,10 @@ namespace TelemetryConsole.Database
                     GpsStruct gpsStruct = (GpsStruct) (object) dataStruct;
                     GpsCollection.Add(new Gps
                     {
-                        LAT = (double)gpsStruct.latitude/10000000,
-                        LONG = (double)gpsStruct.longitude/10000000,
+                        LAT = (double)gpsStruct.latitude/100000,
+                        LONG = (double)gpsStruct.longitude/100000,
                         ALT = (double)gpsStruct.altitude/10,
-                        SPEED = gpsStruct.speed,
+                        SPEED = ((double)gpsStruct.speed/1000)*3.6,
                         GPSFIX = gpsStruct.gps_fix,
                         DIST = gpsStruct.distance,
                         TDIST = gpsStruct.total_distance,

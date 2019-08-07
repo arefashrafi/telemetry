@@ -83,7 +83,7 @@ namespace TelemetryConsole.Database
                         }
                         else if (id == GpsId)
                         {
-                            if (dataLength == 53)
+                            if (dataLength == 61)
                             {
                                 var gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
                                 DatabaseParser(gpsStruct);
@@ -97,17 +97,6 @@ namespace TelemetryConsole.Database
                             {
                                 var motorStruct = Extensions.ByteArrayToStructure<MotorStruct>(dataSubsetPacket);
                                 DatabaseParser(motorStruct);
-                            }
-                        }
-
-
-                        else if (id == MotorIdOld)
-                        {
-                            if (dataLength <= 32)
-                            {
-                                var motorStructOld =
-                                    Extensions.ByteArrayToStructure<MotorStructOld>(dataSubsetPacket);
-                                DatabaseParser(motorStructOld);
                             }
                         }
 

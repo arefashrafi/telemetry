@@ -12,17 +12,15 @@ namespace TelemetryConsole
             RuleFor(x => x.MotorDriveMode).LessThan(300);
             RuleFor(x => x.BatteryCurrent).LessThan(1000);
             RuleFor(x => x.BatteryVoltage).LessThan(1000);
-            RuleFor(x => x.CurrentDirection).LessThan(5);
             RuleFor(x => x.OutputDuty).LessThan(250);
             RuleFor(x => x.TempControl).LessThan(200);
             RuleFor(x => x.TempMotor).LessThan(200);
             RuleFor(x => x.FailModeInfo).LessThan(100);
-            RuleFor(x => x.FailModeInfo1).LessThan(100);
             RuleFor(x => x.FailModeInfo2).LessThan(100);
             RuleFor(x => x.OutputDutyType).LessThan(100);
             RuleFor(x => x.PresentCorePos).LessThan(100);
             RuleFor(x => x.Gear).LessThan(300);
-            RuleFor(x => x.MotorRPM).LessThan(5000);
+            RuleFor(x => x.MotorRpm).LessThan(5000);
         }
     }
     public class BmsValidator:AbstractValidator<Bms>
@@ -32,13 +30,12 @@ namespace TelemetryConsole
             RuleFor(x => x.Time).NotNull();
             RuleFor(x => x.Current).LessThan(1000);
             RuleFor(x => x.Soc).LessThan(125);
-            RuleFor(x => x.Status).LessThan(1000);
             RuleFor(x => x.Volt).LessThan(1000);
             RuleFor(x => x.CycleTime).LessThan(5000);
             RuleFor(x => x.MaxTemp).LessThan(300);
-            RuleFor(x => x.MaxVolt).LessThan(1000);
+            RuleFor(x => x.MaxVolt).LessThan(5000);
             RuleFor(x => x.MinTemp).LessThan(300);
-            RuleFor(x => x.MinVolt).LessThan(1000);
+            RuleFor(x => x.MinVolt).LessThan(5000);
             RuleFor(x => x.RoundtripTm).LessThan(100);
             RuleFor(x => x.FWVersion).LessThan(100);
             RuleFor(x => x.MaxTempId).NotNull();

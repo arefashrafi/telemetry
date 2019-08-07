@@ -289,6 +289,14 @@
     <Compile Include="Migrations\20190807135741_addedmessages.designer.cs">
       <DependentUpon>20190807135741_addedmessages.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190807152349_dadad.cs" />
+    <Compile Include="Migrations\20190807152349_dadad.designer.cs">
+      <DependentUpon>20190807152349_dadad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190807160214_bytetoint.cs" />
+    <Compile Include="Migrations\20190807160214_bytetoint.designer.cs">
+      <DependentUpon>20190807160214_bytetoint.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\TelemetryContextModelSnapshot.cs" />
     <Compile Include="Misc\Constants.cs" />
     <Compile Include="Misc\CRC32.cs" />

@@ -30,7 +30,7 @@ namespace TelemetryConsole
 
         private static void StartTimer()
         {
-            _messageTimer.Interval = 5000;
+            _messageTimer.Interval = 1000;
             _messageTimer.Enabled = true;
             _messageTimer.Start();
             _messageTimer.Elapsed += MessageTimerOnElapsed;
@@ -52,11 +52,11 @@ namespace TelemetryConsole
                 byte[] formatedBytes = Encoding.GetEncoding("ASCII").GetBytes(_message.Text);
                 byte[] prefixBytes = Encoding.GetEncoding("ASCII").GetBytes(_message.Prefix);
                 byteArray.AddRange(prefixBytes);
-                byteArray.Add(_message.MessageId);
-                byteArray.Add(_message.Length);
+                byteArray.Add((byte)_message.MessageId);
+                byteArray.Add((byte)_message.Length);
                 byteArray.AddRange(formatedBytes);
+                byteArray.Add(0x0d);
                 SerialPort.Write(byteArray.ToArray(),0,byteArray.Count);
-                SerialPort.DiscardOutBuffer();
             }
             catch (Exception exception)
             {
@@ -70,9 +70,7 @@ namespace TelemetryConsole
             {
                 byte[] tempBuffer = new byte[SerialPort.BytesToRead];
                 SerialPort.Read(tempBuffer, 0, tempBuffer.Length);
-                Console.WriteLine(tempBuffer[2]);
                 foreach (byte singleByte in tempBuffer) RxByteQueue.Enqueue(singleByte);
-                SerialPort.DiscardInBuffer();
             }
             catch (Exception exception)
             {

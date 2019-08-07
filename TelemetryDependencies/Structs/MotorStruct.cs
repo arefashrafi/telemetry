@@ -2,7 +2,7 @@
 
 namespace TelemetryDependencies.Structs
 {
-    [StructLayout(LayoutKind.Explicit, Size = 28)]
+    [StructLayout(LayoutKind.Explicit, Size = 29)]
     public struct MotorStruct
     {
         [MarshalAs(UnmanagedType.U2)] [FieldOffset(0)]
@@ -18,7 +18,7 @@ namespace TelemetryDependencies.Structs
         public ushort MotorCurrent;
 
         [MarshalAs(UnmanagedType.U1)] [FieldOffset(7)]
-        public byte BatteryCurrentDir2;
+        public byte MotorCurrentDir;
 
         [MarshalAs(UnmanagedType.U1)] [FieldOffset(8)]
         public byte TempControl;

@@ -43,17 +43,17 @@ namespace TelemetryGUI
                     {
                         Text = MessageTextBox.Text,
                         Prefix = messagePrefix,
-                        Length = (byte)MessageTextBox.Text.Count(),
-                        MessageId = (byte)IdComboBox.SelectedValue,
+                        Length = MessageTextBox.Text.Count(),
+                        MessageId = (int)IdComboBox.SelectedValue,
                         DateTime = DateTime.Now
                     });
                     context.SaveChanges();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                MessageBox.Show("Ensure length and id is correct");
+                MessageBox.Show(ex.Message);
             }
 
             

@@ -40,12 +40,12 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public int MotorRPM
         {
-            get => Motor.MotorRPM;
+            get => Motor.MotorRpm;
             set
             {
-                if (Motor.MotorRPM != value)
+                if (Motor.MotorRpm != value)
                 {
-                    Motor.MotorRPM = value;
+                    Motor.MotorRpm = value;
                     RaisePropertyChanged("MotorRPM");
                 }
             }
@@ -92,12 +92,12 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public int CurrentDirection
         {
-            get => Motor.CurrentDirection;
+            get => Motor.MotorCurrentDir;
             set
             {
-                if (Motor.CurrentDirection != value)
+                if (Motor.MotorCurrentDir != value)
                 {
-                    Motor.CurrentDirection = value;
+                    Motor.MotorCurrentDir = value;
                     RaisePropertyChanged("CurrentDirection");
                 }
             }
@@ -116,18 +116,6 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
-        public int FailModeInfo1
-        {
-            get => Motor.FailModeInfo1;
-            set
-            {
-                if (Motor.FailModeInfo1 != value)
-                {
-                    Motor.FailModeInfo1 = value;
-                    RaisePropertyChanged("FailModeInfo1");
-                }
-            }
-        }
 
         public int FailModeInfo2
         {
