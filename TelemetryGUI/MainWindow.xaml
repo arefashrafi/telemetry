@@ -39,6 +39,7 @@
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        FontSize="12" FontFamily="Champagne &amp; Limousines" />
+            <Button Content="Send Message" Click="Button_Click_1" Width="100" Margin="355,13,42,15"></Button>
         </Grid>
         <Grid Margin="0 60 0 0">
             <dragablz:TabablzControl>

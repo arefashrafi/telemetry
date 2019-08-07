@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Maps.MapControl.WPF;
 using SharpDX.Direct3D11;
+using Telemetry.App;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Annotations;
 using TelemetryGUI.Util;

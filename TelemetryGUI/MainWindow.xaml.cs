@@ -27,5 +27,11 @@ namespace TelemetryGUI
         {
             Environment.Exit(Environment.ExitCode);
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MessageView messageView = new MessageView();
+            messageView.Show();
+        }
     }
 }

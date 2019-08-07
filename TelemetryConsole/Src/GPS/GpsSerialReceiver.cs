@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO.Ports;
 using NmeaParser;
 using NmeaParser.Nmea;
+using Telemetry.App;
 using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
 
@@ -11,7 +12,7 @@ namespace TelemetryConsole.SerialReader
 {
     public class GpsSerialReceiver : Constants
     {
-        public static void StartListening()
+        public static void StartListener()
         {
             string portName = ConfigurationManager.AppSettings["GPSCOMPORT"];
             try
@@ -53,7 +54,7 @@ namespace TelemetryConsole.SerialReader
                         SPEED = 0,
                         TimeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
-                    context.SaveChangesAsync();
+                    context.SaveChangesAsync().Wait();
                 }
             }
             catch (Exception e)

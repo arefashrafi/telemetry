@@ -93,7 +93,7 @@ namespace TelemetryConsole.Database
 
                         else if (id == MotorId)
                         {
-                            if (dataLength == 28)
+                            if (dataLength == 29)
                             {
                                 var motorStruct = Extensions.ByteArrayToStructure<MotorStruct>(dataSubsetPacket);
                                 DatabaseParser(motorStruct);

@@ -32,6 +32,7 @@ namespace TelemetryDependencies.Models
         public int FailModeInfo1 { get; set; }
         public int FailModeInfo2 { get; set; }
         public int PresentCorePos { get; set; }
+        public int Gear { get; set; }
         public int FailModeInfo { get; set; }
 
 

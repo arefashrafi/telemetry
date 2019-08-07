@@ -14,6 +14,7 @@ using SciChart.Core.Extensions;
 using SciChart.Data.Model;
 using SciChart.Examples.ExternalDependencies.Common;
 using SharpDX.Direct3D11;
+using Telemetry.App;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
 

@@ -46,11 +46,14 @@ namespace TelemetryDependencies.Structs
 
         [MarshalAs(UnmanagedType.U1)] [FieldOffset(18)]
         public byte PresentCorePos;
-
+        
         [MarshalAs(UnmanagedType.U1)] [FieldOffset(19)]
+        public byte Gear;
+
+        [MarshalAs(UnmanagedType.U1)] [FieldOffset(20)]
         public byte FailModeInfo2;
 
-        [MarshalAs(UnmanagedType.U8)] [FieldOffset(20)]
+        [MarshalAs(UnmanagedType.U8)] [FieldOffset(21)]
         public ulong TimeStamp;
     }
 }

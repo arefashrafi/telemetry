@@ -206,7 +206,7 @@ namespace TelemetryGUI.ViewModel.Live
 
         private void AddToChannelViewModels(string channelName)
         {
-            _channelViewModels.Add(new LiveChannelViewModel(Size, _colors[4])
+            _channelViewModels.Add(new LiveChannelViewModel(Size, _colors[new Random().Next(8)])
             {
                 ChannelName = channelName
             });

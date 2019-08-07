@@ -34,7 +34,7 @@ namespace TelemetryConsole.Database
                         CycleTime = bMsStruct.CycleTime,
                         MCUTemp = bMsStruct.MCUTemp,
                         RoundtripTm = bMsStruct.RoundtripTm,
-                        Time = Time(bMsStruct.TimeStamp)
+                        Time = Time(bMsStruct.TimeStamp)  
                     };
                     if (BmsValidation.Validate(bms).IsValid)
                     {
@@ -59,6 +59,7 @@ namespace TelemetryConsole.Database
                         FailModeInfo = motorStruct.FailModeInfo,
                         FailModeInfo2 = motorStruct.FailModeInfo2,
                         PresentCorePos = motorStruct.PresentCorePos,
+                        Gear = motorStruct.Gear,
                         TempControl = motorStruct.TempControl,
                         TempMotor = motorStruct.TempMotor,
                         Time = Time(motorStruct.TimeStamp)
@@ -66,6 +67,10 @@ namespace TelemetryConsole.Database
                     if (MotorValidation.Validate(motor).IsValid)
                     {
                         MotorCollection.Add(motor);
+                    }
+                    else
+                    {
+                        var x = 0;
                     }
                 }
 

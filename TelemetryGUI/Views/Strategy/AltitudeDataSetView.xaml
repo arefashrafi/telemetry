@@ -30,11 +30,11 @@
                            ViewportManager="{Binding ViewportManager}">
             <s:SciChartSurface.RenderableSeries>
                 <s:FastLineRenderableSeries DataSeries="{Binding RouteDataSeries, Mode=OneWay}"
-                                            Stroke="#FFFC9C29"
+                                            Stroke="#FFFF1919"
                                             StrokeThickness="1"
                                             XAxisId="Numeric" />
                 <s:FastLineRenderableSeries DataSeries="{Binding EnergyDataSeries, Mode=OneWay}"
-                                            Stroke="#FF4083B7"
+                                            Stroke="#FF279B27"
                                             StrokeThickness="1"
                                             DrawNaNAs="Gaps"
                                             XAxisId="DateTime" />

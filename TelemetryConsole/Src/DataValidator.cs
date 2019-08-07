@@ -9,19 +9,19 @@ namespace TelemetryConsole
         {
             RuleFor(x => x.Time).NotNull();
             RuleFor(x => x.MotorCurrent).LessThan(1000);
-            RuleFor(x => x.MotorDriveMode).LessThan(4);
+            RuleFor(x => x.MotorDriveMode).LessThan(300);
             RuleFor(x => x.BatteryCurrent).LessThan(1000);
             RuleFor(x => x.BatteryVoltage).LessThan(1000);
             RuleFor(x => x.CurrentDirection).LessThan(5);
-            RuleFor(x => x.OutputDuty).LessThan(4);
-            RuleFor(x => x.TempControl).LessThan(1000);
-            RuleFor(x => x.TempMotor).LessThan(1000);
+            RuleFor(x => x.OutputDuty).LessThan(250);
+            RuleFor(x => x.TempControl).LessThan(200);
+            RuleFor(x => x.TempMotor).LessThan(200);
             RuleFor(x => x.FailModeInfo).LessThan(100);
             RuleFor(x => x.FailModeInfo1).LessThan(100);
             RuleFor(x => x.FailModeInfo2).LessThan(100);
-            RuleFor(x => x.MotorDriveMode).LessThan(100);
             RuleFor(x => x.OutputDutyType).LessThan(100);
             RuleFor(x => x.PresentCorePos).LessThan(100);
+            RuleFor(x => x.Gear).LessThan(300);
             RuleFor(x => x.MotorRPM).LessThan(5000);
         }
     }

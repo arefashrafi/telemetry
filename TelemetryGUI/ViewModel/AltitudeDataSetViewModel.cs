@@ -13,6 +13,7 @@ using SciChart.Charting.ViewportManagers;
 using SciChart.Charting.Visuals.Annotations;
 using SciChart.Core.Extensions;
 using SciChart.Examples.ExternalDependencies.Common;
+using Telemetry.App;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
 
@@ -84,9 +85,9 @@ namespace TelemetryGUI.ViewModel
             }
             catch
             {
-                if (routenotes.IsNullOrEmptyList() || bms.IsNullOrEmptyList())
+                if (routenotes.IsNullOrEmptyList())
                 {
-                    MessageBox.Show("Lists are empty");
+                    MessageBox.Show("No routes available");
                 }
             }
 

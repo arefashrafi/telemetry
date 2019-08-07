@@ -7,6 +7,7 @@ using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Common;
 using System.Configuration;
 using TelemetryConsole.SerialReader;
+using TelemetryConsole.Src.Wifi;
 
 namespace TelemetryConsole
 {
@@ -14,15 +15,14 @@ namespace TelemetryConsole
     {
         public static void Main(string[] args)
         {
-            
-            
             var databaseHandlerThread = new Thread(TelemetryControl.DatabaseHandler);
             var databaseSerializerThread = new Thread(TelemetryControl.DataSerializer);
             Console.WriteLine(DateTime.Now);
             databaseHandlerThread.Start();
             databaseSerializerThread.Start();
-            var DataReader = new DataReader();
-            GpsSerialReceiver.StartListening();
+            DataReader.StartListener();
+            GpsSerialReceiver.StartListener();
+            AsynchronousSocketListener.StartListener();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Application is running and Waiting for data");
             do
