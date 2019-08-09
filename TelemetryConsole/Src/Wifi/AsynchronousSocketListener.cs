@@ -72,8 +72,9 @@ namespace TelemetryConsole.Src.Wifi
 
         public static void StartListener()
         {
+            var connectionString = ConfigurationManager.AppSettings["IP"];
             AsynchronousSocketListener s = new AsynchronousSocketListener();
-            s.Server("192.168.137.1",20526);
+            s.Server(connectionString,20527);
             Console.WriteLine("WiFi Dongle running");
         }
     }
