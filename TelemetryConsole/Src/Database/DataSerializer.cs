@@ -61,6 +61,7 @@ namespace TelemetryConsole.Database
                     try
                     {
                         byte[] dataSubsetPacket = packetArray.RangeSubset(3, dataLength);
+                        
                         byte[] crcSubsetPacket = packetArray.RangeSubset(dataLength + 3, 4);
                         if (crcSubsetPacket == BitConverter.GetBytes(new Crc32().Get(dataSubsetPacket))) continue;
 
@@ -106,6 +107,14 @@ namespace TelemetryConsole.Database
                             {
                                 var gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
                                 DatabaseParser(gpsStruct);
+                            }
+                        }
+                        else if (id == AckId)
+                        {
+                            if (dataLength == 1)
+                            {
+                                var ackStruct = Extensions.ByteArrayToStructure<AckStruct>(dataSubsetPacket);
+                                DatabaseParser(ackStruct);
                             }
                         }
 

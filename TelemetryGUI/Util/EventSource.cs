@@ -10,10 +10,11 @@ namespace TelemetryGUI.Util
         public static event EventHandler<EntityEventArgs> EventError = delegate { };
         public static event EventHandler<EntityEventArgs> EventGps = delegate { };
         public static event EventHandler<EntityEventArgs> EventMppt = delegate { };
-
+        public static event EventHandler<EntityEventArgs> EventMessage = delegate { };
         public static void RaiseEvent(object data, string time)
         {
             if (data.GetType() == typeof(Motor)) EventMotor.Invoke(null, new EntityEventArgs(data, time));
+            if (data.GetType() == typeof(Message)) EventMessage.Invoke(null, new EntityEventArgs(data, time));
             if (data.GetType() == typeof(Bms)) EventBms.Invoke(null, new EntityEventArgs(data, time));
             if (data.GetType() == typeof(Error)) EventError.Invoke(null, new EntityEventArgs(data, time));
             if (data.GetType() == typeof(Gps)) EventGps.Invoke(null, new EntityEventArgs(data, time));

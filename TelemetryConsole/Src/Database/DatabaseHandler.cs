@@ -53,6 +53,11 @@ namespace TelemetryConsole.Database
                                 //await context.BulkInsertAsync(new List<Debug>(DebugCollection));
                                 DebugCollection.Clear();
                             }
+                            if (MessageCollection.Count > 0)
+                            {
+                                await context.BulkInsertAsync(new List<Message>(MessageCollection));
+                                MessageCollection.Clear();
+                            }
 
                             await context.SaveChangesAsync();
                         }

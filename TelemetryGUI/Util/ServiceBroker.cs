@@ -33,10 +33,13 @@ namespace TelemetryGUI.Util
                 SqlTableDependency<Error> errordep = new SqlTableDependency<Error>(ConnectionString, "Errors");
                 errordep.OnChanged += ChangedError;
                 errordep.Start();
+                SqlTableDependency<TelemetryDependencies.Models.Message> messagedep = new SqlTableDependency<TelemetryDependencies.Models.Message>(ConnectionString, "Messages");
+                messagedep.OnChanged += ChangedMessage;
+                messagedep.Start();
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Could not setup sqltabledependency");
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -45,6 +48,12 @@ namespace TelemetryGUI.Util
             if (e.ChangeType != ChangeType.Insert) return;
             var changedEntity = e.Entity;
             EventSource.RaiseEvent(changedEntity, changedEntity.Time);
+        }
+        private void ChangedMessage(object sender, RecordChangedEventArgs<TelemetryDependencies.Models.Message> e)
+        {
+            if (e.ChangeType != ChangeType.Insert) return;
+            var changedEntity = e.Entity;
+            EventSource.RaiseEvent(changedEntity, null);
         }
 
         private void ChangedGps(object sender, RecordChangedEventArgs<Gps> e)

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Threading;
+using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
 
 namespace TelemetryGUI
@@ -15,8 +17,21 @@ namespace TelemetryGUI
             InitializeComponent();
             var serviceBroker = new ServiceBroker();
             serviceBroker.Broker();
+            WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMessage), OnTick);
         }
 
+        private void OnTick(object sender, EntityEventArgs e)
+        {
+            if (!(e.Data is Message message)) return;
+            else
+            {
+                var _message = e.Data as Message;
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => {
+                    MessageBox.Show(Application.Current.MainWindow, _message.Prefix + _message.Text);
+                }));
+                
+            }
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

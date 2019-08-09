@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using Telemetry.App;
 using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
 using TelemetryDependencies.Structs;
@@ -104,6 +105,19 @@ namespace TelemetryConsole.Database
                         ExceptionSource = "smn",
                         Message = debugStruct.rssi.ToString(),
                         Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
+                    });
+                }
+
+                if (typeof(T) == typeof(AckStruct))
+                {
+                    AckStruct ackStruct = (AckStruct) (object) dataStruct;
+                    MessageCollection.Add(new Message
+                    {
+                        Prefix = "$ACK",
+                        MessageId = ackStruct.ackId,
+                        Length = 1,
+                        Text = "ACK",
+                        DateTime = DateTime.Now
                     });
                 }
             }

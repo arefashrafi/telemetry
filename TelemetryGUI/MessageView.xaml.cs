@@ -30,7 +30,6 @@ namespace TelemetryGUI
             IdList = new List<int>();
             IdList.AddRange(Enumerable.Range(0, 10));
             IdComboBox.ItemsSource = IdList;
-            messagePrefix = ConfigurationManager.AppSettings["MessagePrefix"];
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -42,7 +41,7 @@ namespace TelemetryGUI
                     context.Messages.Add(new Message
                     {
                         Text = MessageTextBox.Text,
-                        Prefix = messagePrefix,
+                        Prefix = MessageTextBoxPrefix.Text,
                         Length = MessageTextBox.Text.Count(),
                         MessageId = (int)IdComboBox.SelectedValue,
                         DateTime = DateTime.Now
