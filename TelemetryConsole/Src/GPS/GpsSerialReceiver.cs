@@ -45,7 +45,7 @@ namespace TelemetryConsole.SerialReader
                         TDIST = 0,
                         GYRX = 0,
                         GYRY = 0,
-                        GYRZ = 2,
+                        GYRZ = 0,
                         GPSFIX = 0,
                         ACCX = 0,
                         ACCY = 0,
@@ -59,7 +59,7 @@ namespace TelemetryConsole.SerialReader
             }
             catch (Exception e)
             {
-                Console.WriteLine("GPS Parsing, most likely database");
+                Console.WriteLine(e.Message);
             }
         }
     }

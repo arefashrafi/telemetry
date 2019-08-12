@@ -28,6 +28,7 @@
             <Label FontSize="16" Content="LONG" />
             <Label FontSize="16" Content="DIST" />
             <Label FontSize="16" Content="ALT" />
+            <Label FontSize="16" Content="ALT" />
             <Label Content="Secondary GPS" FontSize="30" />
             <Label FontSize="16" Content="LAT" />
             <Label FontSize="16" Content="LONG" />
@@ -42,6 +43,7 @@
             <Label FontSize="16" Content="{Binding GpsSourceDirect.LONG, Mode=OneWay}" />
             <Label FontSize="16" Content="{Binding GpsSourceDirect.DIST, Mode=OneWay}" />
             <Label FontSize="16" Content="{Binding GpsSourceDirect.ALT, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.SPEED, Mode=OneWay}" />
             <Label Content="Secondary GPS" FontSize="30" Visibility="Hidden" />
             <Label FontSize="16" Content="{Binding GpsSourceExternal.LAT, Mode=OneWay}" />
             <Label FontSize="16" Content="{Binding GpsSourceExternal.LONG, Mode=OneWay}" />

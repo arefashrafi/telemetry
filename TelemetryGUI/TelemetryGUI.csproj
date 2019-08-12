@@ -306,10 +306,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Microsoft.Expression.Interactions.dll" />
     <Content Include="sharpdx_direct3d11_1_effects_x64.dll" />
     <Content Include="sharpdx_direct3d11_1_effects_x86.dll" />
-    <Content Include="System.Windows.Interactivity.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

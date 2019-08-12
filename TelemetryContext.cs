@@ -18,6 +18,7 @@ namespace Telemetry.App
         ///     Gets or sets the errors.
         /// </summary>
         public DbSet<Error> Errors { get; set; }
+        public DbSet<Debug> Debugs { get; set; }
 
         public DbSet<Gps> GPSs { get; set; }
 

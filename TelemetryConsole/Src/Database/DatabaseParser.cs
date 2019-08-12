@@ -10,8 +10,7 @@ namespace TelemetryConsole.Database
 {
     public partial class TelemetryControl
     {
-        private static int countcorrect = 0;
-        private static int countwrong = 0;
+        private static int _countcorrect = 0;
         public static void DatabaseParser<T>(T dataStruct)
         {
             try
@@ -42,7 +41,7 @@ namespace TelemetryConsole.Database
                     if (BmsValidation.Validate(bms).IsValid)
                     {
                         BmsCollection.Add(bms);
-                        Console.WriteLine("Correct"+countcorrect++ + "\n");
+                        Console.WriteLine("Correct"+_countcorrect++ + "\n");
                     }
 
                 }
@@ -72,7 +71,7 @@ namespace TelemetryConsole.Database
                     if (MotorValidation.Validate(motor).IsValid)
                     {
                         MotorCollection.Add(motor);
-                        Console.WriteLine("Correct"+countcorrect++ + "\n");
+                        Console.WriteLine("Correct"+_countcorrect++ + "\n");
                     }
                 }
 
@@ -102,7 +101,7 @@ namespace TelemetryConsole.Database
                     DebugStruct debugStruct = (DebugStruct)(object)dataStruct;
                     DebugCollection.Add(new Debug
                     {
-                        ExceptionSource = "smn",
+                        ExceptionSource = "rssi",
                         Message = debugStruct.rssi.ToString(),
                         Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });

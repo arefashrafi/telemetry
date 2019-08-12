@@ -45,7 +45,7 @@ namespace TelemetryConsole.Database
                     }
                     catch (IndexOutOfRangeException e)
                     {
-                        Console.WriteLine("Index out of range");
+                        Console.WriteLine(e.Message);
                     }
                     catch (Exception e)
                     {

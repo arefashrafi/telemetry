@@ -13,6 +13,7 @@ using System.Timers;
 using Microsoft.EntityFrameworkCore;
 using Telemetry.App;
 using TelemetryConsole.Misc;
+using TelemetryConsole.Src.Wifi;
 using TelemetryDependencies.Models;
 
 namespace TelemetryConsole
@@ -22,10 +23,9 @@ namespace TelemetryConsole
         private static SerialPort SerialPort { get; set; }
         private static System.Timers.Timer _messageTimer = new System.Timers.Timer();
         private static Message _message = new Message();
+
         public DataReader()
         {
-            
-
         }
 
         private static void StartTimer()
@@ -43,8 +43,8 @@ namespace TelemetryConsole
                 using (var context = new TelemetryContext())
                 {
                     var message = context.Messages.LastOrDefault();
-                    if(message != null && DateTime.Now>message.DateTime.AddSeconds(1)) return;
-                    if (message == _message || message==null) return;
+                    if (message != null && DateTime.Now > message.DateTime.AddSeconds(1)) return;
+                    if (message == _message || message == null) return;
                     _message = message;
                 }
 
@@ -56,33 +56,49 @@ namespace TelemetryConsole
                     byte[] valueBytes = Encoding.GetEncoding("ASCII").GetBytes(_message.Text);
                     byte[] prefixBytes = Encoding.GetEncoding("ASCII").GetBytes(_message.Prefix);
                     byteArray.AddRange(prefixBytes);
-                    byteArray.Add((byte)_message.MessageId);
-                    byteArray.Add((byte)_message.Length);
+                    byteArray.Add((byte) _message.MessageId);
+                    byteArray.Add((byte) _message.Length);
                     byteArray.AddRange(valueBytes);
-                    byteArray.AddRange(new byte[]{0x0D,0x0A});
-                    foreach (byte data in byteArray)
+                    byteArray.AddRange(new byte[] {0x0D, 0x0A});
+                    if (SerialPort.IsOpen)
                     {
-                        //Keep sleep, otherwise the data is corrupted on otherside. This is a baudrate issue
-                        Thread.Sleep(1);
-                        SerialPort.Write(new byte[]{data},0,1); 
+                        foreach (byte data in byteArray)
+                        {
+                            //Keep sleep, otherwise the data is corrupted on otherside. This is a baudrate issue
+                            Thread.Sleep(1);
+                            if (!SerialPort.IsOpen)
+                            {
+                                SerialPort.Write(new byte[] {data}, 0, 1);
+                            }
+                        }
                     }
+                    else
+                    {
+                        AsynchronousSocketListener.Send(byteArray.ToArray());
+                    }
+
                 }
                 else
                 {
-
                     byte[] prefixBytes = Encoding.GetEncoding("ASCII").GetBytes(_message.Prefix);
                     byteArray.AddRange(prefixBytes);
                     byteArray.AddRange(Encoding.GetEncoding("ASCII").GetBytes(_message.Text));
-                    byteArray.AddRange(new byte[]{0x0D,0x0A});
-                    foreach (byte data in byteArray)
+                    byteArray.AddRange(new byte[] {0x0D, 0x0A});
+                    if (SerialPort.IsOpen)
                     {
-                        //Keep sleep, otherwise the data is corrupted on otherside. This is a baudrate issue
-                        Thread.Sleep(1);
-                        SerialPort.Write(new byte[]{data},0,1); 
+                        foreach (byte data in byteArray)
+                        {
+                            //Keep sleep, otherwise the data is corrupted on otherside. This is a baudrate issue
+                            Thread.Sleep(1);
+                            SerialPort.Write(new byte[] {data}, 0, 1);
+                        }
                     }
-                    
-                }
+                    else
+                    {
+                        AsynchronousSocketListener.Send(byteArray.ToArray());
+                    }
 
+                }
             }
             catch (Exception exception)
             {
@@ -103,7 +119,7 @@ namespace TelemetryConsole
                 Extensions.PrintProperties(exception);
             }
         }
-        
+
 
         public static void StartListener()
         {
@@ -115,37 +131,30 @@ namespace TelemetryConsole
                 Console.WriteLine("Failed to open serial port");
                 return;
             }
+
+            SerialPort = new SerialPort
+            {
+                PortName = portName,
+                BaudRate = 115200,
+                Parity = Parity.None,
+                DataBits = 8,
+                StopBits = StopBits.One,
+                DtrEnable = true
+            };
             try
             {
-                SerialPort = new SerialPort
-                {
-                    PortName = portName,
-                    BaudRate = 115200,
-                    Parity = Parity.None,
-                    DataBits = 8,
-                    StopBits = StopBits.One,
-                    DtrEnable = true
-                };
                 SerialPort.Open();
                 SerialPort.DataReceived += DataReceiveHandler;
-
+                
                 Console.WriteLine(
                     $"SerialPort Settings:{SerialPort.PortName}, Baudrate:{SerialPort.BaudRate}, isOpen:{SerialPort.IsOpen}");
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
-                Console.WriteLine("Cant find open port");
-                using (var context = new TelemetryContext())
-                {
-                    context.Errors.Add(new Error
-                    {
-                        ExceptionSource = e.Source,
-                        Message = e.Message,
-                        Time = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
-                    });
-                    context.SaveChanges();
-                }
+                Console.WriteLine(e.Message);
             }
+
         }
     }
 }
+

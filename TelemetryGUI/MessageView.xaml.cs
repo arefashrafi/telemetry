@@ -23,7 +23,6 @@ namespace TelemetryGUI
     public partial class MessageView : Window
     {
         public List<int> IdList { get; set; }
-        private string messagePrefix = null;
         public MessageView()
         {
             InitializeComponent();

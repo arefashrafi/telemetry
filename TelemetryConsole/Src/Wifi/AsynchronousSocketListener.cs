@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
@@ -35,6 +35,8 @@ namespace TelemetryConsole.Src.Wifi
         private AsyncCallback recv = null;
         public int counter;
 
+
+
         public class State
         {
             public byte[] buffer = new byte[bufSize];
@@ -62,7 +64,6 @@ namespace TelemetryConsole.Src.Wifi
                 State so = (State)ar.AsyncState;
                 int bytes = _socket.EndReceiveFrom(ar, ref epFrom);
                 _socket.BeginReceiveFrom(so.buffer, 0, bufSize, SocketFlags.None, ref epFrom, recv, so);
-                Console.WriteLine("Received"+counter++);
                 foreach (byte item in so.buffer)
                 {
                     RxByteQueue.Enqueue(item);
@@ -70,11 +71,22 @@ namespace TelemetryConsole.Src.Wifi
             }, state);
         }
 
+        public static void Send(byte[] data)
+        {
+            int portRemote = int.Parse(ConfigurationManager.AppSettings["PORTREMOTE"]);
+            var ipRemote = IPAddress.Parse(ConfigurationManager.AppSettings["IPREMOTE"]);
+            UdpClient udpClient = new UdpClient(portRemote);
+            udpClient.Send(data, data.Length, new IPEndPoint(ipRemote, portRemote));
+            Console.WriteLine("sent");
+        }
+
         public static void StartListener()
         {
+
             var connectionString = ConfigurationManager.AppSettings["IP"];
+            int connectionPort = int.Parse(ConfigurationManager.AppSettings["PORT"]);
             AsynchronousSocketListener s = new AsynchronousSocketListener();
-            s.Server(connectionString,20527);
+            s.Server(connectionString,connectionPort);
             Console.WriteLine("WiFi Dongle running");
         }
     }

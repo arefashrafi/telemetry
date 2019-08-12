@@ -50,7 +50,7 @@ namespace TelemetryConsole.Database
                             }
                             if (DebugCollection.Count > 0)
                             {
-                                //await context.BulkInsertAsync(new List<Debug>(DebugCollection));
+                                await context.BulkInsertAsync(new List<Debug>(DebugCollection));
                                 DebugCollection.Clear();
                             }
                             if (MessageCollection.Count > 0)
