@@ -39,19 +39,19 @@
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        FontSize="12" FontFamily="Champagne &amp; Limousines" />
-            <Button Content="Send Message" Click="Button_Click_1" Width="100" Margin="355,13,42,15"></Button>
+            <Button Background="CadetBlue" Content="CMD" Click="Button_Click_1" Width="100" Margin="23,16,375,12" Grid.Column="1"></Button>
         </Grid>
-        <Grid Margin="0 60 0 0">
+        <Grid Margin="0 60 0 0" Background="Aquamarine">
             <dragablz:TabablzControl>
-                <TabItem Header="INFO">
-                    <dragablz:TabablzControl Margin="2">
-                        <TabItem Header="Multi BMS Chart">
+                <TabItem Header="MAIN">
+                    <dragablz:TabablzControl Margin="0 2 0 0">
+                        <TabItem Header="RTC">
                             <live:LiveView DataContext="{StaticResource LiveViewModel}" />
                         </TabItem>
-                        <TabItem Header="Progress">
+                        <TabItem Header="ENG/ALT">
                             <strategy:AltitudeDataSetView DataContext="{StaticResource AltitudeDataSetViewModel}" />
                         </TabItem>
-                        <TabItem Header="History Chart">
+                        <TabItem Header="Charting">
                             <historyChart:HistoryChartView />
                         </TabItem>
                         <TabItem Header="Energy Estimation">
@@ -62,7 +62,7 @@
                         </TabItem>
                     </dragablz:TabablzControl>
                 </TabItem>
-                <TabItem Header="DATA">
+                <TabItem Header="RTL">
                     <TabControl>
                         <TabItem Header="MOTOR">
                             <TabControl>

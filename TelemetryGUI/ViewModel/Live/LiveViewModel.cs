@@ -178,27 +178,33 @@ namespace TelemetryGUI.ViewModel.Live
                 if (_channelViewModels.IsEmpty()) return;
                 foreach (var channel in _channelViewModels)
                 {
-                    if (!(e.Data is Motor motor)) continue;
-                    // ReSharper disable once PossibleNullReferenceException
-                    if (motor.GetType().GetProperty(channel.ChannelName).CanRead == false) continue;
-                    IXyDataSeries<DateTime, double> dataSeries = channel.ChannelDataSeries;
-                    var dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                        CultureInfo.InvariantCulture);
-                    if (dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
+                    try
                     {
-                        channel.ChannelDataSeries.Append(dateTime, double.NaN);
-                        _firstRead = true;
+                        // ReSharper disable once PossibleNullReferenceException
+                        if (e.Data.GetType().GetProperty(channel.ChannelName).CanRead == false) continue;
+                        IXyDataSeries<DateTime, double> dataSeries = channel.ChannelDataSeries;
+                        var dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                            CultureInfo.InvariantCulture);
+                        if (dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
+                        {
+                            channel.ChannelDataSeries.Append(dateTime, double.NaN);
+                            _firstRead = true;
+                        }
+                        else
+                        {
+                            double yValue =
+                                Convert.ToDouble(e.Data.GetType().GetProperty(channel.ChannelName)
+                                    ?.GetValue(e.Data, null));
+                            channel.ChannelDataSeries.Append(dateTime, yValue);
+                            // For reporting current size to GUI
+                            _currentSize = dataSeries.Count;
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        double yValue =
-                            Convert.ToDouble(e.Data.GetType().GetProperty(channel.ChannelName)
-                                ?.GetValue(e.Data, null));
-                        // Append block of values
-                        channel.ChannelDataSeries.Append(dateTime, yValue);
-                        // For reporting current size to GUI
-                        _currentSize = dataSeries.Count;
+                        Console.WriteLine(ex.Message);
                     }
+
                 }
             }
             

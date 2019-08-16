@@ -126,10 +126,9 @@ namespace TelemetryConsole
             StartTimer();
             Console.WriteLine("Trying to initiate Serial Port");
             string portName = ConfigurationManager.AppSettings["DATACOMPORT"];
-            if (SerialPort.GetPortNames().Any(x => x != portName))
+            if (SerialPort.GetPortNames().Any(x => x == portName))
             {
-                Console.WriteLine("Failed to open serial port");
-                return;
+                Console.WriteLine("trying to open port");
             }
 
             SerialPort = new SerialPort
@@ -147,7 +146,7 @@ namespace TelemetryConsole
                 SerialPort.DataReceived += DataReceiveHandler;
                 
                 Console.WriteLine(
-                    $"SerialPort Settings:{SerialPort.PortName}, Baudrate:{SerialPort.BaudRate}, isOpen:{SerialPort.IsOpen}");
+                    $"SerialPort Opened: Settings:{SerialPort.PortName}, Baudrate:{SerialPort.BaudRate}, isOpen:{SerialPort.IsOpen}");
             }
             catch (Exception e)
             {

@@ -176,7 +176,7 @@ namespace TelemetryGUI.ViewModel
             });
             _verticalLineAnnotationCollection.Add(new VerticalLineAnnotation
             {
-                LabelValue = "Tennant Creek",
+                LabelValue = "Dunmarra",
                 Stroke = new SolidColorBrush(Colors.DarkOliveGreen),
                 StrokeThickness = 2,
                 X1 = 988,

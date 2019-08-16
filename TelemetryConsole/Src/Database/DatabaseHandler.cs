@@ -21,6 +21,47 @@ namespace TelemetryConsole.Database
                 {
                     using (TelemetryContext context = new TelemetryContext())
                     {
+                        MotorCollection.Add(new Motor
+                        {
+                            BatteryVoltage = 32,
+                            BatteryCurrent = 321,
+                            BatteryCurrentDir = 312,
+                            MotorCurrent = 33,
+                            MotorCurrentDir = 15,
+                            TempControl = 23,
+                            TempMotor = 23,
+                            MotorRpm = 213,
+                            OutputDuty = 321,
+                            OutputDutyType = 233,
+                            MotorDriveMode = 123,
+                            FailModeInfo = 3211,
+                            TempErrLevel = 123,
+                            PresentCorePos = 213,
+                            Gear = 3,
+                            FailModeInfo2 = 23,
+                            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
+                        });
+                        BmsCollection.Add(new Bms
+                        {
+                            MinVolt = 100,
+                            MinVoltId = 100,
+                            MaxVolt = 100,
+                            MaxVoltId = 100,
+                            Volt = 100,
+                            Current = 100,
+                            Status =100 ,
+                            Soc = 100,
+                            MinTemp = 100,
+                            MinTempId = 100,
+                            MaxTemp = 100,
+                            MaxTempId = 100,
+                            FWVersion = 100,
+                            CycleTime = 100,
+                            MCUTemp = 100,
+                            RoundtripTm = 100,
+                            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
+                        });
+                        Thread.Sleep(300);
                         try
                         {
                             if (BmsCollection.Count > 0)

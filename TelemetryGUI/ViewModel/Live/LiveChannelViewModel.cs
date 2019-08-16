@@ -38,7 +38,6 @@ namespace TelemetryGUI.ViewModel.Live
             ChannelDataSeries = new XyDataSeries<DateTime, double>
             {
                 FifoCapacity = _size,
-                AcceptsUnsortedData = true
             };
             // Pre-fill with NaN up to size. This stops the stretching effect when Fifo series are filled with AutoRange
             for (int i = 0; i < _size; i++)

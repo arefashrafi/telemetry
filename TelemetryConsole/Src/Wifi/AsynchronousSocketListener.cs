@@ -49,6 +49,7 @@ namespace TelemetryConsole.Src.Wifi
                 _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
                 _socket.Bind(new IPEndPoint(IPAddress.Parse(address), port));
                 Receive();
+                Console.WriteLine("WiFi Dongle Running");
             }
             catch (Exception e)
             {
@@ -87,7 +88,7 @@ namespace TelemetryConsole.Src.Wifi
             int connectionPort = int.Parse(ConfigurationManager.AppSettings["PORT"]);
             AsynchronousSocketListener s = new AsynchronousSocketListener();
             s.Server(connectionString,connectionPort);
-            Console.WriteLine("WiFi Dongle running");
+
         }
     }
 }
