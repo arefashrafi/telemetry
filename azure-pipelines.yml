@@ -1,5 +1,5 @@
 # .NET Desktop
-- task: BuildInstaller@1
+task: BuildInstaller@1
   inputs:
     installTaskMode: 'solution'
     VsVersion: 'VS2017'
