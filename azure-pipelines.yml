@@ -30,4 +30,4 @@ steps:
 - task: BuildInstaller@1
   inputs:
     installTaskMode: 'solution'
-    VsVersion: 'VS2017'
+    VsVersion: 'VS2019'
