@@ -34,7 +34,7 @@ namespace TelemetryGUI.ViewModel.Live
 {
     public class LiveViewModel : BaseViewModel
     {
-        private const int Size = 100000; // Size of each channel in points (FIFO Buffer)
+        private int _size = 100000; // Size of each channel in points (FIFO Buffer)
 
         private readonly IList<Color> _colors = new[]
         {
@@ -139,6 +139,16 @@ namespace TelemetryGUI.ViewModel.Live
             }
         }
 
+        public int TimerInterval
+        {
+            get{ return _size;}
+            set
+            {
+                _size = value;
+                OnPropertyChanged("TimerInterval");
+            }
+        }
+
         private void Start()
         {
             if (_channelViewModels == null || _channelViewModels.Count == 0) Reset();
@@ -212,7 +222,7 @@ namespace TelemetryGUI.ViewModel.Live
 
         private void AddToChannelViewModels(string channelName)
         {
-            _channelViewModels.Add(new LiveChannelViewModel(Size, _colors[new Random().Next(8)])
+            _channelViewModels.Add(new LiveChannelViewModel(_size, _colors[new Random().Next(8)])
             {
                 ChannelName = channelName
             });

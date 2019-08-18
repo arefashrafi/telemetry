@@ -73,6 +73,14 @@ namespace TelemetryConsole.Database
                                 DatabaseParser(bMsStruct);
                             }
                         }
+                        if (id == MpptId)
+                        {
+                            if (dataLength == 100)
+                            {
+                                var mpptStruct = Extensions.ByteArrayToStructure<MpptStruct>(dataSubsetPacket);
+                                DatabaseParser(mpptStruct);
+                            }
+                        }
 
                         else if (id == DebugId)
                         {
@@ -128,7 +136,7 @@ namespace TelemetryConsole.Database
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e+"Dataserializer");
+                        Console.WriteLine(e+" ------------>>>>>>> DATA SERIALIZER");
                     }
                 else
                     lock (RxByteQueue)

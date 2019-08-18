@@ -21,7 +21,7 @@ namespace TelemetryConsole.Database
                 {
                     using (TelemetryContext context = new TelemetryContext())
                     {
-                        MotorCollection.Add(new Motor
+/*                        MotorCollection.Add(new Motor
                         {
                             BatteryVoltage = 32,
                             BatteryCurrent = 321,
@@ -61,7 +61,7 @@ namespace TelemetryConsole.Database
                             RoundtripTm = 100,
                             Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                         });
-                        Thread.Sleep(300);
+                        Thread.Sleep(300);*/
                         try
                         {
                             if (BmsCollection.Count > 0)
@@ -110,9 +110,9 @@ namespace TelemetryConsole.Database
                     }
                         
                 }
-                catch (ArgumentNullException e)
+                catch (Exception e)
                 {
-                    Console.WriteLine(e+"ArgumentNullException");
+                    Console.WriteLine(e.Message);
                 }
             }
         }

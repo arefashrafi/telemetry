@@ -124,26 +124,26 @@
 
                 <ext:FlyoutMenuButton x:Name="IntervalFlyoutMenuButton" HorizontalAlignment="Left" Content="Interval"
                                       Style="{StaticResource FlyoutMenuButtonStyle}"
-                                      ToolTipService.ToolTip="Interval (ms)">
+                                      ToolTipService.ToolTip="FIFO Size">
 
                     <ext:FlyoutMenuButton.PopupContent>
                         <StackPanel MinWidth="150" Orientation="Vertical">
 
-                            <TextBlock Margin="3" HorizontalAlignment="Left" Foreground="White" Text="Interval (ms): " />
+                            <TextBlock Margin="3" HorizontalAlignment="Left" Foreground="White" Text="FIFO Size: " />
 
                             <Slider MinWidth="100"
                                     DataContext="{Binding}"
                                     IsEnabled="{Binding IsRunning,
                                                         Converter={StaticResource BooleanToVisibilityConverter},
                                                         ConverterParameter=INVERSE}"
-                                    Maximum="100"
-                                    Minimum="10"
+                                    Maximum="1000000"
+                                    Minimum="1000"
                                     Value="{Binding TimerInterval,
                                                     Mode=TwoWay}">
                                 <ToolTipService.ToolTip>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Foreground="#222222" Text="{Binding TimerInterval}" />
-                                        <TextBlock Foreground="#222222" Text=" ms" />
+                                        <TextBlock Foreground="#222222" Text=" int" />
                                     </StackPanel>
                                 </ToolTipService.ToolTip>
                             </Slider>

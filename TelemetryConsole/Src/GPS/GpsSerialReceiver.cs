@@ -21,10 +21,11 @@ namespace TelemetryConsole.SerialReader
                 var device = new SerialPortDevice(port);
                 device.MessageReceived += DeviceOnMessageReceived;
                 device.OpenAsync();
+                Console.WriteLine("GPS Opened");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
             }
         }
 

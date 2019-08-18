@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.Reflection;
 using Telemetry.App;
 using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
@@ -11,6 +13,7 @@ namespace TelemetryConsole.Database
     public partial class TelemetryControl
     {
         private static int _countcorrect = 0;
+
         public static void DatabaseParser<T>(T dataStruct)
         {
             try
@@ -36,14 +39,12 @@ namespace TelemetryConsole.Database
                         CycleTime = bMsStruct.CycleTime,
                         MCUTemp = bMsStruct.MCUTemp,
                         RoundtripTm = bMsStruct.RoundtripTm,
-                        Time = Time(bMsStruct.TimeStamp)  
+                        Time = Time(bMsStruct.TimeStamp)
                     };
                     if (BmsValidation.Validate(bms).IsValid)
                     {
                         BmsCollection.Add(bms);
-                        Console.WriteLine("Correct"+_countcorrect++ + "\n");
                     }
-
                 }
 
                 if (typeof(T) == typeof(MotorStruct))
@@ -71,7 +72,6 @@ namespace TelemetryConsole.Database
                     if (MotorValidation.Validate(motor).IsValid)
                     {
                         MotorCollection.Add(motor);
-                        Console.WriteLine("Correct"+_countcorrect++ + "\n");
                     }
                 }
 
@@ -80,10 +80,10 @@ namespace TelemetryConsole.Database
                     GpsStruct gpsStruct = (GpsStruct) (object) dataStruct;
                     GpsCollection.Add(new Gps
                     {
-                        LAT = (double)gpsStruct.latitude/100000,
-                        LONG = (double)gpsStruct.longitude/100000,
-                        ALT = (double)gpsStruct.altitude/10,
-                        SPEED = ((double)gpsStruct.speed/1000)*3.6,
+                        LAT = (double) gpsStruct.latitude / 100000,
+                        LONG = (double) gpsStruct.longitude / 100000,
+                        ALT = (double) gpsStruct.altitude / 10,
+                        SPEED = ((double) gpsStruct.speed / 1000) * 3.6,
                         GPSFIX = gpsStruct.gps_fix,
                         DIST = gpsStruct.distance,
                         TDIST = gpsStruct.total_distance,
@@ -96,15 +96,38 @@ namespace TelemetryConsole.Database
                         TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
                 }
+
                 if (typeof(T) == typeof(DebugStruct))
                 {
-                    DebugStruct debugStruct = (DebugStruct)(object)dataStruct;
+                    DebugStruct debugStruct = (DebugStruct) (object) dataStruct;
+                    Console.WriteLine("Signal Strength: " + debugStruct.rssi);
                     DebugCollection.Add(new Debug
                     {
                         ExceptionSource = "rssi",
                         Message = debugStruct.rssi.ToString(),
                         Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
+                }
+
+                if (typeof(T) == typeof(MpptStruct))
+                {
+                    MpptStruct mpptStruct = (MpptStruct) (object) dataStruct;
+                    int i = 0;
+                    foreach (var field in typeof(MpptStruct).GetFields())
+                    {
+                        i++;
+                        mppt_frame_struct mpptFrameStruct = (mppt_frame_struct) field.GetValue(mpptStruct);
+                        MpptCollection.Add(new MPPT
+                        {
+                            DeviceId = i,
+                            InputCurrent = (int) mpptFrameStruct.inputCurrent,
+                            InputVoltage = (int) mpptFrameStruct.inputVoltage,
+                            OutputVoltage = (int) mpptFrameStruct.outputVoltage,
+                            OutputCurrent = (int) mpptFrameStruct.outputCurrent,
+                            ControllerTemp = (int) mpptFrameStruct.controllerTemp,
+                            Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
+                        });
+                    }
                 }
 
                 if (typeof(T) == typeof(AckStruct))
@@ -122,7 +145,7 @@ namespace TelemetryConsole.Database
             }
             catch (Exception ex)
             {
-                Extensions.PrintProperties(ex);
+                Console.WriteLine(ex.Message);
             }
         }
 

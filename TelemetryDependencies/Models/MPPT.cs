@@ -10,6 +10,7 @@ namespace TelemetryDependencies.Models
         public int InputCurrent { get; set; }
         public int InputVoltage { get; set; }
         public int OutputVoltage { get; set; }
+        public int OutputCurrent { get; set; }
         public int ControllerTemp { get; set; }
         public string Time { get; set; }
     }
