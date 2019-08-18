@@ -12,7 +12,6 @@ namespace TelemetryConsole.Database
 {
     public partial class TelemetryControl
     {
-        private static int _countcorrect = 0;
 
         public static void DatabaseParser<T>(T dataStruct)
         {

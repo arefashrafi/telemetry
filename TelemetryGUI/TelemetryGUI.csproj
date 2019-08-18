@@ -279,6 +279,9 @@
     <PackageReference Include="SqlTableDependency">
       <Version>8.5.4</Version>
     </PackageReference>
+    <PackageReference Include="Squirrel.Windows">
+      <Version>1.9.1</Version>
+    </PackageReference>
     <PackageReference Include="System.Configuration.ConfigurationManager">
       <Version>4.5.0</Version>
     </PackageReference>
