@@ -20,3 +20,6 @@
 /TelemetryGUI/TelemetryGUI.csproj.user
 /.vs
 /Telemetry.sln.DotSettings
+/TelemetryConsole/bin/Release
+/TelemetryDependencies/bin/Release/netstandard2.0
+/TelemetryGUI/bin/Release

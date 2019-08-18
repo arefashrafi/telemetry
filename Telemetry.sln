@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{7FE91A36-9E2
 		TelemetryContext.cs = TelemetryContext.cs
 	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TelemetrySetup", "TelemetrySetup\TelemetrySetup.vdproj", "{D75DDB11-A9EA-4B17-A7CD-70520BB3465B}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TelemetrySetup", "TelemetrySetup\TelemetrySetup.vdproj", "{46E763F7-885D-48EF-8055-0AD64FE6426B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,10 +36,8 @@ Global
 		{4795F777-3E68-4AB1-BEB9-F35F19E6FAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4795F777-3E68-4AB1-BEB9-F35F19E6FAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4795F777-3E68-4AB1-BEB9-F35F19E6FAD0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D75DDB11-A9EA-4B17-A7CD-70520BB3465B}.Debug|Any CPU.ActiveCfg = Debug
-		{D75DDB11-A9EA-4B17-A7CD-70520BB3465B}.Debug|Any CPU.Build.0 = Debug
-		{D75DDB11-A9EA-4B17-A7CD-70520BB3465B}.Release|Any CPU.ActiveCfg = Release
-		{D75DDB11-A9EA-4B17-A7CD-70520BB3465B}.Release|Any CPU.Build.0 = Release
+		{46E763F7-885D-48EF-8055-0AD64FE6426B}.Debug|Any CPU.ActiveCfg = Debug
+		{46E763F7-885D-48EF-8055-0AD64FE6426B}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
