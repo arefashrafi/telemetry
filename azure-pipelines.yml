@@ -31,8 +31,3 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-# .NET Desktop
- -task: BuildInstaller@1
-  inputs:
-    installTaskMode: 'solution'
-    VsVersion: 'VS2017'
