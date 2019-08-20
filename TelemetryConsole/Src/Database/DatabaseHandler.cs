@@ -111,8 +111,6 @@ namespace TelemetryConsole.Database
                         {
                             // Need to restart, some weird bug caused by bulk insert
                             Console.WriteLine(e);
-                            System.Diagnostics.Process.Start(Application.ExecutablePath);
-                            Environment.Exit(0);
                         }
                         
                     }
