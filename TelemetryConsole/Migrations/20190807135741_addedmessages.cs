@@ -8,32 +8,26 @@ namespace TelemetryConsole.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             migrationBuilder.CreateTable(
-                name: "Messages",
-                columns: table => new
+                "Messages",
+                table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>()
+                        .Annotation("SqlServer:ValueGenerationStrategy",
+                            SqlServerValueGenerationStrategy.IdentityColumn),
                     Prefix = table.Column<string>(nullable: true),
-                    MessageId = table.Column<byte>(nullable: false),
-                    Length = table.Column<byte>(nullable: false),
+                    MessageId = table.Column<byte>(),
+                    Length = table.Column<byte>(),
                     Text = table.Column<string>(nullable: true),
-                    DateTime = table.Column<DateTime>(nullable: false)
+                    DateTime = table.Column<DateTime>()
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
-                });
-
-
+                constraints: table => { table.PrimaryKey("PK_Messages", x => x.Id); });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
             migrationBuilder.DropTable(
-                name: "Messages");
+                "Messages");
         }
     }
 }

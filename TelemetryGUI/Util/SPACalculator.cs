@@ -19,12 +19,6 @@ namespace TelemetryGUI
         private static readonly int B_COUNT = 2;
         private static readonly int R_COUNT = 5;
         private static readonly int Y_COUNT = 63;
-
-        #pragma warning disable 414
-        private static int L_MAX_SUBCOUNT = 64;
-        private static int B_MAX_SUBCOUNT = 5;
-        private static int R_MAX_SUBCOUNT = 40;
-        #pragma warning restore 414
         private static readonly int[] l_subcount = {64, 34, 20, 7, 3, 1};
         private static readonly int[] b_subcount = {5, 2};
         private static readonly int[] r_subcount = {40, 10, 6, 2, 1};
@@ -579,7 +573,7 @@ namespace TelemetryGUI
 
         private static double EarthHeliocentricLongitude(double jme)
         {
-            double[] sum = new double[L_COUNT];
+            var sum = new double[L_COUNT];
             int i;
 
             for (i = 0; i < L_COUNT; i++)
@@ -590,7 +584,7 @@ namespace TelemetryGUI
 
         private static double EarthHeliocentricLatitude(double jme)
         {
-            double[] sum = new double[L_COUNT];
+            var sum = new double[L_COUNT];
             int i;
 
             for (i = 0; i < B_COUNT; i++)
@@ -601,7 +595,7 @@ namespace TelemetryGUI
 
         private static double EarthRadiusVector(double jme)
         {
-            double[] sum = new double[R_COUNT];
+            var sum = new double[R_COUNT];
             int i;
 
             for (i = 0; i < R_COUNT; i++)
@@ -902,7 +896,7 @@ namespace TelemetryGUI
 
         private static void CalculateGeocentricSunRightAscensionAndDeclination(ref SPAData spa)
         {
-            double[] x = new double[(int) TERM2.TERM_X_COUNT];
+            var x = new double[(int) TERM2.TERM_X_COUNT];
 
             spa.Jc = JulianCentury(spa.Jd);
 
@@ -949,7 +943,7 @@ namespace TelemetryGUI
             double h0Prime = -1 * (SunRadius + spa.AtmosRefract);
             int i;
 
-            var sunRts = spa;
+            SPAData sunRts = spa;
 
             double m = SunMeanLongitude(spa.Jme);
             spa.Eot = EquationOfTime(m, spa.Alpha, spa.DelPsi, spa.Epsilon);
@@ -1219,5 +1213,11 @@ namespace TelemetryGUI
             SUN_SET = 2,
             SUN_COUNT = 3
         }
+
+#pragma warning disable 414
+        private static int L_MAX_SUBCOUNT = 64;
+        private static int B_MAX_SUBCOUNT = 5;
+        private static int R_MAX_SUBCOUNT = 40;
+#pragma warning restore 414
     }
 }

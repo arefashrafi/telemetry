@@ -115,7 +115,7 @@
                                        Foreground="{Binding Stroke,
                                                             Converter={StaticResource ColorToBrushConverter}}"
                                        Text="{Binding SeriesName}" />
-                            
+
                             <StackPanel Grid.Column="1" Margin="3,3,20,3" Orientation="Horizontal">
                                 <TextBlock FontSize="13"
                                            FontWeight="Bold"

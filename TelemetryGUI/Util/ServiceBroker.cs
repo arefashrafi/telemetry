@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Windows;
-using SharpDX.Direct3D11;
 using TableDependency.SqlClient;
 using TableDependency.SqlClient.Base.Enums;
 using TableDependency.SqlClient.Base.EventArgs;
@@ -18,26 +17,26 @@ namespace TelemetryGUI.Util
         {
             try
             {
-                SqlTableDependency<Motor> motordep = new SqlTableDependency<Motor>(ConnectionString, "Motors");
+                var motordep = new SqlTableDependency<Motor>(ConnectionString, "Motors");
                 motordep.OnChanged += ChangedMotor;
                 motordep.Start();
-                SqlTableDependency<Gps> gpsdep = new SqlTableDependency<Gps>(ConnectionString, "GPSs");
+                var gpsdep = new SqlTableDependency<Gps>(ConnectionString, "GPSs");
                 gpsdep.OnChanged += ChangedGps;
                 gpsdep.Start();
-                SqlTableDependency<Bms> bmsdep = new SqlTableDependency<Bms>(ConnectionString, "BatteryManagementSystems");
+                var bmsdep = new SqlTableDependency<Bms>(ConnectionString, "BatteryManagementSystems");
                 bmsdep.OnChanged += ChangedBms;
                 bmsdep.Start();
-                SqlTableDependency<MPPT> mpptdep = new SqlTableDependency<MPPT>(ConnectionString, "MPPTs");
+                var mpptdep = new SqlTableDependency<MPPT>(ConnectionString, "MPPTs");
                 mpptdep.OnChanged += ChangedMppt;
                 mpptdep.Start();
-                SqlTableDependency<Error> errordep = new SqlTableDependency<Error>(ConnectionString, "Errors");
+                var errordep = new SqlTableDependency<Error>(ConnectionString, "Errors");
                 errordep.OnChanged += ChangedError;
                 errordep.Start();
-                SqlTableDependency<TelemetryDependencies.Models.Message> messagedep = new SqlTableDependency<TelemetryDependencies.Models.Message>(ConnectionString, "Messages");
+                var messagedep = new SqlTableDependency<Message>(ConnectionString, "Messages");
                 messagedep.OnChanged += ChangedMessage;
                 messagedep.Start();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -46,41 +45,42 @@ namespace TelemetryGUI.Util
         private void ChangedMotor(object sender, RecordChangedEventArgs<Motor> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
-            var changedEntity = e.Entity;
+            Motor changedEntity = e.Entity;
             EventSource.RaiseEvent(changedEntity, changedEntity.Time);
         }
-        private void ChangedMessage(object sender, RecordChangedEventArgs<TelemetryDependencies.Models.Message> e)
+
+        private void ChangedMessage(object sender, RecordChangedEventArgs<Message> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
-            var changedEntity = e.Entity;
+            Message changedEntity = e.Entity;
             EventSource.RaiseEvent(changedEntity, null);
         }
 
         private void ChangedGps(object sender, RecordChangedEventArgs<Gps> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
-            var changedEntity = e.Entity;
+            Gps changedEntity = e.Entity;
             EventSource.RaiseEvent(changedEntity, changedEntity.TimeStamp);
         }
 
         private void ChangedBms(object sender, RecordChangedEventArgs<Bms> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
-            var changedEntity = e.Entity;
+            Bms changedEntity = e.Entity;
             EventSource.RaiseEvent(changedEntity, changedEntity.Time);
         }
 
         private void ChangedMppt(object sender, RecordChangedEventArgs<MPPT> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
-            var changedEntity = e.Entity;
+            MPPT changedEntity = e.Entity;
             EventSource.RaiseEvent(changedEntity, changedEntity.Time);
         }
 
         private void ChangedError(object sender, RecordChangedEventArgs<Error> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
-            var changedEntity = e.Entity;
+            Error changedEntity = e.Entity;
             EventSource.RaiseEvent(changedEntity, changedEntity.Time);
         }
     }

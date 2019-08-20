@@ -36,11 +36,8 @@ namespace TelemetryGUI.ViewModel.Live
             // a scrolling chart window
             ChannelDataSeries = new XyDataSeries<TimeSpan, double>
             {
-                FifoCapacity = _size,
+                FifoCapacity = _size
             };
-            // Pre-fill with NaN up to size. This stops the stretching effect when Fifo series are filled with AutoRange
-/*            for (int i = 0; i < _size; i++)
-                ChannelDataSeries.Append(DateTime.Now.TimeOfDay, double.NaN);*/
         }
 
         public string ChannelName { get; set; }
@@ -64,7 +61,7 @@ namespace TelemetryGUI.ViewModel.Live
                 OnPropertyChanged("ChannelDataSeries");
             }
         }
-        
+
         public void Reset()
         {
             _channelDataSeries.Clear();

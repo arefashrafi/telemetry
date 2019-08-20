@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace TelemetryConsole.Misc
@@ -8,7 +9,7 @@ namespace TelemetryConsole.Misc
         public static T ByteArrayToStructure<T>(byte[] bytes) where T : struct
         {
             T data;
-            var handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+            GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
             try
             {
                 data = (T) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
@@ -26,7 +27,7 @@ namespace TelemetryConsole.Misc
         {
             try
             {
-                T[] subset = new T[length];
+                var subset = new T[length];
                 Array.Copy(array, startIndex, subset, 0, length);
                 return subset;
             }
@@ -38,11 +39,15 @@ namespace TelemetryConsole.Misc
 
         public static void PrintProperties<T>(T myObj)
         {
-            foreach (var prop in myObj.GetType().GetProperties())
+            foreach (PropertyInfo prop in myObj.GetType().GetProperties())
+            {
                 Console.WriteLine(prop.Name + ": " + prop.GetValue(myObj, null));
+            }
 
-            foreach (var field in myObj.GetType().GetFields())
+            foreach (FieldInfo field in myObj.GetType().GetFields())
+            {
                 Console.WriteLine(field.Name + ": " + field.GetValue(myObj));
+            }
         }
     }
 }

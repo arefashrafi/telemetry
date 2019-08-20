@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
 using SciChart.Charting.Model.DataSeries;
-using SciChart.Charting.Model.Filters;
 using SciChart.Charting.ViewportManagers;
 using SciChart.Charting.Visuals.Annotations;
 using SciChart.Core.Extensions;
@@ -23,10 +19,10 @@ namespace TelemetryGUI.ViewModel
     public class AltitudeDataSetViewModel : BaseViewModel
     {
         private XyDataSeries<DateTime, double> _energyDataSeries = new XyDataSeries<DateTime, double>();
+        private bool _firstRead;
         private XyDataSeries<double, double> _routeDataSeries = new XyDataSeries<double, double>();
         private VerticalLineAnnotation _verticalLineAnnotationCarPosition;
         private AnnotationCollection _verticalLineAnnotationCollection = new AnnotationCollection();
-        private bool _firstRead = false;
 
         public AltitudeDataSetViewModel()
         {
@@ -72,9 +68,8 @@ namespace TelemetryGUI.ViewModel
 
         private async void DataLoad()
         {
-
-            List<Routenote> routenotes = new List<Routenote>();
-            List<Bms> bms = new List<Bms>();
+            var routenotes = new List<Routenote>();
+            var bms = new List<Bms>();
             try
             {
                 using (TelemetryContext context = new TelemetryContext())
@@ -82,27 +77,26 @@ namespace TelemetryGUI.ViewModel
                     routenotes = await context.Routenotes.ToListAsync();
                     bms = await context.BatteryManagementSystems.ToListAsync();
                 }
-
             }
             catch
             {
-                if (routenotes.IsNullOrEmptyList())
-                {
-                    MessageBox.Show("No routes available");
-                }
+                if (routenotes.IsNullOrEmptyList()) MessageBox.Show("No routes available");
             }
 
             _routeDataSeries = new XyDataSeries<double, double>();
             _energyDataSeries = new XyDataSeries<DateTime, double> {AcceptsUnsortedData = true};
-            
-            foreach (Routenote item in routenotes) _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
+
+            foreach (Routenote item in routenotes)
+            {
+                _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
+            }
+
             try
             {
                 foreach (Bms item in bms)
                 {
-
                     DateTime dateTime = DateTime.ParseExact(item.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                                                            CultureInfo.InvariantCulture);
+                        CultureInfo.InvariantCulture);
                     if (dateTime > _energyDataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
                     {
                         _energyDataSeries.Append(dateTime, double.NaN);
@@ -111,19 +105,16 @@ namespace TelemetryGUI.ViewModel
                     else
                     {
                         double energy = item.Current * item.Volt;
-
                         _energyDataSeries.Append(dateTime, energy);
-                        
                     }
                 }
 
-                _energyDataSeries.ToMovingAverage(100);
                 EnergyDataSeries = _energyDataSeries;
                 RouteDataSeries = _routeDataSeries;
             }
-            catch
+            catch (Exception e)
             {
-                MessageBox.Show("Could not parse datetime");
+                MessageBox.Show(e.Message);
             }
         }
 
@@ -136,8 +127,6 @@ namespace TelemetryGUI.ViewModel
                 _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
                 _verticalLineAnnotationCollection.Add(_verticalLineAnnotationCarPosition);
             });
-
-
         }
 
         public void VerticalLinesRoutes()

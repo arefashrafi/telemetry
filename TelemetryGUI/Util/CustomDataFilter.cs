@@ -59,7 +59,7 @@ namespace TelemetryGUI.Util
             // Implementing a simple low pass filter https://kiritchatterjee.wordpress.com/2014/11/10/a-simple-digital-low-pass-filter-in-c/
             for (int i = 1; i < _originalDataSeries.Count; i++)
             {
-                var xValue = _originalDataSeries.XValues[i];
+                DateTime xValue = _originalDataSeries.XValues[i];
                 double yValue = beta * _originalDataSeries.YValues[i] + (1 - beta) * _filteredDataSeries.YValues[i - 1];
                 _filteredDataSeries.Append(xValue, yValue);
             }

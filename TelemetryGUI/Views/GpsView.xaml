@@ -50,7 +50,7 @@
             <Label FontSize="16" Content="{Binding GpsSourceExternal.DIST, Mode=OneWay}" />
             <Label FontSize="16" Content="{Binding GpsSourceExternal.ALT, Mode=OneWay}" />
         </StackPanel>
-        <m:Map  x:Name="GpsMapView" ZoomLevel="10" Center="{Binding LocationExternal, Mode=OneWay}" Grid.Column="2"
+        <m:Map x:Name="GpsMapView" ZoomLevel="10" Center="{Binding LocationExternal, Mode=OneWay}" Grid.Column="2"
                TargetUpdated="GpsMapView_OnTargetUpdated"
                CredentialsProvider="s5W0gX9RtyYX2B9Tbn3Q~qO_d8j0dzipMeHZykzOUPw~AvvSFGkA50MKT-YOsMMGXTUOtNLP56QZVOZcfBkukSBVcJR057t9EQxcHWhnZBeH">
             <m:Map.Children>

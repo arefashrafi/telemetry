@@ -251,7 +251,7 @@ namespace TelemetryGUI.ViewModel.DataList
 
         private void RaisePropertyChanged(string propertyName)
         {
-            var handler = PropertyChanged;
+            PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }

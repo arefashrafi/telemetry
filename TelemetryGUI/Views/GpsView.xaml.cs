@@ -1,7 +1,5 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Data;
-using Microsoft.Maps.MapControl.WPF;
-using TelemetryGUI.ViewModel;
 
 namespace TelemetryGUI.Views
 {

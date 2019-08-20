@@ -17,8 +17,8 @@ namespace TelemetryConsole.SerialReader
             string portName = ConfigurationManager.AppSettings["GPSCOMPORT"];
             try
             {
-                var port = new SerialPort(portName, 9600); //change parameters to match your serial port
-                var device = new SerialPortDevice(port);
+                SerialPort port = new SerialPort(portName, 9600); //change parameters to match your serial port
+                SerialPortDevice device = new SerialPortDevice(port);
                 device.MessageReceived += DeviceOnMessageReceived;
                 device.OpenAsync();
                 Console.WriteLine("GPS Opened");
@@ -34,7 +34,7 @@ namespace TelemetryConsole.SerialReader
             try
             {
                 if (!(args.Message is Gga gngga)) return;
-                using (var context = new TelemetryContext())
+                using (TelemetryContext context = new TelemetryContext())
                 {
                     context.GPSs.AddAsync(new Gps
                     {

@@ -8,13 +8,13 @@
         Title="MessageView" Height="450" Width="800">
     <Grid>
         <StackPanel>
-            <ComboBox BorderBrush="Blue" SelectedIndex="1" Name="IdComboBox"></ComboBox>
-            <Label Content="prefix"></Label>
-            <TextBox x:Name="MessageTextBoxPrefix" Text="Input prefix"></TextBox>
-            <Label Content="value"></Label>
-            <TextBox x:Name="MessageTextBox" MaxLength="30" Text="Input message"></TextBox>
-            <Button Content="Send" Click="Button_Click"></Button>
+            <ComboBox BorderBrush="Blue" SelectedIndex="1" Name="IdComboBox" />
+            <Label Content="prefix" />
+            <TextBox x:Name="MessageTextBoxPrefix" Text="Input prefix" />
+            <Label Content="value" />
+            <TextBox x:Name="MessageTextBox" MaxLength="30" Text="Input message" />
+            <Button Content="Send" Click="Button_Click" />
         </StackPanel>
-        
+
     </Grid>
 </Window>

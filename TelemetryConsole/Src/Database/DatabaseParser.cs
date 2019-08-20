@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Reflection;
-using Telemetry.App;
-using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
 using TelemetryDependencies.Structs;
 
@@ -12,7 +8,6 @@ namespace TelemetryConsole.Database
 {
     public partial class TelemetryControl
     {
-
         public static void DatabaseParser<T>(T dataStruct)
         {
             try
@@ -20,7 +15,7 @@ namespace TelemetryConsole.Database
                 if (typeof(T) == typeof(BmsStruct))
                 {
                     BmsStruct bMsStruct = (BmsStruct) (object) dataStruct;
-                    var bms = new Bms
+                    Bms bms = new Bms
                     {
                         MinVolt = bMsStruct.MinVolt,
                         MinVoltId = bMsStruct.MinVoltID,
@@ -40,16 +35,13 @@ namespace TelemetryConsole.Database
                         RoundtripTm = bMsStruct.RoundtripTm,
                         Time = Time(bMsStruct.TimeStamp)
                     };
-                    if (BmsValidation.Validate(bms).IsValid)
-                    {
-                        BmsCollection.Add(bms);
-                    }
+                    if (BmsValidation.Validate(bms).IsValid) BmsCollection.Add(bms);
                 }
 
                 if (typeof(T) == typeof(MotorStruct))
                 {
                     MotorStruct motorStruct = (MotorStruct) (object) dataStruct;
-                    var motor = new Motor
+                    Motor motor = new Motor
                     {
                         MotorCurrent = motorStruct.MotorCurrent,
                         MotorDriveMode = motorStruct.MotorDriveMode,
@@ -68,10 +60,7 @@ namespace TelemetryConsole.Database
                         TempMotor = motorStruct.TempMotor,
                         Time = Time(motorStruct.TimeStamp)
                     };
-                    if (MotorValidation.Validate(motor).IsValid)
-                    {
-                        MotorCollection.Add(motor);
-                    }
+                    if (MotorValidation.Validate(motor).IsValid) MotorCollection.Add(motor);
                 }
 
                 if (typeof(T) == typeof(GpsStruct))
@@ -82,7 +71,7 @@ namespace TelemetryConsole.Database
                         LAT = (double) gpsStruct.latitude / 100000,
                         LONG = (double) gpsStruct.longitude / 100000,
                         ALT = (double) gpsStruct.altitude / 10,
-                        SPEED = ((double) gpsStruct.speed / 1000) * 3.6,
+                        SPEED = (double) gpsStruct.speed / 1000 * 3.6,
                         GPSFIX = gpsStruct.gps_fix,
                         DIST = gpsStruct.distance,
                         TDIST = gpsStruct.total_distance,
@@ -112,7 +101,7 @@ namespace TelemetryConsole.Database
                 {
                     MpptStruct mpptStruct = (MpptStruct) (object) dataStruct;
                     int i = 0;
-                    foreach (var field in typeof(MpptStruct).GetFields())
+                    foreach (FieldInfo field in typeof(MpptStruct).GetFields())
                     {
                         i++;
                         mppt_frame_struct mpptFrameStruct = (mppt_frame_struct) field.GetValue(mpptStruct);

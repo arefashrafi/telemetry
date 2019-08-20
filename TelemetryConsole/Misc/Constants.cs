@@ -18,8 +18,8 @@ namespace TelemetryConsole.Misc
         protected const int DebugId = 0x75;
         protected const int AckId = 0x77;
         public static readonly ConcurrentQueue<byte> RxByteQueue = new ConcurrentQueue<byte>();
-        
-        
+
+
         public static readonly ObservableCollection<Motor> MotorCollection = new ObservableCollection<Motor>();
         public static readonly ObservableCollection<MPPT> MpptCollection = new ObservableCollection<MPPT>();
         public static readonly ObservableCollection<Bms> BmsCollection = new ObservableCollection<Bms>();
@@ -27,7 +27,7 @@ namespace TelemetryConsole.Misc
         public static readonly ObservableCollection<Error> ErrorCollection = new ObservableCollection<Error>();
         public static readonly ObservableCollection<Debug> DebugCollection = new ObservableCollection<Debug>();
         public static readonly ObservableCollection<Message> MessageCollection = new ObservableCollection<Message>();
-        
+
         public static MotorValidator MotorValidation = new MotorValidator();
         public static BmsValidator BmsValidation = new BmsValidator();
         public static MpptValidator MpptValidation = new MpptValidator();

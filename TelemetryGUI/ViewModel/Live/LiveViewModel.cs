@@ -17,29 +17,24 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using FastMember;
 using SciChart.Charting.Common.Helpers;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.Visuals;
 using SciChart.Core.Extensions;
 using SciChart.Examples.ExternalDependencies.Common;
-using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
-using FastMember;
 
 namespace TelemetryGUI.ViewModel.Live
 {
     public class LiveViewModel : BaseViewModel
     {
-        private int _size = 100000; // Size of each channel in points (FIFO Buffer)
-
         private readonly IList<Color> _colors = new[]
         {
             Colors.White, Colors.Yellow, Color.FromArgb(255, 0, 128, 128), Color.FromArgb(255, 176, 196, 222),
@@ -55,16 +50,17 @@ namespace TelemetryGUI.ViewModel.Live
         private readonly ActionCommand _startCommand;
         private readonly ActionCommand _stopCommand;
         private readonly object _syncRoot = new object();
-        private string _property;
         private ObservableCollection<LiveChannelViewModel> _channelViewModels;
         private volatile int _currentSize;
         private bool _firstRead;
         private bool _isReset;
+        private string _property;
 
         // X, Y buffers used to buffer data into the Scichart instances in blocks of BufferSize
 
         private bool _running;
         private SciChartSurface _sciChartSurface;
+        private int _size = 100000; // Size of each channel in points (FIFO Buffer)
 
         public LiveViewModel()
         {
@@ -145,7 +141,7 @@ namespace TelemetryGUI.ViewModel.Live
 
         public int TimerInterval
         {
-            get { return _size; }
+            get => _size;
             set
             {
                 _size = value;
@@ -189,20 +185,19 @@ namespace TelemetryGUI.ViewModel.Live
         {
             lock (_syncRoot)
             {
-                DateTime dateTime;
                 if (_channelViewModels.IsEmpty()) return;
-                var accessor = TypeAccessor.Create(e.Data.GetType());
-                foreach (var channel in _channelViewModels)
+                TypeAccessor accessor = TypeAccessor.Create(e.Data.GetType());
+                foreach (LiveChannelViewModel channel in _channelViewModels)
                 {
                     try
                     {
-                        var hasProp = accessor.GetMembers().Any(m => m.Name == channel.ChannelName);
+                        bool hasProp = accessor.GetMembers().Any(m => m.Name == channel.ChannelName);
                         if (!hasProp) continue;
                         double yValue = Convert.ToDouble(accessor[e.Data, channel.ChannelName]);
                         var dataSeries = channel.ChannelDataSeries;
-                        dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                        var dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
                             CultureInfo.InvariantCulture);
-                       //Checks if OnTick stopped between to objects and add NaN to it
+                        //Checks if OnTick stopped between to objects and add NaN to it
                         if (dateTime.TimeOfDay.Seconds - 2 > dataSeries.XValues.LastOrDefault().Seconds || !_firstRead)
                         {
                             dataSeries.Append(dateTime.TimeOfDay, double.NaN);
@@ -217,7 +212,6 @@ namespace TelemetryGUI.ViewModel.Live
                                 dataSeries.Append(dateTime.TimeOfDay, yValue);
                                 channel.ChannelDataSeries = dataSeries;
                             }
-                            
                         }
                     }
                     catch (Exception ex)
@@ -230,7 +224,7 @@ namespace TelemetryGUI.ViewModel.Live
 
         private void AddToChannelViewModels(string channelName)
         {
-            _channelViewModels.Add(new LiveChannelViewModel(_size, _colors[new Random().Next(8)])
+            _channelViewModels.Add(new LiveChannelViewModel(_size, _colors[new Random().Next(12)])
             {
                 ChannelName = channelName
             });

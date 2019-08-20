@@ -46,7 +46,7 @@ namespace TelemetryDependencies.Structs
 
         [MarshalAs(UnmanagedType.U1)] [FieldOffset(18)]
         public byte PresentCorePos;
-        
+
         [MarshalAs(UnmanagedType.U1)] [FieldOffset(19)]
         public byte Gear;
 

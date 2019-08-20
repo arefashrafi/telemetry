@@ -11,6 +11,7 @@ namespace TelemetryGUI.Util
         public static event EventHandler<EntityEventArgs> EventGps = delegate { };
         public static event EventHandler<EntityEventArgs> EventMppt = delegate { };
         public static event EventHandler<EntityEventArgs> EventMessage = delegate { };
+
         public static void RaiseEvent(object data, string time)
         {
             if (data.GetType() == typeof(Motor)) EventMotor.Invoke(null, new EntityEventArgs(data, time));

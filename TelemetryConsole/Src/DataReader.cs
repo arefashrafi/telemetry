@@ -1,32 +1,25 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
-using Microsoft.EntityFrameworkCore;
 using Telemetry.App;
 using TelemetryConsole.Misc;
 using TelemetryConsole.Src.Wifi;
 using TelemetryDependencies.Models;
+using Timer = System.Timers.Timer;
 
 namespace TelemetryConsole
 {
     public class DataReader : Constants
     {
-        private static SerialPort SerialPort { get; set; }
-        private static System.Timers.Timer _messageTimer = new System.Timers.Timer();
+        private static readonly Timer _messageTimer = new Timer();
         private static Message _message = new Message();
 
-        public DataReader()
-        {
-        }
+        private static SerialPort SerialPort { get; set; }
 
         private static void StartTimer()
         {
@@ -40,15 +33,15 @@ namespace TelemetryConsole
         {
             try
             {
-                using (var context = new TelemetryContext())
+                using (TelemetryContext context = new TelemetryContext())
                 {
-                    var message = context.Messages.LastOrDefault();
+                    Message message = context.Messages.LastOrDefault();
                     if (message != null && DateTime.Now > message.DateTime.AddSeconds(1)) return;
                     if (message == _message || message == null) return;
                     _message = message;
                 }
 
-                List<byte> byteArray = new List<byte>();
+                var byteArray = new List<byte>();
 
                 //Check if command or text message
                 if (_message.Prefix == "$#!T")
@@ -61,22 +54,14 @@ namespace TelemetryConsole
                     byteArray.AddRange(valueBytes);
                     byteArray.AddRange(new byte[] {0x0D, 0x0A});
                     if (SerialPort.IsOpen)
-                    {
                         foreach (byte data in byteArray)
                         {
                             //Keep sleep, otherwise the data is corrupted on otherside. This is a baudrate issue
                             Thread.Sleep(1);
-                            if (!SerialPort.IsOpen)
-                            {
-                                SerialPort.Write(new byte[] {data}, 0, 1);
-                            }
+                            if (!SerialPort.IsOpen) SerialPort.Write(new[] {data}, 0, 1);
                         }
-                    }
                     else
-                    {
                         AsynchronousSocketListener.Send(byteArray.ToArray());
-                    }
-
                 }
                 else
                 {
@@ -85,19 +70,14 @@ namespace TelemetryConsole
                     byteArray.AddRange(Encoding.GetEncoding("ASCII").GetBytes(_message.Text));
                     byteArray.AddRange(new byte[] {0x0D, 0x0A});
                     if (SerialPort.IsOpen)
-                    {
                         foreach (byte data in byteArray)
                         {
                             //Keep sleep, otherwise the data is corrupted on otherside. This is a baudrate issue
                             Thread.Sleep(1);
-                            SerialPort.Write(new byte[] {data}, 0, 1);
+                            SerialPort.Write(new[] {data}, 0, 1);
                         }
-                    }
                     else
-                    {
                         AsynchronousSocketListener.Send(byteArray.ToArray());
-                    }
-
                 }
             }
             catch (Exception exception)
@@ -110,9 +90,12 @@ namespace TelemetryConsole
         {
             try
             {
-                byte[] tempBuffer = new byte[SerialPort.BytesToRead];
+                var tempBuffer = new byte[SerialPort.BytesToRead];
                 SerialPort.Read(tempBuffer, 0, tempBuffer.Length);
-                foreach (byte singleByte in tempBuffer) RxByteQueue.Enqueue(singleByte);
+                foreach (byte singleByte in tempBuffer)
+                {
+                    RxByteQueue.Enqueue(singleByte);
+                }
             }
             catch (Exception exception)
             {
@@ -126,10 +109,7 @@ namespace TelemetryConsole
             StartTimer();
             Console.WriteLine("Trying to initiate Serial Port");
             string portName = ConfigurationManager.AppSettings["DATACOMPORT"];
-            if (SerialPort.GetPortNames().Any(x => x == portName))
-            {
-                Console.WriteLine("trying to open port");
-            }
+            if (SerialPort.GetPortNames().Any(x => x == portName)) Console.WriteLine("trying to open port");
 
             SerialPort = new SerialPort
             {
@@ -144,7 +124,7 @@ namespace TelemetryConsole
             {
                 SerialPort.Open();
                 SerialPort.DataReceived += DataReceiveHandler;
-                
+
                 Console.WriteLine(
                     $"SerialPort Opened: Settings:{SerialPort.PortName}, Baudrate:{SerialPort.BaudRate}, isOpen:{SerialPort.IsOpen}");
             }
@@ -152,8 +132,6 @@ namespace TelemetryConsole
             {
                 Console.WriteLine(e.Message);
             }
-
         }
     }
 }
-

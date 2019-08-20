@@ -19,8 +19,8 @@ namespace TelemetryGUI.Views.Strategy
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var estimationChartViewModel = (EnergyEstimationChartViewModel) DataContext;
-            var energyEstimationConfig = new EnergyEstimationConfig(estimationChartViewModel.Spa);
+            EnergyEstimationChartViewModel estimationChartViewModel = (EnergyEstimationChartViewModel) DataContext;
+            EnergyEstimationConfig energyEstimationConfig = new EnergyEstimationConfig(estimationChartViewModel.Spa);
             energyEstimationConfig.ShowDialog();
             _tempSpa = energyEstimationConfig.TempSpa;
             estimationChartViewModel.Spa = new SPACalculator.SPAData

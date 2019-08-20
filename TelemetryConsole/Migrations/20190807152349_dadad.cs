@@ -7,23 +7,23 @@ namespace TelemetryConsole.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "MotorRPM",
-                table: "Motors",
-                newName: "MotorRpm");
+                "MotorRPM",
+                "Motors",
+                "MotorRpm");
 
             migrationBuilder.RenameColumn(
-                name: "FailModeInfo1",
-                table: "Motors",
-                newName: "TempErrLevel");
+                "FailModeInfo1",
+                "Motors",
+                "TempErrLevel");
 
             migrationBuilder.RenameColumn(
-                name: "CurrentDirection",
-                table: "Motors",
-                newName: "MotorCurrentDir");
+                "CurrentDirection",
+                "Motors",
+                "MotorCurrentDir");
 
             migrationBuilder.AddColumn<int>(
-                name: "BatteryCurrentDir",
-                table: "Motors",
+                "BatteryCurrentDir",
+                "Motors",
                 nullable: false,
                 defaultValue: 0);
         }
@@ -31,23 +31,23 @@ namespace TelemetryConsole.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "BatteryCurrentDir",
-                table: "Motors");
+                "BatteryCurrentDir",
+                "Motors");
 
             migrationBuilder.RenameColumn(
-                name: "MotorRpm",
-                table: "Motors",
-                newName: "MotorRPM");
+                "MotorRpm",
+                "Motors",
+                "MotorRPM");
 
             migrationBuilder.RenameColumn(
-                name: "TempErrLevel",
-                table: "Motors",
-                newName: "FailModeInfo1");
+                "TempErrLevel",
+                "Motors",
+                "FailModeInfo1");
 
             migrationBuilder.RenameColumn(
-                name: "MotorCurrentDir",
-                table: "Motors",
-                newName: "CurrentDirection");
+                "MotorCurrentDir",
+                "Motors",
+                "CurrentDirection");
         }
     }
 }

@@ -3,7 +3,7 @@ using TelemetryDependencies.Models;
 
 namespace TelemetryConsole
 {
-    public class MotorValidator:AbstractValidator<Motor>
+    public class MotorValidator : AbstractValidator<Motor>
     {
         public MotorValidator()
         {
@@ -23,7 +23,8 @@ namespace TelemetryConsole
             RuleFor(x => x.MotorRpm).LessThan(5000);
         }
     }
-    public class BmsValidator:AbstractValidator<Bms>
+
+    public class BmsValidator : AbstractValidator<Bms>
     {
         public BmsValidator()
         {
@@ -45,7 +46,8 @@ namespace TelemetryConsole
             RuleFor(x => x.MCUTemp).LessThan(1000);
         }
     }
-    public class MpptValidator:AbstractValidator<MPPT>
+
+    public class MpptValidator : AbstractValidator<MPPT>
     {
         public MpptValidator()
         {
@@ -57,7 +59,8 @@ namespace TelemetryConsole
             RuleFor(x => x.InputVoltage).LessThan(1000);
         }
     }
-    public class GpsValidator:AbstractValidator<Gps>
+
+    public class GpsValidator : AbstractValidator<Gps>
     {
         public GpsValidator()
         {

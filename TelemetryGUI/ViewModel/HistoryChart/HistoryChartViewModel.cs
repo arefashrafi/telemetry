@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 using SciChart.Charting.Model.ChartSeries;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Charting.Visuals.RenderableSeries;
-using SciChart.Core.Extensions;
 using SciChart.Data.Model;
 using SciChart.Examples.ExternalDependencies.Common;
-using SharpDX.Direct3D11;
 using Telemetry.App;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
@@ -67,7 +64,7 @@ namespace TelemetryGUI.ViewModel.HistoryChart
         public async void HistoryChartLoadData(Type type, string param)
         {
             Random r = new Random();
-            XyDataSeries<DateTime, double> xyDataSeries = new XyDataSeries<DateTime, double>();
+            var xyDataSeries = new XyDataSeries<DateTime, double>();
             if (type == typeof(Motor))
             {
                 List<Motor> dataList;
@@ -87,15 +84,15 @@ namespace TelemetryGUI.ViewModel.HistoryChart
                 try
                 {
                     List<Motor> filteredMotors = dataList.Where(t =>
-                                                                    DateTime.ParseExact(t.Time,
-                                                                                        "yyyy-MM-dd HH:mm:ss.fff",
-                                                                                        CultureInfo.InvariantCulture) >
-                                                                    TimeSpan)
-                                                         .ToList();
+                            DateTime.ParseExact(t.Time,
+                                "yyyy-MM-dd HH:mm:ss.fff",
+                                CultureInfo.InvariantCulture) >
+                            TimeSpan)
+                        .ToList();
                     foreach (Motor motor in filteredMotors)
                     {
                         DateTime dateTime = DateTime.ParseExact(motor.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                                                                CultureInfo.InvariantCulture);
+                            CultureInfo.InvariantCulture);
 
                         if (dateTime > xyDataSeries.XValues.LastOrDefault().AddMinutes(10) || _firstReadMotor)
                         {
@@ -136,13 +133,13 @@ namespace TelemetryGUI.ViewModel.HistoryChart
                 try
                 {
                     List<Bms> bmses = dataList.Where(t => DateTime.ParseExact(t.Time,
-                                                                             "yyyy-MM-dd HH:mm:ss.fff",
-                                                                             CultureInfo.InvariantCulture) > TimeSpan)
-                                                            .ToList();
+                                                              "yyyy-MM-dd HH:mm:ss.fff",
+                                                              CultureInfo.InvariantCulture) > TimeSpan)
+                        .ToList();
                     foreach (Bms motor in bmses)
                     {
                         DateTime dateTime = DateTime.ParseExact(motor.Time, "yyyy-MM-dd HH:mm:ss.fff",
-                                                                CultureInfo.InvariantCulture);
+                            CultureInfo.InvariantCulture);
 
                         if (dateTime > xyDataSeries.XValues.LastOrDefault().AddMinutes(10) || _firstReadBms)
                         {
@@ -165,7 +162,7 @@ namespace TelemetryGUI.ViewModel.HistoryChart
             }
 
             Color color = Color.FromRgb(Convert.ToByte(r.Next(256)), Convert.ToByte(r.Next(256)),
-                                      Convert.ToByte(r.Next(256)));
+                Convert.ToByte(r.Next(256)));
             _renderableSeriesViewModels.Add(new LineRenderableSeriesViewModel
             {
                 DrawNaNAs = LineDrawMode.Gaps,
@@ -176,7 +173,7 @@ namespace TelemetryGUI.ViewModel.HistoryChart
 
         private void DeleteSeriesClick()
         {
-            var rSeries = RenderableSeriesViewModels.LastOrDefault();
+            IRenderableSeriesViewModel rSeries = RenderableSeriesViewModels.LastOrDefault();
             if (rSeries?.DataSeries == null)
                 return;
 

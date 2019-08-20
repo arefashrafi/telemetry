@@ -7,14 +7,14 @@ namespace TelemetryConsole.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "MessageId",
-                table: "Messages",
+                "MessageId",
+                "Messages",
                 nullable: false,
                 oldClrType: typeof(byte));
 
             migrationBuilder.AlterColumn<int>(
-                name: "Length",
-                table: "Messages",
+                "Length",
+                "Messages",
                 nullable: false,
                 oldClrType: typeof(byte));
         }
@@ -22,14 +22,14 @@ namespace TelemetryConsole.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<byte>(
-                name: "MessageId",
-                table: "Messages",
+                "MessageId",
+                "Messages",
                 nullable: false,
                 oldClrType: typeof(int));
 
             migrationBuilder.AlterColumn<byte>(
-                name: "Length",
-                table: "Messages",
+                "Length",
+                "Messages",
                 nullable: false,
                 oldClrType: typeof(int));
         }

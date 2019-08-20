@@ -33,7 +33,7 @@ namespace TelemetryConsole.Database
             // Loop if receiveQueue contains data while serial port is open
             do
             {
-                byte[] packetArray = new byte[128];
+                var packetArray = new byte[128];
                 lock (RxByteQueue)
                 {
                     try
@@ -52,6 +52,7 @@ namespace TelemetryConsole.Database
                         Console.WriteLine(e);
                     }
                 }
+
                 //Identify packet
                 byte startByte = packetArray[StartByteIndex];
                 byte id = packetArray[IdIndex];
@@ -61,23 +62,22 @@ namespace TelemetryConsole.Database
                     try
                     {
                         byte[] dataSubsetPacket = packetArray.RangeSubset(3, dataLength);
-                        
+
                         byte[] crcSubsetPacket = packetArray.RangeSubset(dataLength + 3, 4);
                         if (crcSubsetPacket == BitConverter.GetBytes(new Crc32().Get(dataSubsetPacket))) continue;
 
                         if (id == BmsId)
-                        {
                             if (dataLength == 38)
                             {
-                                var bMsStruct = Extensions.ByteArrayToStructure<BmsStruct>(dataSubsetPacket);
+                                BmsStruct bMsStruct = Extensions.ByteArrayToStructure<BmsStruct>(dataSubsetPacket);
                                 DatabaseParser(bMsStruct);
                             }
-                        }
+
                         if (id == MpptId)
                         {
                             if (dataLength == 100)
                             {
-                                var mpptStruct = Extensions.ByteArrayToStructure<MpptStruct>(dataSubsetPacket);
+                                MpptStruct mpptStruct = Extensions.ByteArrayToStructure<MpptStruct>(dataSubsetPacket);
                                 DatabaseParser(mpptStruct);
                             }
                         }
@@ -86,7 +86,8 @@ namespace TelemetryConsole.Database
                         {
                             if (dataLength == 1)
                             {
-                                var debugStruct = Extensions.ByteArrayToStructure<DebugStruct>(dataSubsetPacket);
+                                DebugStruct debugStruct =
+                                    Extensions.ByteArrayToStructure<DebugStruct>(dataSubsetPacket);
                                 DatabaseParser(debugStruct);
                             }
                         }
@@ -94,7 +95,7 @@ namespace TelemetryConsole.Database
                         {
                             if (dataLength == 61)
                             {
-                                var gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
+                                GpsStruct gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
                                 DatabaseParser(gpsStruct);
                             }
                         }
@@ -104,7 +105,8 @@ namespace TelemetryConsole.Database
                         {
                             if (dataLength == 29)
                             {
-                                var motorStruct = Extensions.ByteArrayToStructure<MotorStruct>(dataSubsetPacket);
+                                MotorStruct motorStruct =
+                                    Extensions.ByteArrayToStructure<MotorStruct>(dataSubsetPacket);
                                 DatabaseParser(motorStruct);
                             }
                         }
@@ -113,7 +115,7 @@ namespace TelemetryConsole.Database
                         {
                             if (dataLength <= 32)
                             {
-                                var gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
+                                GpsStruct gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
                                 DatabaseParser(gpsStruct);
                             }
                         }
@@ -121,7 +123,7 @@ namespace TelemetryConsole.Database
                         {
                             if (dataLength == 1)
                             {
-                                var ackStruct = Extensions.ByteArrayToStructure<AckStruct>(dataSubsetPacket);
+                                AckStruct ackStruct = Extensions.ByteArrayToStructure<AckStruct>(dataSubsetPacket);
                                 DatabaseParser(ackStruct);
                             }
                         }
@@ -136,7 +138,7 @@ namespace TelemetryConsole.Database
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e+" ------------>>>>>>> DATA SERIALIZER");
+                        Console.WriteLine(e + " ------------>>>>>>> DATA SERIALIZER");
                     }
                 else
                     lock (RxByteQueue)

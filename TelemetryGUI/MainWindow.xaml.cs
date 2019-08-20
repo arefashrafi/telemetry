@@ -15,7 +15,7 @@ namespace TelemetryGUI
         public MainWindow()
         {
             InitializeComponent();
-            var serviceBroker = new ServiceBroker();
+            ServiceBroker serviceBroker = new ServiceBroker();
             serviceBroker.Broker();
             WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMessage), OnTick);
         }
@@ -23,14 +23,12 @@ namespace TelemetryGUI
         private void OnTick(object sender, EntityEventArgs e)
         {
             if (!(e.Data is Message message)) return;
-            else
-            {
-                var _message = e.Data as Message;
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => {
-                    MessageBox.Show(Application.Current.MainWindow, _message.Prefix + _message.Text);
+
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal,
+                new Action(() =>
+                {
+                    MessageBox.Show(Application.Current.MainWindow, message.Prefix + message.Text);
                 }));
-                
-            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
