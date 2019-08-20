@@ -66,7 +66,7 @@ namespace TelemetryConsole.Database
                             RoundtripTm = r.Next(100) ,
                             Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                         });
-                        Thread.Sleep(100);
+                        Thread.Sleep(50);
                         try
                         {
                             if (BmsCollection.Count > 0)

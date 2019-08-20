@@ -24,7 +24,7 @@ namespace TelemetryGUI.ViewModel.Live
     public class LiveChannelViewModel : BaseViewModel
     {
         private readonly int _size;
-        private IXyDataSeries<DateTime, double> _channelDataSeries;
+        private IXyDataSeries<TimeSpan, double> _channelDataSeries;
         private Color _color;
 
         public LiveChannelViewModel(int size, Color color)
@@ -34,13 +34,13 @@ namespace TelemetryGUI.ViewModel.Live
             // Add an empty First In First Out series. When the data reaches capacity (int size) then old samples
             // will be pushed out of the series and new appended to the end. This gives the appearance of 
             // a scrolling chart window
-            ChannelDataSeries = new XyDataSeries<DateTime, double>
+            ChannelDataSeries = new XyDataSeries<TimeSpan, double>
             {
                 FifoCapacity = _size,
             };
             // Pre-fill with NaN up to size. This stops the stretching effect when Fifo series are filled with AutoRange
-            for (int i = 0; i < _size; i++)
-                ChannelDataSeries.Append(DateTime.Now, double.NaN);
+/*            for (int i = 0; i < _size; i++)
+                ChannelDataSeries.Append(DateTime.Now.TimeOfDay, double.NaN);*/
         }
 
         public string ChannelName { get; set; }
@@ -55,7 +55,7 @@ namespace TelemetryGUI.ViewModel.Live
             }
         }
 
-        public IXyDataSeries<DateTime, double> ChannelDataSeries
+        public IXyDataSeries<TimeSpan, double> ChannelDataSeries
         {
             get => _channelDataSeries;
             set

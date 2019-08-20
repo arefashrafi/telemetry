@@ -189,6 +189,7 @@ namespace TelemetryGUI.ViewModel.Live
         {
             lock (_syncRoot)
             {
+                DateTime dateTime;
                 if (_channelViewModels.IsEmpty()) return;
                 var accessor = TypeAccessor.Create(e.Data.GetType());
                 foreach (var channel in _channelViewModels)
@@ -199,22 +200,24 @@ namespace TelemetryGUI.ViewModel.Live
                         if (!hasProp) continue;
                         double yValue = Convert.ToDouble(accessor[e.Data, channel.ChannelName]);
                         var dataSeries = channel.ChannelDataSeries;
-                        DateTime dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                        dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
                             CultureInfo.InvariantCulture);
-                        //Checks if OnTick stopped between to objects and add NaN to it
-                        if (dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(2) || !_firstRead)
+                       //Checks if OnTick stopped between to objects and add NaN to it
+                        if (dateTime.TimeOfDay.Seconds - 2 > dataSeries.XValues.LastOrDefault().Seconds || !_firstRead)
                         {
-                            channel.ChannelDataSeries.Append(dateTime, double.NaN);
+                            dataSeries.Append(dateTime.TimeOfDay, double.NaN);
                             _firstRead = true;
                         }
                         else
                         {
                             //If this line is removed it causes unsorted exception which will cause very bad performance
                             //Recommend to leave this.
-                            dateTime = dateTime.AddSeconds(1);
-                            channel.ChannelDataSeries.Append(dateTime, yValue);
-                            // For reporting current size to GUI
-                            _currentSize = dataSeries.Count;
+                            if (!dataSeries.XMax.ToTimeSpan().Equals(dateTime.TimeOfDay))
+                            {
+                                dataSeries.Append(dateTime.TimeOfDay, yValue);
+                                channel.ChannelDataSeries = dataSeries;
+                            }
+                            
                         }
                     }
                     catch (Exception ex)

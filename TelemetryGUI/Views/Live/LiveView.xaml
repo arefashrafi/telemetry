@@ -52,7 +52,6 @@
                                                         DataSeries="{Binding ChannelDataSeries}"
                                                         ResamplingMode="Auto"
                                                         DrawNaNAs="Gaps"
-                                                        
                                                         Stroke="{Binding Stroke,
                                                                               Mode=OneWay}">
                                 <s:FastLineRenderableSeries.RolloverMarkerTemplate>
@@ -64,11 +63,10 @@
                         </s:SciChartSurface.RenderableSeries>
 
                         <s:SciChartSurface.XAxis>
-                            <s:DateTimeAxis DrawMajorBands="True"
+                            <s:TimeSpanAxis DrawMajorBands="True"
                                             GrowBy="0.1,0.1"
                                             MinorsPerMajor="4"
-                                            AutoRange="Always"
-                                            TextFormatting="HH:mm:ss.fff" />
+                                            AutoRange="Always"/>
                         </s:SciChartSurface.XAxis>
                         <s:SciChartSurface.YAxis>
                             <s:NumericAxis AutoRange="Always" DrawMajorGridLines="False" DrawMinorGridLines="False"

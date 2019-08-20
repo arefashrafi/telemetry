@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Microsoft.EntityFrameworkCore;
 using SciChart.Charting.Model.DataSeries;
+using SciChart.Charting.Model.Filters;
 using SciChart.Charting.ViewportManagers;
 using SciChart.Charting.Visuals.Annotations;
 using SciChart.Core.Extensions;
@@ -112,8 +113,11 @@ namespace TelemetryGUI.ViewModel
                         double energy = item.Current * item.Volt;
 
                         _energyDataSeries.Append(dateTime, energy);
+                        
                     }
                 }
+
+                _energyDataSeries.ToMovingAverage(100);
                 EnergyDataSeries = _energyDataSeries;
                 RouteDataSeries = _routeDataSeries;
             }
