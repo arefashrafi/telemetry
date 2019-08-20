@@ -51,7 +51,6 @@ namespace TelemetryGUI.ViewModel.Live
         private readonly ActionCommand _stopCommand;
         private readonly object _syncRoot = new object();
         private ObservableCollection<LiveChannelViewModel> _channelViewModels;
-        private volatile int _currentSize;
         private bool _firstRead;
         private bool _isReset;
         private string _property;
@@ -60,7 +59,7 @@ namespace TelemetryGUI.ViewModel.Live
 
         private bool _running;
         private SciChartSurface _sciChartSurface;
-        private int _size = 100000; // Size of each channel in points (FIFO Buffer)
+        private int _size = 10000; // Size of each channel in points (FIFO Buffer)
 
         public LiveViewModel()
         {
