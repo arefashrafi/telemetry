@@ -21,6 +21,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -144,7 +145,7 @@ namespace TelemetryGUI.ViewModel.Live
 
         public int TimerInterval
         {
-            get{ return _size;}
+            get { return _size; }
             set
             {
                 _size = value;
@@ -195,7 +196,7 @@ namespace TelemetryGUI.ViewModel.Live
                     try
                     {
                         var hasProp = accessor.GetMembers().Any(m => m.Name == channel.ChannelName);
-                        if(!hasProp)continue;
+                        if (!hasProp) continue;
                         double yValue = Convert.ToDouble(accessor[e.Data, channel.ChannelName]);
                         var dataSeries = channel.ChannelDataSeries;
                         DateTime dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
@@ -208,6 +209,9 @@ namespace TelemetryGUI.ViewModel.Live
                         }
                         else
                         {
+                            //If this line is removed it causes unsorted exception which will cause very bad performance
+                            //Recommend to leave this.
+                            dateTime = dateTime.AddSeconds(1);
                             channel.ChannelDataSeries.Append(dateTime, yValue);
                             // For reporting current size to GUI
                             _currentSize = dataSeries.Count;
@@ -215,7 +219,7 @@ namespace TelemetryGUI.ViewModel.Live
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Trace.WriteLine(ex.Message);
                     }
                 }
             }
@@ -226,7 +230,6 @@ namespace TelemetryGUI.ViewModel.Live
             _channelViewModels.Add(new LiveChannelViewModel(_size, _colors[new Random().Next(8)])
             {
                 ChannelName = channelName
-                
             });
         }
     }

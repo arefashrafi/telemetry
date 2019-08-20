@@ -44,16 +44,15 @@
                     <!-- Declare the SciChartSurface. We use RenderPriority=Low to put rendering below mouse input and keep the app responsive -->
                     <s:SciChartSurface Name="sciChart" Grid.Column="1" Height="200" HorizontalAlignment="Stretch" Padding="0"
                                        s3D:DirectXHelper.TryApplyDirectXRenderer="True"
+                                       RenderPriority="Normal"
                                        s3D:DirectXHelper.FallbackType="{x:Type s:HighSpeedRenderSurface}">
-                        <s:SciChartSurface.RenderSurface>
-                            <s:HighSpeedRenderSurface/>
-                        </s:SciChartSurface.RenderSurface>
                         <!--  Declare RenderableSeries, which are mapped to DataSet Series 1:1 and in order  -->
                         <s:SciChartSurface.RenderableSeries>
                             <s:FastLineRenderableSeries AntiAliasing="False"
                                                         DataSeries="{Binding ChannelDataSeries}"
-                                                        ResamplingMode="None"
+                                                        ResamplingMode="Auto"
                                                         DrawNaNAs="Gaps"
+                                                        
                                                         Stroke="{Binding Stroke,
                                                                               Mode=OneWay}">
                                 <s:FastLineRenderableSeries.RolloverMarkerTemplate>
@@ -69,12 +68,15 @@
                                             GrowBy="0.1,0.1"
                                             MinorsPerMajor="4"
                                             AutoRange="Always"
-                                            TextFormatting="yyyy-MM-dd HH:mm:ss.fff" />
+                                            TextFormatting="HH:mm:ss.fff" />
                         </s:SciChartSurface.XAxis>
                         <s:SciChartSurface.YAxis>
                             <s:NumericAxis AutoRange="Always" DrawMajorGridLines="False" DrawMinorGridLines="False"
                                            DrawMajorBands="True" Visibility="Visible" />
                         </s:SciChartSurface.YAxis>
+                        <s:SciChartSurface.Annotations>
+                            <s:TextAnnotation Text="{Binding ElementName= sciChart, Path=RenderSurface.}" Y1="5"></s:TextAnnotation>
+                        </s:SciChartSurface.Annotations>
                     </s:SciChartSurface>
                 </Grid>
             </DataTemplate>

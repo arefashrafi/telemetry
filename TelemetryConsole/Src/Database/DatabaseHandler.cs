@@ -5,9 +5,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
+using System.Windows.Forms;
 using Telemetry.App;
 using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
+using Message = TelemetryDependencies.Models.Message;
 
 namespace TelemetryConsole.Database
 {
@@ -107,7 +109,10 @@ namespace TelemetryConsole.Database
                         }
                         catch (Exception e)
                         {
+                            // Need to restart, some weird bug caused by bulk insert
                             Console.WriteLine(e);
+                            System.Diagnostics.Process.Start(Application.ExecutablePath);
+                            Environment.Exit(0);
                         }
                         
                     }

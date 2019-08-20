@@ -31,7 +31,6 @@ namespace TelemetryGUI.ViewModel.Live
         {
             _size = size;
             Stroke = color;
-
             // Add an empty First In First Out series. When the data reaches capacity (int size) then old samples
             // will be pushed out of the series and new appended to the end. This gives the appearance of 
             // a scrolling chart window
