@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -29,6 +31,7 @@ using SciChart.Core.Extensions;
 using SciChart.Examples.ExternalDependencies.Common;
 using TelemetryDependencies.Models;
 using TelemetryGUI.Util;
+using FastMember;
 
 namespace TelemetryGUI.ViewModel.Live
 {
@@ -51,7 +54,7 @@ namespace TelemetryGUI.ViewModel.Live
         private readonly ActionCommand _startCommand;
         private readonly ActionCommand _stopCommand;
         private readonly object _syncRoot = new object();
-        private string _bmsProperty;
+        private string _property;
         private ObservableCollection<LiveChannelViewModel> _channelViewModels;
         private volatile int _currentSize;
         private bool _firstRead;
@@ -80,14 +83,14 @@ namespace TelemetryGUI.ViewModel.Live
             }
         }
 
-        public string BmsProperty
+        public string Property
         {
-            get => _bmsProperty;
+            get => _property;
             set
             {
-                _bmsProperty = value;
+                _property = value;
                 AddToChannelViewModels(value);
-                OnPropertyChanged("BmsProperty");
+                OnPropertyChanged("Property");
             }
         }
 
@@ -186,25 +189,25 @@ namespace TelemetryGUI.ViewModel.Live
             lock (_syncRoot)
             {
                 if (_channelViewModels.IsEmpty()) return;
+                var accessor = TypeAccessor.Create(e.Data.GetType());
                 foreach (var channel in _channelViewModels)
                 {
                     try
                     {
-                        // ReSharper disable once PossibleNullReferenceException
-                        if (e.Data.GetType().GetProperty(channel.ChannelName).CanRead == false) continue;
-                        IXyDataSeries<DateTime, double> dataSeries = channel.ChannelDataSeries;
-                        var dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                        var hasProp = accessor.GetMembers().Any(m => m.Name == channel.ChannelName);
+                        if(!hasProp)continue;
+                        double yValue = Convert.ToDouble(accessor[e.Data, channel.ChannelName]);
+                        var dataSeries = channel.ChannelDataSeries;
+                        DateTime dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
                             CultureInfo.InvariantCulture);
-                        if (dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(20) || !_firstRead)
+                        //Checks if OnTick stopped between to objects and add NaN to it
+                        if (dateTime > dataSeries.XValues.LastOrDefault().AddSeconds(2) || !_firstRead)
                         {
                             channel.ChannelDataSeries.Append(dateTime, double.NaN);
                             _firstRead = true;
                         }
                         else
                         {
-                            double yValue =
-                                Convert.ToDouble(e.Data.GetType().GetProperty(channel.ChannelName)
-                                    ?.GetValue(e.Data, null));
                             channel.ChannelDataSeries.Append(dateTime, yValue);
                             // For reporting current size to GUI
                             _currentSize = dataSeries.Count;
@@ -214,10 +217,8 @@ namespace TelemetryGUI.ViewModel.Live
                     {
                         Console.WriteLine(ex.Message);
                     }
-
                 }
             }
-            
         }
 
         private void AddToChannelViewModels(string channelName)
@@ -225,6 +226,7 @@ namespace TelemetryGUI.ViewModel.Live
             _channelViewModels.Add(new LiveChannelViewModel(_size, _colors[new Random().Next(8)])
             {
                 ChannelName = channelName
+                
             });
         }
     }

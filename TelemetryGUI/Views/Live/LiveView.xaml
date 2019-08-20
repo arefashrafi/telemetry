@@ -137,7 +137,7 @@
                                                         Converter={StaticResource BooleanToVisibilityConverter},
                                                         ConverterParameter=INVERSE}"
                                     Maximum="1000000"
-                                    Minimum="1000"
+                                    Minimum="100"
                                     Value="{Binding TimerInterval,
                                                     Mode=TwoWay}">
                                 <ToolTipService.ToolTip>
@@ -151,37 +151,7 @@
                         </StackPanel>
                     </ext:FlyoutMenuButton.PopupContent>
                 </ext:FlyoutMenuButton>
-
-                <ext:FlyoutMenuButton x:Name="PointsFlyoutMenuButton" HorizontalAlignment="Left" Content="Points"
-                                      Style="{StaticResource FlyoutMenuButtonStyle}"
-                                      ToolTipService.ToolTip="Points per Tick">
-
-                    <ext:FlyoutMenuButton.PopupContent>
-                        <StackPanel MinWidth="150" Orientation="Vertical">
-
-                            <TextBlock Margin="3" VerticalAlignment="Center" Foreground="White"
-                                       Text="Points per Tick: " />
-
-                            <Slider MinWidth="100"
-                                    DataContext="{Binding}"
-                                    IsEnabled="{Binding IsRunning,
-                                                        Converter={StaticResource BooleanToVisibilityConverter},
-                                                        ConverterParameter=INVERSE}"
-                                    Maximum="100"
-                                    Minimum="10"
-                                    Value="{Binding BufferSize,
-                                                    Mode=TwoWay}">
-                                <ToolTipService.ToolTip>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Foreground="#222222" Text="{Binding BufferSize}" />
-                                        <TextBlock Foreground="#222222" Text=" Points/Tick" />
-                                    </StackPanel>
-                                </ToolTipService.ToolTip>
-                            </Slider>
-
-                        </StackPanel>
-                    </ext:FlyoutMenuButton.PopupContent>
-                </ext:FlyoutMenuButton>
+                
                 <ext:FlyoutMenuButton x:Name="DataFlyoutMenuButton" HorizontalAlignment="Left" Content="Data"
                                       Style="{StaticResource FlyoutMenuButtonStyle}"
                                       ToolTipService.ToolTip="Data">
@@ -192,11 +162,11 @@
                             <TextBlock Margin="3" HorizontalAlignment="Left" Foreground="White" Text="Choose Data: " />
 
                             <ComboBox Text="Select" Name="DataBmsSelectionComboBox" Margin="4"
-                                      SelectedItem="{Binding BmsProperty, Mode=TwoWay}" />
+                                      SelectedItem="{Binding Property, Mode=TwoWay}" />
                             <ComboBox Text="Select" Name="DataMotorSelectionComboBox" Margin="4"
-                                      SelectedItem="{Binding BmsProperty, Mode=TwoWay}" />
+                                      SelectedItem="{Binding Property, Mode=TwoWay}" />
                             <ComboBox Text="Select" Name="DataMpptSelectionComboBox" Margin="4"
-                                      SelectedItem="{Binding BmsProperty, Mode=TwoWay}" />
+                                      SelectedItem="{Binding Property, Mode=TwoWay}" />
 
                         </StackPanel>
                     </ext:FlyoutMenuButton.PopupContent>

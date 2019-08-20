@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Device.Location;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -187,12 +188,18 @@ namespace TelemetryGUI.ViewModel
 
         private void CalculateDistance()
         {
-            if (_gpsDirect == null) return;
-            if (_gpsExternal == null) return;
-            GeoCoordinate directGps = new GeoCoordinate(_gpsDirect.LAT, _gpsDirect.LONG);
-            GeoCoordinate externalGps = new GeoCoordinate(_gpsExternal.LAT, _gpsExternal.LONG);
+            try
+            {
+                GeoCoordinate directGps = new GeoCoordinate(_gpsDirect.LAT, _gpsDirect.LONG);
+                GeoCoordinate externalGps = new GeoCoordinate(_gpsExternal.LAT, _gpsExternal.LONG);
 
-            _distanceBetweenGps = externalGps.GetDistanceTo(directGps);
+                _distanceBetweenGps = externalGps.GetDistanceTo(directGps);
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e);
+            }
+
         }
         protected void OnPropertyChanged(string name)
         {

@@ -21,47 +21,50 @@ namespace TelemetryConsole.Database
                 {
                     using (TelemetryContext context = new TelemetryContext())
                     {
-/*                        MotorCollection.Add(new Motor
+                        Random r = new Random();
+                        
+                        MotorCollection.Add(new Motor
                         {
-                            BatteryVoltage = 32,
-                            BatteryCurrent = 321,
-                            BatteryCurrentDir = 312,
-                            MotorCurrent = 33,
-                            MotorCurrentDir = 15,
-                            TempControl = 23,
-                            TempMotor = 23,
-                            MotorRpm = 213,
-                            OutputDuty = 321,
-                            OutputDutyType = 233,
-                            MotorDriveMode = 123,
-                            FailModeInfo = 3211,
-                            TempErrLevel = 123,
-                            PresentCorePos = 213,
-                            Gear = 3,
-                            FailModeInfo2 = 23,
+                            BatteryVoltage = r.Next(100),
+                            BatteryCurrent = r.Next(100),
+                            BatteryCurrentDir = r.Next(100),
+                            MotorCurrent = r.Next(100),
+                            MotorCurrentDir = r.Next(100),
+                            TempControl = r.Next(100),
+                            TempMotor = r.Next(100),
+                            MotorRpm = r.Next(100),
+                            OutputDuty = r.Next(100),
+                            OutputDutyType = r.Next(100),
+                            MotorDriveMode = r.Next(100),
+                            FailModeInfo = r.Next(100),
+                            TempErrLevel = r.Next(100),
+                            PresentCorePos = r.Next(100),
+                            Gear = r.Next(100),
+                            FailModeInfo2 = r.Next(100),
                             Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                         });
                         BmsCollection.Add(new Bms
                         {
-                            MinVolt = 100,
-                            MinVoltId = 100,
-                            MaxVolt = 100,
-                            MaxVoltId = 100,
-                            Volt = 100,
-                            Current = 100,
-                            Status =100 ,
-                            Soc = 100,
-                            MinTemp = 100,
-                            MinTempId = 100,
-                            MaxTemp = 100,
-                            MaxTempId = 100,
-                            FWVersion = 100,
-                            CycleTime = 100,
-                            MCUTemp = 100,
-                            RoundtripTm = 100,
+
+                            MinVolt = r.Next(100) ,
+                            MinVoltId = r.Next(100) ,
+                            MaxVolt = r.Next(100) ,
+                            MaxVoltId = r.Next(100) ,
+                            Volt = r.Next(100) ,
+                            Current = r.Next(100) ,
+                            Status = r.Next(100) ,
+                            Soc = r.Next(100) ,
+                            MinTemp = r.Next(100) ,
+                            MinTempId = r.Next(100) ,
+                            MaxTemp = r.Next(100) ,
+                            MaxTempId = r.Next(100) ,
+                            FWVersion = r.Next(100) ,
+                            CycleTime = r.Next(100) ,
+                            MCUTemp = r.Next(100) ,
+                            RoundtripTm = r.Next(100) ,
                             Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                         });
-                        Thread.Sleep(300);*/
+                        Thread.Sleep(100);
                         try
                         {
                             if (BmsCollection.Count > 0)
