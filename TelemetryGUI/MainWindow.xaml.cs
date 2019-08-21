@@ -20,7 +20,7 @@ namespace TelemetryGUI
             WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMessage), OnTick);
         }
 
-        private void OnTick(object sender, EntityEventArgs e)
+        private static void OnTick(object sender, EntityEventArgs e)
         {
             if (!(e.Data is Message message)) return;
 
@@ -29,11 +29,6 @@ namespace TelemetryGUI
                 {
                     MessageBox.Show(Application.Current.MainWindow, message.Prefix + message.Text);
                 }));
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Environment.Exit(Environment.ExitCode);
         }
 
         protected override void OnClosing(CancelEventArgs e)

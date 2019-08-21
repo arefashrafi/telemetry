@@ -31,8 +31,7 @@ namespace TelemetryGUI.Views.HistoryChart
         private void TextBoxBase_OnSelectionChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = (TextBox) sender;
-            double number;
-            if (!double.TryParse(textBox.Text, out number)) return;
+            if (!double.TryParse(textBox.Text, out double number)) return;
             DateTime dateTimeDiff = DateTime.Now.AddHours(number * -1); //-1 because we need it to be negative.
             _historyChartViewModel.TimeSpan = dateTimeDiff;
         }
@@ -40,17 +39,12 @@ namespace TelemetryGUI.Views.HistoryChart
         private void ParameterComboBoxBms_OnSelected(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (ComboBox) sender;
-            switch (comboBox.Name)
-            {
-                case "ParameterComboBoxBms":
-                    _historyChartViewModel.HistoryChartLoadData(typeof(Bms),
-                        ParameterComboBoxBms.SelectedItem.ToString());
-                    break;
-                case "ParameterComboBoxMotor":
-                    _historyChartViewModel.HistoryChartLoadData(typeof(Motor),
-                        ParameterComboBoxMotor.SelectedItem.ToString());
-                    break;
-            }
+            if (comboBox.Name == "ParameterComboBoxBms")
+                _historyChartViewModel.HistoryChartLoadData(typeof(Bms),
+                    ParameterComboBoxBms.SelectedItem.ToString());
+            else if (comboBox.Name == "ParameterComboBoxMotor")
+                _historyChartViewModel.HistoryChartLoadData(typeof(Motor),
+                    ParameterComboBoxMotor.SelectedItem.ToString());
         }
     }
 }

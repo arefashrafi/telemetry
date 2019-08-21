@@ -118,20 +118,25 @@ namespace TelemetryGUI.ViewModel
 
             foreach (Gps item in gpsCollection)
             {
-                if (item.DeviceId == 1)
-                    _locationCollectionExternal.Add(new Location
-                    {
-                        Altitude = item.Alt,
-                        Latitude = item.Lat,
-                        Longitude = item.Long
-                    });
-                else if (item.DeviceId == 0)
-                    _locationCollectionDirect.Add(new Location
-                    {
-                        Altitude = item.Alt,
-                        Latitude = item.Lat,
-                        Longitude = item.Long
-                    });
+                switch (item.DeviceId)
+                {
+                    case 0:
+                        _locationCollectionDirect.Add(new Location
+                        {
+                            Altitude = item.Alt,
+                            Latitude = item.Lat,
+                            Longitude = item.Long
+                        });
+                        break;
+                    case 1:
+                        _locationCollectionExternal.Add(new Location
+                        {
+                            Altitude = item.Alt,
+                            Latitude = item.Lat,
+                            Longitude = item.Long
+                        });
+                        break;
+                }
             }
         }
 
@@ -140,23 +145,24 @@ namespace TelemetryGUI.ViewModel
         {
             if (!(e.Data is Gps gps)) return;
 
-            if (gps.DeviceId == 0)
+            switch (gps.DeviceId)
             {
-                _gpsDirect = gps;
-                GpsSourceDirect = _gpsDirect;
-                _locationDirect.Altitude = _gpsDirect.Alt;
-                _locationDirect.Latitude = _gpsDirect.Lat;
-                _locationDirect.Longitude = _gpsDirect.Long;
-                Application.Current.Dispatcher.Invoke(() => { _locationCollectionDirect.Add(_locationDirect); });
-            }
-            else if (gps.DeviceId == 1)
-            {
-                _gpsExternal = gps;
-                GpsSourceExternal = _gpsExternal;
-                _locationExternal.Altitude = _gpsExternal.Alt;
-                _locationExternal.Latitude = _gpsExternal.Lat;
-                _locationExternal.Longitude = _gpsExternal.Long;
-                Application.Current.Dispatcher.Invoke(() => { _locationCollectionExternal.Add(_locationExternal); });
+                case 0:
+                    _gpsDirect = gps;
+                    GpsSourceDirect = _gpsDirect;
+                    _locationDirect.Altitude = _gpsDirect.Alt;
+                    _locationDirect.Latitude = _gpsDirect.Lat;
+                    _locationDirect.Longitude = _gpsDirect.Long;
+                    Application.Current.Dispatcher.Invoke(() => { _locationCollectionDirect.Add(_locationDirect); });
+                    break;
+                case 1:
+                    _gpsExternal = gps;
+                    GpsSourceExternal = _gpsExternal;
+                    _locationExternal.Altitude = _gpsExternal.Alt;
+                    _locationExternal.Latitude = _gpsExternal.Lat;
+                    _locationExternal.Longitude = _gpsExternal.Long;
+                    Application.Current.Dispatcher.Invoke(() => { _locationCollectionExternal.Add(_locationExternal); });
+                    break;
             }
 
             Application.Current.Dispatcher.Invoke(() =>
@@ -186,7 +192,7 @@ namespace TelemetryGUI.ViewModel
         protected void OnPropertyChanged(string name)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(name));
+            handler?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

@@ -6,11 +6,10 @@ using TelemetryGUI.Util;
 
 namespace TelemetryGUI.ViewModel.DataList
 {
-    public class ErrorViewModel : INotifyPropertyChanged
+    public sealed class ErrorViewModel : INotifyPropertyChanged
     {
         private Error _error = new Error();
         private ObservableCollection<Error> _errors;
-        public Visibility Visibility = Visibility.Hidden;
 
         public ErrorViewModel()
         {
@@ -22,7 +21,7 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public RelayCommand ResetCommand { get; set; }
 
-        public Error Error
+        private Error Error
         {
             get => _error;
             set
@@ -77,22 +76,20 @@ namespace TelemetryGUI.ViewModel.DataList
             if (_error == null) return;
             Application.Current.Dispatcher.Invoke(delegate // <--- HERE
             {
-                Visibility = Visibility.Visible;
                 _errors.Add(_error);
                 if (_errors.Count > 1000) _errors.RemoveAt(0);
             });
         }
 
 
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        private void OnPropertyChanged(string propertyName = null)
         {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
         private void ResetErrors()
         {
-            Visibility = Visibility.Hidden;
             _error = null;
             _errors.Clear();
         }
