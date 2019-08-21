@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using TelemetryGUI.Model.Math;
+using TelemetryGUI.Util;
 using TelemetryGUI.ViewModel.EnergyEstimation;
 
 namespace TelemetryGUI.Views.Strategy
@@ -23,7 +24,7 @@ namespace TelemetryGUI.Views.Strategy
             EnergyEstimationConfig energyEstimationConfig = new EnergyEstimationConfig(estimationChartViewModel.Spa);
             energyEstimationConfig.ShowDialog();
             _tempSpa = energyEstimationConfig.TempSpa;
-            estimationChartViewModel.Spa = new SPACalculator.SPAData
+            estimationChartViewModel.Spa = new SpaCalculator.SPAData
             {
                 Year = _tempSpa.Year,
                 Month = _tempSpa.Month,
@@ -42,7 +43,7 @@ namespace TelemetryGUI.Views.Strategy
                 Slope = _tempSpa.Slope,
                 AzmRotation = _tempSpa.AzmRotation,
                 AtmosRefract = _tempSpa.AtmosRefract,
-                Function = SPACalculator.CalculationMode.SPA_ALL
+                Function = SpaCalculator.CalculationMode.SPA_ALL
             };
         }
     }

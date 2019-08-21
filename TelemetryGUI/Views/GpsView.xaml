@@ -39,16 +39,16 @@
             <Label Content="{Binding DistanceBetweenGps, StringFormat=\{ 0:F4\}}"
                    FontSize="20" />
             <Label Content="Solar car" FontSize="30" Visibility="Hidden" />
-            <Label FontSize="16" Content="{Binding GpsSourceDirect.LAT, Mode=OneWay}" />
-            <Label FontSize="16" Content="{Binding GpsSourceDirect.LONG, Mode=OneWay}" />
-            <Label FontSize="16" Content="{Binding GpsSourceDirect.DIST, Mode=OneWay}" />
-            <Label FontSize="16" Content="{Binding GpsSourceDirect.ALT, Mode=OneWay}" />
-            <Label FontSize="16" Content="{Binding GpsSourceDirect.SPEED, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.Lat, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.Long, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.Dist, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.Alt, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceDirect.Speed, Mode=OneWay}" />
             <Label Content="Secondary GPS" FontSize="30" Visibility="Hidden" />
-            <Label FontSize="16" Content="{Binding GpsSourceExternal.LAT, Mode=OneWay}" />
-            <Label FontSize="16" Content="{Binding GpsSourceExternal.LONG, Mode=OneWay}" />
-            <Label FontSize="16" Content="{Binding GpsSourceExternal.DIST, Mode=OneWay}" />
-            <Label FontSize="16" Content="{Binding GpsSourceExternal.ALT, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.Lat, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.Long, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.Dist, Mode=OneWay}" />
+            <Label FontSize="16" Content="{Binding GpsSourceExternal.Alt, Mode=OneWay}" />
         </StackPanel>
         <m:Map x:Name="GpsMapView" ZoomLevel="10" Center="{Binding LocationExternal, Mode=OneWay}" Grid.Column="2"
                TargetUpdated="GpsMapView_OnTargetUpdated"

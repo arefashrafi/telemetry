@@ -20,13 +20,13 @@ namespace TelemetryDependencies.Models
         ///     Gets or sets the id.
         /// </summary>
         [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
-        public int UNIX_TIME { get; set; }
-        public string TIME { get; set; }
-        public decimal LAT { get; set; }
-        public decimal LONG { get; set; }
-        public decimal ALT { get; set; }
-        public decimal DIST { get; set; }
+        public int UnixTime { get; set; }
+        public string Time { get; set; }
+        public decimal Lat { get; set; }
+        public decimal Long { get; set; }
+        public decimal Alt { get; set; }
+        public decimal Dist { get; set; }
     }
 }

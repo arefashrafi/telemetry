@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:TelemetryGUI"
     xmlns:uc="clr-namespace:TelemetryGUI.Views"
     xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
     xmlns:viewModel="clr-namespace:TelemetryGUI.ViewModel"
@@ -11,7 +10,7 @@
     xmlns:liveModel="clr-namespace:TelemetryGUI.ViewModel.Live"
     xmlns:strategy="clr-namespace:TelemetryGUI.Views.Strategy"
     xmlns:dataList="clr-namespace:TelemetryGUI.Views.DataList"
-    xmlns:DataList="clr-namespace:TelemetryGUI.ViewModel.DataList"
+    xmlns:viewModelDataList="clr-namespace:TelemetryGUI.ViewModel.DataList"
     xmlns:historyChart="clr-namespace:TelemetryGUI.Views.HistoryChart"
     x:Class="TelemetryGUI.MainWindow"
     mc:Ignorable="d"
@@ -19,7 +18,7 @@
     <Window.Resources>
         <viewModel:AltitudeDataSetViewModel x:Key="AltitudeDataSetViewModel" />
         <liveModel:LiveViewModel x:Key="LiveViewModel" />
-        <DataList:ErrorViewModel x:Key="ErrorViewModel" />
+        <viewModelDataList:ErrorViewModel x:Key="ErrorViewModel" />
     </Window.Resources>
 
     <Grid>
@@ -75,7 +74,7 @@
                         <TabItem Header="MPPT">
                             <TabControl>
                                 <TabItem Header="RAW">
-                                    <uc:MPPTDataView />
+                                    <dataList:MpptDataView />
                                 </TabItem>
                             </TabControl>
                         </TabItem>
@@ -89,7 +88,7 @@
                     </TabControl>
                 </TabItem>
                 <TabItem Header="WEATHER">
-                    <uc:WeatherView />
+                    <strategy:WeatherView />
                 </TabItem>
                 <TabItem Header="ERRORS">
                     <TabControl>

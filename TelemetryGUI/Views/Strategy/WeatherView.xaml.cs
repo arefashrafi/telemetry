@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace TelemetryGUI.Views
+namespace TelemetryGUI.Views.Strategy
 {
     /// <summary>
     ///     Interaction logic for WeatherView.xaml

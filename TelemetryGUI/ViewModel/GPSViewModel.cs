@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Device.Location;
+using System.Diagnostics;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Maps.MapControl.WPF;
@@ -120,16 +121,16 @@ namespace TelemetryGUI.ViewModel
                 if (item.DeviceId == 1)
                     _locationCollectionExternal.Add(new Location
                     {
-                        Altitude = item.ALT,
-                        Latitude = item.LAT,
-                        Longitude = item.LONG
+                        Altitude = item.Alt,
+                        Latitude = item.Lat,
+                        Longitude = item.Long
                     });
-                else
+                else if (item.DeviceId == 0)
                     _locationCollectionDirect.Add(new Location
                     {
-                        Altitude = item.ALT,
-                        Latitude = item.LAT,
-                        Longitude = item.LONG
+                        Altitude = item.Alt,
+                        Latitude = item.Lat,
+                        Longitude = item.Long
                     });
             }
         }
@@ -143,25 +144,25 @@ namespace TelemetryGUI.ViewModel
             {
                 _gpsDirect = gps;
                 GpsSourceDirect = _gpsDirect;
-                _locationDirect.Altitude = _gpsDirect.ALT;
-                _locationDirect.Latitude = _gpsDirect.LAT;
-                _locationDirect.Longitude = _gpsDirect.LONG;
+                _locationDirect.Altitude = _gpsDirect.Alt;
+                _locationDirect.Latitude = _gpsDirect.Lat;
+                _locationDirect.Longitude = _gpsDirect.Long;
                 Application.Current.Dispatcher.Invoke(() => { _locationCollectionDirect.Add(_locationDirect); });
             }
             else if (gps.DeviceId == 1)
             {
                 _gpsExternal = gps;
                 GpsSourceExternal = _gpsExternal;
-                _locationExternal.Altitude = _gpsExternal.ALT;
-                _locationExternal.Latitude = _gpsExternal.LAT;
-                _locationExternal.Longitude = _gpsExternal.LONG;
+                _locationExternal.Altitude = _gpsExternal.Alt;
+                _locationExternal.Latitude = _gpsExternal.Lat;
+                _locationExternal.Longitude = _gpsExternal.Long;
                 Application.Current.Dispatcher.Invoke(() => { _locationCollectionExternal.Add(_locationExternal); });
             }
 
             Application.Current.Dispatcher.Invoke(() =>
             {
-                if (_locationCollectionExternal.Count > 10000) _locationCollectionExternal.RemoveAt(0);
-                if (_locationCollectionDirect.Count > 10000) _locationCollectionDirect.RemoveAt(0);
+                if (_locationCollectionExternal.Count > 1000) _locationCollectionExternal.RemoveAt(0);
+                if (_locationCollectionDirect.Count > 1000) _locationCollectionDirect.RemoveAt(0);
             });
 
             CalculateDistance();
@@ -171,14 +172,14 @@ namespace TelemetryGUI.ViewModel
         {
             try
             {
-                GeoCoordinate directGps = new GeoCoordinate(_gpsDirect.LAT, _gpsDirect.LONG);
-                GeoCoordinate externalGps = new GeoCoordinate(_gpsExternal.LAT, _gpsExternal.LONG);
+                GeoCoordinate directGps = new GeoCoordinate(_gpsDirect.Lat, _gpsDirect.Long);
+                GeoCoordinate externalGps = new GeoCoordinate(_gpsExternal.Lat, _gpsExternal.Long);
 
                 _distanceBetweenGps = externalGps.GetDistanceTo(directGps);
             }
             catch (ArgumentNullException e)
             {
-                Console.WriteLine(e);
+                Trace.WriteLine(e);
             }
         }
 

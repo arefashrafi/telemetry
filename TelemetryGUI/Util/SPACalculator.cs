@@ -1,8 +1,8 @@
 using System;
 
-namespace TelemetryGUI
+namespace TelemetryGUI.Util
 {
-    public static class SPACalculator
+    public static class SpaCalculator
     {
         public enum CalculationMode
         {

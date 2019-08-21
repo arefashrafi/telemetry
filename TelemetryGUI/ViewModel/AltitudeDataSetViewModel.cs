@@ -18,7 +18,9 @@ namespace TelemetryGUI.ViewModel
 {
     public class AltitudeDataSetViewModel : BaseViewModel
     {
-        private XyDataSeries<DateTime, double> _energyDataSeries = new XyDataSeries<DateTime, double>();
+        private XyDataSeries<DateTime, double> _energyDataSeries = new XyDataSeries<DateTime, double>
+            {AcceptsUnsortedData = true};
+
         private bool _firstRead;
         private XyDataSeries<double, double> _routeDataSeries = new XyDataSeries<double, double>();
         private VerticalLineAnnotation _verticalLineAnnotationCarPosition;
@@ -42,8 +44,26 @@ namespace TelemetryGUI.ViewModel
             WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventGps), OnTick);
         }
 
-        public IDataSeries<DateTime, double> EnergyDataSeries { get; set; }
-        public IDataSeries<double, double> RouteDataSeries { get; set; }
+        public XyDataSeries<DateTime, double> EnergyDataSeries
+        {
+            get => _energyDataSeries;
+            set
+            {
+                _energyDataSeries = value;
+                OnPropertyChanged("EnergyDataSeries");
+            }
+        }
+
+        public XyDataSeries<double, double> RouteDataSeries
+        {
+            get => _routeDataSeries;
+            set
+            {
+                _routeDataSeries = value;
+                OnPropertyChanged("RouteDataSeries");
+            }
+        }
+
         public IViewportManager ViewportManager { get; set; }
 
         public AnnotationCollection VerticalLineAnnotationCollection
@@ -83,12 +103,9 @@ namespace TelemetryGUI.ViewModel
                 if (routenotes.IsNullOrEmptyList()) MessageBox.Show("No routes available");
             }
 
-            _routeDataSeries = new XyDataSeries<double, double>();
-            _energyDataSeries = new XyDataSeries<DateTime, double> {AcceptsUnsortedData = true};
-
             foreach (Routenote item in routenotes)
             {
-                _routeDataSeries.Append((double) item.DIST, (double) item.ALT);
+                _routeDataSeries.Append((double) item.Dist, (double) item.Alt);
             }
 
             try
@@ -108,9 +125,6 @@ namespace TelemetryGUI.ViewModel
                         _energyDataSeries.Append(dateTime, energy);
                     }
                 }
-
-                EnergyDataSeries = _energyDataSeries;
-                RouteDataSeries = _routeDataSeries;
             }
             catch (Exception e)
             {
@@ -124,7 +138,7 @@ namespace TelemetryGUI.ViewModel
             Application.Current.Dispatcher.Invoke(() =>
             {
                 _verticalLineAnnotationCollection.Remove(_verticalLineAnnotationCarPosition);
-                _verticalLineAnnotationCarPosition.X1 = gps.TDIST;
+                _verticalLineAnnotationCarPosition.X1 = gps.Tdist;
                 _verticalLineAnnotationCollection.Add(_verticalLineAnnotationCarPosition);
             });
         }

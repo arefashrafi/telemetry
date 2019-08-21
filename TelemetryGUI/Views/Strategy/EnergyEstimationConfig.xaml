@@ -18,39 +18,39 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <ItemsControl>
                 <Label Content="Year" />
-                <TextBox Text="{Binding Path=Year, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Year, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Month" />
-                <TextBox Text="{Binding Path=Month, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Month, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Day" />
-                <TextBox Text="{Binding Path=Day, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Day, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Hour" />
-                <TextBox Text="{Binding Path=Hour, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Hour, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Minute" />
-                <TextBox Text="{Binding Path=Minute, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Minute, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Second" />
-                <TextBox Text="{Binding Path=Second, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Second, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="DeltaUt1" />
-                <TextBox Text="{Binding Path=DeltaUt1, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=DeltaUt1, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="DeltaT" />
-                <TextBox Text="{Binding Path=DeltaT, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=DeltaT, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Timezone" />
-                <TextBox Text="{Binding Path=Timezone, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Timezone, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Longitude" />
-                <TextBox Text="{Binding Path=Longitude, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Longitude, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Latitude" />
-                <TextBox Text="{Binding Path=Latitude, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Latitude, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Elevation" />
-                <TextBox Text="{Binding Path=Elevation, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Elevation, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Pressure" />
-                <TextBox Text="{Binding Path=Pressure, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Pressure, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Temperature" />
-                <TextBox Text="{Binding Path=Temperature, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Temperature, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="Slope" />
-                <TextBox Text="{Binding Path=Slope, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=Slope, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="AzmRotation" />
-                <TextBox Text="{Binding Path=AzmRotation, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=AzmRotation, Mode=TwoWay}" Margin="0,0,0,10" />
                 <Label Content="AtmosRefract" />
-                <TextBox Text="{Binding Path=AtmosRefract, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
+                <TextBox Text="{Binding Path=AtmosRefract, Mode=TwoWay}" Margin="0,0,0,10" />
             </ItemsControl>
         </ScrollViewer>
         <Button Grid.Row="1" Grid.Column="0" Click="ButtonBase_OnClick" Content="Save" />

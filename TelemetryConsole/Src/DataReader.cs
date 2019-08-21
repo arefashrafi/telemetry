@@ -8,7 +8,7 @@ using System.Threading;
 using System.Timers;
 using Telemetry.App;
 using TelemetryConsole.Misc;
-using TelemetryConsole.Src.Wifi;
+using TelemetryConsole.Wifi;
 using TelemetryDependencies.Models;
 using Timer = System.Timers.Timer;
 
@@ -16,17 +16,17 @@ namespace TelemetryConsole
 {
     public class DataReader : Constants
     {
-        private static readonly Timer _messageTimer = new Timer();
+        private static readonly Timer MessageTimer = new Timer();
         private static Message _message = new Message();
 
         private static SerialPort SerialPort { get; set; }
 
         private static void StartTimer()
         {
-            _messageTimer.Interval = 1000;
-            _messageTimer.Enabled = true;
-            _messageTimer.Start();
-            _messageTimer.Elapsed += MessageTimerOnElapsed;
+            MessageTimer.Interval = 1000;
+            MessageTimer.Enabled = true;
+            MessageTimer.Start();
+            MessageTimer.Elapsed += MessageTimerOnElapsed;
         }
 
         private static void MessageTimerOnElapsed(object sender, ElapsedEventArgs e)

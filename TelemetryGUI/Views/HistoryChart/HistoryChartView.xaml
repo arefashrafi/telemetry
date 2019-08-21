@@ -6,6 +6,7 @@
              xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
              xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
              xmlns:historyChart="clr-namespace:TelemetryGUI.ViewModel.HistoryChart"
+             xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -73,6 +74,8 @@
         <!--  Shows the SciChartSurface and binds ZoomHistoryManager to the instance in the viewmodel  -->
         <!--  This is what we use to control zoom history as well as Undo Redo  -->
         <s:SciChartSurface x:Name="SciChart" Grid.Row="0" Grid.Column="1"
+                           s3D:DirectXHelper.TryApplyDirectXRenderer="True"
+                           s3D:DirectXHelper.FallbackType="{x:Type s:HighSpeedRenderSurface}"
                            RenderableSeries="{s:SeriesBinding RenderableSeriesViewModels}">
             <!--  Create an X Axis with Growby  -->
             <s:SciChartSurface.XAxis>

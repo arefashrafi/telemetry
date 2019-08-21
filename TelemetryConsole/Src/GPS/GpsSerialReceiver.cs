@@ -8,7 +8,7 @@ using Telemetry.App;
 using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
 
-namespace TelemetryConsole.SerialReader
+namespace TelemetryConsole.GPS
 {
     public class GpsSerialReceiver : Constants
     {
@@ -20,7 +20,7 @@ namespace TelemetryConsole.SerialReader
                 SerialPort port = new SerialPort(portName, 9600); //change parameters to match your serial port
                 SerialPortDevice device = new SerialPortDevice(port);
                 device.MessageReceived += DeviceOnMessageReceived;
-                device.OpenAsync();
+                device.OpenAsync().Wait();
                 Console.WriteLine("GPS Opened");
             }
             catch (Exception e)
@@ -39,20 +39,20 @@ namespace TelemetryConsole.SerialReader
                     context.GPSs.AddAsync(new Gps
                     {
                         DeviceId = 1,
-                        LAT = gngga.Latitude,
-                        LONG = gngga.Longitude,
-                        ALT = gngga.Altitude,
-                        DIST = 0,
-                        TDIST = 0,
-                        GYRX = 0,
-                        GYRY = 0,
-                        GYRZ = 0,
-                        GPSFIX = 0,
-                        ACCX = 0,
-                        ACCY = 0,
-                        ACCZ = 0,
-                        HEADING = 0,
-                        SPEED = 0,
+                        Lat = gngga.Latitude,
+                        Long = gngga.Longitude,
+                        Alt = gngga.Altitude,
+                        Dist = 0,
+                        Tdist = 0,
+                        Gyrx = 0,
+                        Gyry = 0,
+                        Gyrz = 0,
+                        Gpsfix = 0,
+                        Accx = 0,
+                        Accy = 0,
+                        Accz = 0,
+                        Heading = 0,
+                        Speed = 0,
                         TimeStamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
                     context.SaveChangesAsync().Wait();

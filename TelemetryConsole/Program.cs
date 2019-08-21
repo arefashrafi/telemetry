@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using TelemetryConsole.Database;
-using TelemetryConsole.SerialReader;
-using TelemetryConsole.Src.Wifi;
+using TelemetryConsole.GPS;
+using TelemetryConsole.Wifi;
 
 namespace TelemetryConsole
 {

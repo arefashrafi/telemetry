@@ -6,20 +6,20 @@ using TelemetryGUI.Util;
 
 namespace TelemetryGUI.ViewModel.DataList
 {
-    public class MPPTViewModel : INotifyPropertyChanged
+    public sealed class MpptViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<MPPT> _mppts;
 
-        public MPPTViewModel()
+        public MpptViewModel()
         {
             _mppts = new ObservableCollection<MPPT>();
             WeakEventManager<EventSource, EntityEventArgs>.AddHandler(null, nameof(EventSource.EventMppt),
                 Instance_DataChange);
         }
 
-        public MPPT MPPT { get; set; }
+        public MPPT Mppt { get; set; }
 
-        public ObservableCollection<MPPT> MPPTs
+        public ObservableCollection<MPPT> MppTs
         {
             get => _mppts;
             set
@@ -31,12 +31,12 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public int Id
         {
-            get => MPPT.Id;
+            get => Mppt.Id;
             set
             {
-                if (MPPT.Id != value)
+                if (Mppt.Id != value)
                 {
-                    MPPT.Id = value;
+                    Mppt.Id = value;
                     OnPropertyChanged("Id");
                 }
             }
@@ -44,12 +44,12 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public string Time
         {
-            get => MPPT.Time;
+            get => Mppt.Time;
             set
             {
-                if (MPPT.Time != value)
+                if (Mppt.Time != value)
                 {
-                    MPPT.Time = value;
+                    Mppt.Time = value;
                     OnPropertyChanged("Time");
                 }
             }
@@ -57,12 +57,12 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public int InputCurrent
         {
-            get => MPPT.InputCurrent;
+            get => Mppt.InputCurrent;
             set
             {
-                if (MPPT.InputCurrent != value)
+                if (Mppt.InputCurrent != value)
                 {
-                    MPPT.InputCurrent = value;
+                    Mppt.InputCurrent = value;
                     OnPropertyChanged("InputCurrent");
                 }
             }
@@ -70,12 +70,12 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public int InputVoltage
         {
-            get => MPPT.InputVoltage;
+            get => Mppt.InputVoltage;
             set
             {
-                if (MPPT.InputVoltage != value)
+                if (Mppt.InputVoltage != value)
                 {
-                    MPPT.InputVoltage = value;
+                    Mppt.InputVoltage = value;
                     OnPropertyChanged("InputVoltage");
                 }
             }
@@ -83,12 +83,12 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public int OutputVoltage
         {
-            get => MPPT.OutputVoltage;
+            get => Mppt.OutputVoltage;
             set
             {
-                if (MPPT.OutputVoltage != value)
+                if (Mppt.OutputVoltage != value)
                 {
-                    MPPT.OutputVoltage = value;
+                    Mppt.OutputVoltage = value;
                     OnPropertyChanged("OutputVoltage");
                 }
             }
@@ -96,12 +96,12 @@ namespace TelemetryGUI.ViewModel.DataList
 
         public int ControllerTemp
         {
-            get => MPPT.ControllerTemp;
+            get => Mppt.ControllerTemp;
             set
             {
-                if (MPPT.ControllerTemp != value)
+                if (Mppt.ControllerTemp != value)
                 {
-                    MPPT.ControllerTemp = value;
+                    Mppt.ControllerTemp = value;
                     OnPropertyChanged("ControllerTemp");
                 }
             }
@@ -111,18 +111,18 @@ namespace TelemetryGUI.ViewModel.DataList
 
         private void Instance_DataChange(object sender, EntityEventArgs e)
         {
-            MPPT = e.Data as MPPT;
-            if (MPPT == null) return;
+            Mppt = e.Data as MPPT;
+            if (Mppt == null) return;
             Application.Current.Dispatcher.Invoke(delegate // <--- HERE
             {
-                _mppts.Add(MPPT);
+                _mppts.Add(Mppt);
 
                 if (_mppts.Count > 1000) _mppts.RemoveAt(0);
             });
         }
 
 
-        protected virtual void OnPropertyChanged(string propertyName = null)
+        private void OnPropertyChanged(string propertyName = null)
         {
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }

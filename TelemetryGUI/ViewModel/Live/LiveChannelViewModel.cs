@@ -23,20 +23,18 @@ namespace TelemetryGUI.ViewModel.Live
 {
     public class LiveChannelViewModel : BaseViewModel
     {
-        private readonly int _size;
         private IXyDataSeries<TimeSpan, double> _channelDataSeries;
         private Color _color;
 
         public LiveChannelViewModel(int size, Color color)
         {
-            _size = size;
             Stroke = color;
             // Add an empty First In First Out series. When the data reaches capacity (int size) then old samples
             // will be pushed out of the series and new appended to the end. This gives the appearance of 
             // a scrolling chart window
             ChannelDataSeries = new XyDataSeries<TimeSpan, double>
             {
-                FifoCapacity = _size
+                FifoCapacity = size
             };
         }
 

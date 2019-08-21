@@ -8,20 +8,20 @@ namespace TelemetryDependencies.Models
         [Key] public int Id { get; set; }
 
         public int DeviceId { get; set; }
-        public double LAT { get; set; }
-        public double LONG { get; set; }
-        public double ALT { get; set; }
-        public double SPEED { get; set; }
-        public double HEADING { get; set; }
-        public double GPSFIX { get; set; }
-        public double DIST { get; set; }
-        public double TDIST { get; set; }
-        public double ACCX { get; set; }
-        public double ACCY { get; set; }
-        public double ACCZ { get; set; }
-        public double GYRX { get; set; }
-        public double GYRY { get; set; }
-        public double GYRZ { get; set; }
+        public double Lat { get; set; }
+        public double Long { get; set; }
+        public double Alt { get; set; }
+        public double Speed { get; set; }
+        public double Heading { get; set; }
+        public double Gpsfix { get; set; }
+        public double Dist { get; set; }
+        public double Tdist { get; set; }
+        public double Accx { get; set; }
+        public double Accy { get; set; }
+        public double Accz { get; set; }
+        public double Gyrx { get; set; }
+        public double Gyry { get; set; }
+        public double Gyrz { get; set; }
         public string TimeStamp { get; set; }
     }
 }

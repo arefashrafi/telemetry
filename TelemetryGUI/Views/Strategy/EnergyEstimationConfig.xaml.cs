@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Windows;
 using TelemetryGUI.Model.Math;
+using TelemetryGUI.Util;
 
 namespace TelemetryGUI.Views.Strategy
 {
@@ -8,7 +9,7 @@ namespace TelemetryGUI.Views.Strategy
     {
         private TempSpa _tempSpa;
 
-        public EnergyEstimationConfig(SPACalculator.SPAData spaData)
+        public EnergyEstimationConfig(SpaCalculator.SPAData spaData)
         {
             _tempSpa = new TempSpa
             {

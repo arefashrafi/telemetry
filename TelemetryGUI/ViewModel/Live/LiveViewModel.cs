@@ -193,8 +193,8 @@ namespace TelemetryGUI.ViewModel.Live
                         bool hasProp = accessor.GetMembers().Any(m => m.Name == channel.ChannelName);
                         if (!hasProp) continue;
                         double yValue = Convert.ToDouble(accessor[e.Data, channel.ChannelName]);
-                        var dataSeries = channel.ChannelDataSeries;
-                        var dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
+                        IXyDataSeries<TimeSpan, double> dataSeries = channel.ChannelDataSeries;
+                        DateTime dateTime = DateTime.ParseExact(e.Time, "yyyy-MM-dd HH:mm:ss.fff",
                             CultureInfo.InvariantCulture);
                         //Checks if OnTick stopped between to objects and add NaN to it
                         if (dateTime.TimeOfDay.Seconds - 2 > dataSeries.XValues.LastOrDefault().Seconds || !_firstRead)

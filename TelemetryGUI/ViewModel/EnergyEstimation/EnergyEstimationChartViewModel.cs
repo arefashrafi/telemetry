@@ -24,7 +24,7 @@ namespace TelemetryGUI.ViewModel.EnergyEstimation
     public class EnergyEstimationChartViewModel : BaseViewModel
     {
         private DateTime _dateTime;
-        private SPACalculator.SPAData _spa;
+        private SpaCalculator.SPAData _spa;
 
         public EnergyEstimationChartViewModel()
         {
@@ -47,7 +47,7 @@ namespace TelemetryGUI.ViewModel.EnergyEstimation
             _spa.Slope = 30;
             _spa.AzmRotation = -10;
             _spa.AtmosRefract = 0.5667;
-            _spa.Function = SPACalculator.CalculationMode.SPA_ALL;
+            _spa.Function = SpaCalculator.CalculationMode.SPA_ALL;
             _dateTime = new DateTime(_spa.Day, _spa.Month, _spa.Day, _spa.Hour, _spa.Minute,
                 Convert.ToInt32(_spa.Second));
         }
@@ -56,7 +56,7 @@ namespace TelemetryGUI.ViewModel.EnergyEstimation
 
         public IDataSeries<DateTime, double> ChartSeries { get; set; }
 
-        public SPACalculator.SPAData Spa
+        public SpaCalculator.SPAData Spa
         {
             get => _spa;
             set => _spa = value;
@@ -64,7 +64,7 @@ namespace TelemetryGUI.ViewModel.EnergyEstimation
 
         private void UpdateSeriesClick()
         {
-            int results = SPACalculator.SPACalculate(ref _spa);
+            int results = SpaCalculator.SPACalculate(ref _spa);
             if (results != 0) return;
             for (int i = 0; i < 10; i++)
             {
@@ -76,7 +76,7 @@ namespace TelemetryGUI.ViewModel.EnergyEstimation
                 }
 
                 _spa.Hour++;
-                SPACalculator.SPACalculate(ref _spa);
+                SpaCalculator.SPACalculate(ref _spa);
                 ChartSeries.Append(_dateTime, _spa.Azimuth);
             }
         }

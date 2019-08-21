@@ -3,7 +3,7 @@
 namespace TelemetryDependencies.Structs
 {
     [StructLayout(LayoutKind.Explicit, Size = 6)]
-    public struct mppt_frame_struct
+    public struct MpptFrameStruct
     {
         [MarshalAs(UnmanagedType.U1)] [FieldOffset(0)]
         public uint inputCurrent;

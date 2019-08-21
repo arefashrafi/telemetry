@@ -38,7 +38,7 @@ namespace TelemetryGUI.ViewModel.DataList
             }
         }
 
-        public int MotorRPM
+        public int MotorRpm
         {
             get => Motor.MotorRpm;
             set

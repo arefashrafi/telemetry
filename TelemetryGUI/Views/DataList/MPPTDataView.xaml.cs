@@ -1,13 +1,13 @@
 ﻿using System.Windows.Controls;
 
-namespace TelemetryGUI.Views
+namespace TelemetryGUI.Views.DataList
 {
     /// <summary>
     ///     Interaction logic for RealTimeLog.xaml
     /// </summary>
-    public partial class MPPTDataView : UserControl
+    public partial class MpptDataView : UserControl
     {
-        public MPPTDataView()
+        public MpptDataView()
         {
             InitializeComponent();
         }

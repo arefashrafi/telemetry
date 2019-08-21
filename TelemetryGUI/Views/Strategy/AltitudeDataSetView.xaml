@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:TelemetryGUI.Views"
              xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
              xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
              xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D"
@@ -21,12 +20,14 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <ext:SciChartInteractionToolbar x:Name="UserToolbar"
-                                        TargetSurface="{Binding Source={x:Reference Name=SciChart}}" />
+        <ext:SciChartInteractionToolbar
+            TargetSurface="{Binding Source={x:Reference Name=SciChart}}" />
         <!--  Button is used to invoke a delegate in the ViewModel to append 50 points.  -->
 
         <!--  Declare a SciChartSurface and bind to data  -->
         <s:SciChartSurface Annotations="{Binding VerticalLineAnnotationCollection}" x:Name="SciChart" Grid.Column="1"
+                           s3D:DirectXHelper.TryApplyDirectXRenderer="True"
+                           s3D:DirectXHelper.FallbackType="{x:Type s:HighSpeedRenderSurface}"
                            ViewportManager="{Binding ViewportManager}">
             <s:SciChartSurface.RenderableSeries>
                 <s:FastLineRenderableSeries DataSeries="{Binding RouteDataSeries, Mode=OneWay}"

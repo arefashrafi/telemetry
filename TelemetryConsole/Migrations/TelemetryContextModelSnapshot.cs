@@ -65,6 +65,24 @@ namespace TelemetryConsole.Migrations
                 b.ToTable("BatteryManagementSystems");
             });
 
+            modelBuilder.Entity("TelemetryDependencies.Models.Debug", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy",
+                        SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<string>("ExceptionSource");
+
+                b.Property<string>("Message");
+
+                b.Property<string>("Time");
+
+                b.HasKey("Id");
+
+                b.ToTable("Debugs");
+            });
+
             modelBuilder.Entity("TelemetryDependencies.Models.Error", b =>
             {
                 b.Property<int>("Id")
@@ -90,35 +108,35 @@ namespace TelemetryConsole.Migrations
                     .HasAnnotation("SqlServer:ValueGenerationStrategy",
                         SqlServerValueGenerationStrategy.IdentityColumn);
 
-                b.Property<double>("ACCX");
+                b.Property<double>("Accx");
 
-                b.Property<double>("ACCY");
+                b.Property<double>("Accy");
 
-                b.Property<double>("ACCZ");
+                b.Property<double>("Accz");
 
-                b.Property<double>("ALT");
-
-                b.Property<double>("DIST");
+                b.Property<double>("Alt");
 
                 b.Property<int>("DeviceId");
 
-                b.Property<double>("GPSFIX");
+                b.Property<double>("Dist");
 
-                b.Property<double>("GYRX");
+                b.Property<double>("Gpsfix");
 
-                b.Property<double>("GYRY");
+                b.Property<double>("Gyrx");
 
-                b.Property<double>("GYRZ");
+                b.Property<double>("Gyry");
 
-                b.Property<double>("HEADING");
+                b.Property<double>("Gyrz");
 
-                b.Property<double>("LAT");
+                b.Property<double>("Heading");
 
-                b.Property<double>("LONG");
+                b.Property<double>("Lat");
 
-                b.Property<double>("SPEED");
+                b.Property<double>("Long");
 
-                b.Property<double>("TDIST");
+                b.Property<double>("Speed");
+
+                b.Property<double>("Tdist");
 
                 b.Property<string>("TimeStamp");
 
@@ -141,6 +159,8 @@ namespace TelemetryConsole.Migrations
                 b.Property<int>("InputCurrent");
 
                 b.Property<int>("InputVoltage");
+
+                b.Property<int>("OutputCurrent");
 
                 b.Property<int>("OutputVoltage");
 
@@ -221,24 +241,24 @@ namespace TelemetryConsole.Migrations
 
             modelBuilder.Entity("TelemetryDependencies.Models.Routenote", b =>
             {
-                b.Property<int>("ID")
+                b.Property<int>("Id")
                     .ValueGeneratedOnAdd()
                     .HasAnnotation("SqlServer:ValueGenerationStrategy",
                         SqlServerValueGenerationStrategy.IdentityColumn);
 
-                b.Property<decimal>("ALT");
+                b.Property<decimal>("Alt");
 
-                b.Property<decimal>("DIST");
+                b.Property<decimal>("Dist");
 
-                b.Property<decimal>("LAT");
+                b.Property<decimal>("Lat");
 
-                b.Property<decimal>("LONG");
+                b.Property<decimal>("Long");
 
-                b.Property<string>("TIME");
+                b.Property<string>("Time");
 
-                b.Property<int>("UNIX_TIME");
+                b.Property<int>("UnixTime");
 
-                b.HasKey("ID");
+                b.HasKey("Id");
 
                 b.ToTable("Routenotes");
             });

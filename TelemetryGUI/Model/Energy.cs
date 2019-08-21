@@ -6,7 +6,7 @@
         public float Gravitation { get; set; }
         public float Diameter { get; set; }
         public float Speed { get; set; }
-        public float RPM { get; set; }
+        public float Rpm { get; set; }
         public float Force { get; set; }
         public float Current { get; set; }
         public float Efficiency { get; set; }

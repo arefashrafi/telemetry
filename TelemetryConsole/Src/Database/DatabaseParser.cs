@@ -68,19 +68,19 @@ namespace TelemetryConsole.Database
                     GpsStruct gpsStruct = (GpsStruct) (object) dataStruct;
                     GpsCollection.Add(new Gps
                     {
-                        LAT = (double) gpsStruct.latitude / 100000,
-                        LONG = (double) gpsStruct.longitude / 100000,
-                        ALT = (double) gpsStruct.altitude / 10,
-                        SPEED = (double) gpsStruct.speed / 1000 * 3.6,
-                        GPSFIX = gpsStruct.gps_fix,
-                        DIST = gpsStruct.distance,
-                        TDIST = gpsStruct.total_distance,
-                        ACCX = gpsStruct.x_acc,
-                        ACCY = gpsStruct.y_acc,
-                        ACCZ = gpsStruct.z_acc,
-                        GYRX = gpsStruct.x_gyro,
-                        GYRY = gpsStruct.y_gyro,
-                        GYRZ = gpsStruct.z_gyro,
+                        Lat = (double) gpsStruct.latitude / 100000,
+                        Long = (double) gpsStruct.longitude / 100000,
+                        Alt = (double) gpsStruct.altitude / 10,
+                        Speed = (double) gpsStruct.speed / 1000 * 3.6,
+                        Gpsfix = gpsStruct.gps_fix,
+                        Dist = gpsStruct.distance,
+                        Tdist = gpsStruct.total_distance,
+                        Accx = gpsStruct.x_acc,
+                        Accy = gpsStruct.y_acc,
+                        Accz = gpsStruct.z_acc,
+                        Gyrx = gpsStruct.x_gyro,
+                        Gyry = gpsStruct.y_gyro,
+                        Gyrz = gpsStruct.z_gyro,
                         TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)
                     });
                 }
@@ -104,7 +104,7 @@ namespace TelemetryConsole.Database
                     foreach (FieldInfo field in typeof(MpptStruct).GetFields())
                     {
                         i++;
-                        mppt_frame_struct mpptFrameStruct = (mppt_frame_struct) field.GetValue(mpptStruct);
+                        MpptFrameStruct mpptFrameStruct = (MpptFrameStruct) field.GetValue(mpptStruct);
                         MpptCollection.Add(new MPPT
                         {
                             DeviceId = i,

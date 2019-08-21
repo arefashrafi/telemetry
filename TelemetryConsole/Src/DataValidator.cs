@@ -66,7 +66,7 @@ namespace TelemetryConsole
         {
             RuleFor(x => x.TimeStamp).NotNull();
             RuleFor(x => x.TimeStamp).NotNull();
-            RuleFor(x => x.ALT).LessThan(10000);
+            RuleFor(x => x.Alt).LessThan(10000);
             RuleFor(x => x.DeviceId).LessThan(5);
         }
     }

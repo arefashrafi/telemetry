@@ -298,6 +298,10 @@
     <Compile Include="Migrations\20190807160214_bytetoint.designer.cs">
       <DependentUpon>20190807160214_bytetoint.cs</DependentUpon>
     </Compile>
+      <Compile Include="Migrations\20190821153712_SmallChanges.cs"/>
+      <Compile Include="Migrations\20190821153712_SmallChanges.designer.cs">
+          <DependentUpon>20190821153712_SmallChanges.cs</DependentUpon>
+      </Compile>
     <Compile Include="Migrations\TelemetryContextModelSnapshot.cs" />
     <Compile Include="Misc\Constants.cs" />
     <Compile Include="Misc\CRC32.cs" />
