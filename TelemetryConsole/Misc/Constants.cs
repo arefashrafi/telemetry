@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Configuration;
@@ -38,17 +39,26 @@ namespace TelemetryConsole.Misc
 
         public static void Init()
         {
-            ExpectedStartByte = int.Parse(ConfigurationManager.AppSettings.Get("ExpectedStartByte"));
-            IdIndex = int.Parse(ConfigurationManager.AppSettings.Get("IdIndex"));
-            StartByteIndex = int.Parse(ConfigurationManager.AppSettings.Get("StartByteIndex"));
-            DataLengthIndex = int.Parse(ConfigurationManager.AppSettings.Get("DataLengthIndex"));
-            MotorId = int.Parse(ConfigurationManager.AppSettings.Get("MotorId"));
-            BmsId = int.Parse(ConfigurationManager.AppSettings.Get("BmsId"));
-            GpsId = int.Parse(ConfigurationManager.AppSettings.Get("GpsId"));
-            BuffSize = int.Parse(ConfigurationManager.AppSettings.Get("BuffSize"));
-            MpptId = int.Parse(ConfigurationManager.AppSettings.Get("MpptId"));
-            DebugId = int.Parse(ConfigurationManager.AppSettings.Get("DebugId"));
-            AckId = int.Parse(ConfigurationManager.AppSettings.Get("AckId"));
+            try
+            { 
+                StartByteIndex = Convert.ToInt32(ConfigurationManager.AppSettings.Get("StartByteIndex"));
+                DataLengthIndex = Convert.ToInt32(ConfigurationManager.AppSettings.Get("DataLengthIndex"));
+                IdIndex = Convert.ToInt32(ConfigurationManager.AppSettings.Get("IdIndex"));
+                MotorId = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MotorId"),16);
+                BmsId = Convert.ToInt32(ConfigurationManager.AppSettings.Get("BmsId"),16);
+                GpsId = Convert.ToInt32(ConfigurationManager.AppSettings.Get("GpsId"),16);
+                BuffSize = Convert.ToInt32(ConfigurationManager.AppSettings.Get("BuffSize"),16);
+                MpptId = Convert.ToInt32(ConfigurationManager.AppSettings.Get("MpptId"),16);
+                DebugId = Convert.ToInt32(ConfigurationManager.AppSettings.Get("DebugId"),16);
+                AckId = Convert.ToInt32(ConfigurationManager.AppSettings.Get("AckId"),16);
+                ExpectedStartByte = Convert.ToInt32(ConfigurationManager.AppSettings.Get("ExpectedStartByte"),16);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e+ "---------------->>>>>>>> Check App.config for wrong hex");
+            }
+
         }
     }
 }

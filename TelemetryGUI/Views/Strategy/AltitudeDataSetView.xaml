@@ -46,14 +46,14 @@
                                BorderBrush="#FFFF1919"
                                BorderThickness="0,1,0,0"
                                Id="Numeric"
-                               AutoRange="Always"
+                               AutoRange="Once"
                                TickTextBrush="#FFFF1919" />
                 <s:DateTimeAxis AxisAlignment="Top"
                                 AxisTitle="Top Axis"
                                 BorderBrush="#FF279B27"
                                 BorderThickness="0,0,0,1"
                                 Id="DateTime"
-                                AutoRange="Always"
+                                AutoRange="Once"
                                 TickTextBrush="#FF279B27" />
             </s:SciChartSurface.XAxes>
 

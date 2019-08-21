@@ -82,7 +82,7 @@
                 <s:DateTimeAxis DrawMajorBands="True"
                                 GrowBy="0.1,0.1"
                                 MinorsPerMajor="4"
-                                AutoRange="Always"
+                                AutoRange="Once"
                                 TextFormatting="yyyy-MM-dd HH:mm" />
             </s:SciChartSurface.XAxis>
             <s:SciChartSurface.ChartModifier>
@@ -124,8 +124,7 @@
                                            FontWeight="Bold"
                                            Foreground="{Binding Stroke,
                                                                 Converter={StaticResource ColorToBrushConverter}}"
-                                           Text="{Binding XValue,
-                                                          StringFormat=X: \{yyyy-MM-dd HH:mm:ss.fff\}}" />
+                                           Text="{Binding XValue}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Margin="3,3,20,3" Orientation="Horizontal">
                                 <TextBlock FontSize="13"

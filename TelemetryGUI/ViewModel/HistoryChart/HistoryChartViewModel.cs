@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using FastMember;
 using Microsoft.EntityFrameworkCore;
 using SciChart.Charting.Model.ChartSeries;
 using SciChart.Charting.Model.DataSeries;
@@ -63,7 +64,7 @@ namespace TelemetryGUI.ViewModel.HistoryChart
 
         public async void HistoryChartLoadData(Type type, string param)
         {
-            Random r = new Random();
+
             var xyDataSeries = new XyDataSeries<DateTime, double>();
             if (type == typeof(Motor))
             {
@@ -89,6 +90,7 @@ namespace TelemetryGUI.ViewModel.HistoryChart
                                 CultureInfo.InvariantCulture) >
                             TimeSpan)
                         .ToList();
+
                     foreach (Motor motor in filteredMotors)
                     {
                         DateTime dateTime = DateTime.ParseExact(motor.Time, "yyyy-MM-dd HH:mm:ss.fff",
@@ -108,9 +110,9 @@ namespace TelemetryGUI.ViewModel.HistoryChart
                         }
                     }
                 }
-                catch
+                catch(Exception e)
                 {
-                    MessageBox.Show("Filtering motor data failed");
+                    MessageBox.Show(e.Message);
                 }
             }
 
@@ -155,12 +157,13 @@ namespace TelemetryGUI.ViewModel.HistoryChart
                         }
                     }
                 }
-                catch
+                catch(Exception e)
                 {
-                    MessageBox.Show("Filtering bms data failed");
+                    MessageBox.Show(e.Message);
+                    return;
                 }
             }
-
+            Random r = new Random();
             Color color = Color.FromRgb(Convert.ToByte(r.Next(256)), Convert.ToByte(r.Next(256)),
                 Convert.ToByte(r.Next(256)));
             _renderableSeriesViewModels.Add(new LineRenderableSeriesViewModel
