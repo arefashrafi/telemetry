@@ -1,22 +1,25 @@
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using TelemetryDependencies.Models;
 
 namespace TelemetryConsole.Misc
 {
-    public class Constants
+    public static class Constants
     {
-        protected const int ExpectedStartByte = 0x26;
-        protected const int IdIndex = 1;
-        protected const int StartByteIndex = 0;
-        protected const int DataLengthIndex = 2;
-        protected const int MotorId = 0x72;
-        protected const int BmsId = 0x70;
-        protected const int GpsId = 0x73;
-        protected const int BuffSize = 128;
-        protected const int MpptId = 0x74;
-        protected const int DebugId = 0x75;
-        protected const int AckId = 0x77;
+        public static int ExpectedStartByte;
+        public static int IdIndex;
+        public static int StartByteIndex;
+        public static int DataLengthIndex;
+        public static int MotorId;
+        public static int BmsId;
+        public static int GpsId;
+        public static int BuffSize;
+        public static int MpptId;
+        public static int DebugId;
+        public static int AckId;
+
+
         public static readonly ConcurrentQueue<byte> RxByteQueue = new ConcurrentQueue<byte>();
 
 
@@ -32,5 +35,20 @@ namespace TelemetryConsole.Misc
         public static BmsValidator BmsValidation = new BmsValidator();
         public static MpptValidator MpptValidation = new MpptValidator();
         public static GpsValidator GpsValidation = new GpsValidator();
+
+        public static void Init()
+        {
+            ExpectedStartByte = int.Parse(ConfigurationManager.AppSettings.Get("ExpectedStartByte"));
+            IdIndex = int.Parse(ConfigurationManager.AppSettings.Get("IdIndex"));
+            StartByteIndex = int.Parse(ConfigurationManager.AppSettings.Get("StartByteIndex"));
+            DataLengthIndex = int.Parse(ConfigurationManager.AppSettings.Get("DataLengthIndex"));
+            MotorId = int.Parse(ConfigurationManager.AppSettings.Get("MotorId"));
+            BmsId = int.Parse(ConfigurationManager.AppSettings.Get("BmsId"));
+            GpsId = int.Parse(ConfigurationManager.AppSettings.Get("GpsId"));
+            BuffSize = int.Parse(ConfigurationManager.AppSettings.Get("BuffSize"));
+            MpptId = int.Parse(ConfigurationManager.AppSettings.Get("MpptId"));
+            DebugId = int.Parse(ConfigurationManager.AppSettings.Get("DebugId"));
+            AckId = int.Parse(ConfigurationManager.AppSettings.Get("AckId"));
+        }
     }
 }

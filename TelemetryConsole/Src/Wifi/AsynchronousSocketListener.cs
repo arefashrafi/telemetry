@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using TelemetryConsole.Misc;
+using static TelemetryConsole.Misc.Constants;
 
 namespace TelemetryConsole.Wifi
 {
@@ -25,7 +25,7 @@ namespace TelemetryConsole.Wifi
         public Socket WorkSocket;
     }
 
-    public class AsynchronousSocketListener : Constants
+    public class AsynchronousSocketListener
     {
         private const int BufSize = 8 * 1024;
         private readonly Socket _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);

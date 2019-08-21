@@ -14,7 +14,7 @@ using Timer = System.Timers.Timer;
 
 namespace TelemetryConsole
 {
-    public class DataReader : Constants
+    public static class DataReader
     {
         private static readonly Timer MessageTimer = new Timer();
         private static Message _message = new Message();
@@ -94,7 +94,7 @@ namespace TelemetryConsole
                 SerialPort.Read(tempBuffer, 0, tempBuffer.Length);
                 foreach (byte singleByte in tempBuffer)
                 {
-                    RxByteQueue.Enqueue(singleByte);
+                    Constants.RxByteQueue.Enqueue(singleByte);
                 }
             }
             catch (Exception exception)

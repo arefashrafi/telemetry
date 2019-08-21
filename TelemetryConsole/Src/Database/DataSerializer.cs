@@ -12,6 +12,8 @@ using System;
 using System.Linq;
 using TelemetryConsole.Misc;
 using TelemetryDependencies.Structs;
+using static System.Runtime.InteropServices.Marshal;
+using static TelemetryConsole.Misc.Constants;
 
 namespace TelemetryConsole.Database
 {
@@ -19,7 +21,7 @@ namespace TelemetryConsole.Database
     ///     Class for reading from the serial port and inserting to the database using EF Core
     ///     Class is also determining what model is used from the serial port byteArray
     /// </summary>
-    public partial class TelemetryControl : Constants
+    public static partial class TelemetryControl
 
     {
         /// <summary>
@@ -67,7 +69,7 @@ namespace TelemetryConsole.Database
                         if (crcSubsetPacket == BitConverter.GetBytes(new Crc32().Get(dataSubsetPacket))) continue;
 
                         if (id == BmsId)
-                            if (dataLength == 38)
+                            if (dataLength == SizeOf(typeof(BmsStruct)))
                             {
                                 BmsStruct bMsStruct = Extensions.ByteArrayToStructure<BmsStruct>(dataSubsetPacket);
                                 DatabaseParser(bMsStruct);
@@ -75,7 +77,7 @@ namespace TelemetryConsole.Database
 
                         if (id == MpptId)
                         {
-                            if (dataLength == 100)
+                            if (dataLength == SizeOf(typeof(MpptStruct)))
                             {
                                 MpptStruct mpptStruct = Extensions.ByteArrayToStructure<MpptStruct>(dataSubsetPacket);
                                 DatabaseParser(mpptStruct);
@@ -84,7 +86,7 @@ namespace TelemetryConsole.Database
 
                         else if (id == DebugId)
                         {
-                            if (dataLength == 1)
+                            if (dataLength == SizeOf(typeof(DebugStruct)))
                             {
                                 DebugStruct debugStruct =
                                     Extensions.ByteArrayToStructure<DebugStruct>(dataSubsetPacket);
@@ -93,7 +95,7 @@ namespace TelemetryConsole.Database
                         }
                         else if (id == GpsId)
                         {
-                            if (dataLength == 61)
+                            if (dataLength == SizeOf(typeof(GpsStruct)))
                             {
                                 GpsStruct gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
                                 DatabaseParser(gpsStruct);
@@ -103,7 +105,7 @@ namespace TelemetryConsole.Database
 
                         else if (id == MotorId)
                         {
-                            if (dataLength == 29)
+                            if (dataLength == SizeOf(typeof(MotorStruct)))
                             {
                                 MotorStruct motorStruct =
                                     Extensions.ByteArrayToStructure<MotorStruct>(dataSubsetPacket);
@@ -111,17 +113,9 @@ namespace TelemetryConsole.Database
                             }
                         }
 
-                        else if (id == GpsId)
-                        {
-                            if (dataLength <= 32)
-                            {
-                                GpsStruct gpsStruct = Extensions.ByteArrayToStructure<GpsStruct>(dataSubsetPacket);
-                                DatabaseParser(gpsStruct);
-                            }
-                        }
                         else if (id == AckId)
                         {
-                            if (dataLength == 1)
+                            if (dataLength == SizeOf(typeof(AckStruct)))
                             {
                                 AckStruct ackStruct = Extensions.ByteArrayToStructure<AckStruct>(dataSubsetPacket);
                                 DatabaseParser(ackStruct);

@@ -5,12 +5,11 @@ using System.IO.Ports;
 using NmeaParser;
 using NmeaParser.Nmea;
 using Telemetry.App;
-using TelemetryConsole.Misc;
 using TelemetryDependencies.Models;
 
 namespace TelemetryConsole.GPS
 {
-    public class GpsSerialReceiver : Constants
+    public static class GpsSerialReceiver
     {
         public static void StartListener()
         {

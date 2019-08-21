@@ -2,14 +2,18 @@
 using System.Threading;
 using TelemetryConsole.Database;
 using TelemetryConsole.GPS;
+using TelemetryConsole.Misc;
 using TelemetryConsole.Wifi;
 
 namespace TelemetryConsole
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
+            //Init all the keys from App.config
+            Constants.Init();
+
             Thread databaseHandlerThread = new Thread(TelemetryControl.DatabaseHandler);
             Thread databaseSerializerThread = new Thread(TelemetryControl.DataSerializer);
             Console.WriteLine(DateTime.Now);

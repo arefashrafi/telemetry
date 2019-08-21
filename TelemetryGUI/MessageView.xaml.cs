@@ -32,7 +32,7 @@ namespace TelemetryGUI
                     {
                         Text = MessageTextBox.Text,
                         Prefix = MessageTextBoxPrefix.Text,
-                        Length = MessageTextBox.Text.Count(),
+                        Length = MessageTextBox.Text.Length,
                         MessageId = (int) IdComboBox.SelectedValue,
                         DateTime = DateTime.Now
                     });
