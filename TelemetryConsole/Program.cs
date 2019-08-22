@@ -12,7 +12,7 @@ namespace TelemetryConsole
         public static void Main(string[] args)
         {
             //Init all the keys from App.config
-               Constants.Init();
+            Constants.Init();
             Console.ForegroundColor = ConsoleColor.Green;
             Thread databaseHandlerThread = new Thread(TelemetryControl.DatabaseHandler);
             Thread databaseSerializerThread = new Thread(TelemetryControl.DataSerializer);
