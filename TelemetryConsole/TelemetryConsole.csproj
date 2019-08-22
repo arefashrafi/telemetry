@@ -298,14 +298,14 @@
     <Compile Include="Migrations\20190807160214_bytetoint.designer.cs">
       <DependentUpon>20190807160214_bytetoint.cs</DependentUpon>
     </Compile>
-      <Compile Include="Migrations\20190821153712_SmallChanges.cs"/>
-      <Compile Include="Migrations\20190821153712_SmallChanges.designer.cs">
-          <DependentUpon>20190821153712_SmallChanges.cs</DependentUpon>
-      </Compile>
+    <Compile Include="Migrations\20190821153712_SmallChanges.cs" />
+    <Compile Include="Migrations\20190821153712_SmallChanges.designer.cs">
+      <DependentUpon>20190821153712_SmallChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\TelemetryContextModelSnapshot.cs" />
-    <Compile Include="Misc\Constants.cs" />
-    <Compile Include="Misc\CRC32.cs" />
-    <Compile Include="Misc\Extensions.cs" />
+    <Compile Include="Src\Misc\Constants.cs" />
+    <Compile Include="Src\Misc\CRC32.cs" />
+    <Compile Include="Src\Misc\Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Src\Database\DatabaseHandler.cs" />
@@ -342,8 +342,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DatabaseScript.sql" />
-    <Content Include="Routenotes.sql" />
+    <Content Include="SQL\DatabaseScript.sql" />
+    <Content Include="SQL\Routenotes.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

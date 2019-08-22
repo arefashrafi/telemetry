@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Timers;
 using Telemetry.App;
-using TelemetryConsole.Misc;
+using TelemetryConsole.Src.Misc;
 using TelemetryConsole.Wifi;
 using TelemetryDependencies.Models;
 using Timer = System.Timers.Timer;

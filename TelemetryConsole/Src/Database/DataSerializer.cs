@@ -10,10 +10,10 @@
 
 using System;
 using System.Linq;
-using TelemetryConsole.Misc;
+using TelemetryConsole.Src.Misc;
 using TelemetryDependencies.Structs;
 using static System.Runtime.InteropServices.Marshal;
-using static TelemetryConsole.Misc.Constants;
+using static TelemetryConsole.Src.Misc.Constants;
 
 namespace TelemetryConsole.Database
 {

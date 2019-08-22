@@ -2,7 +2,7 @@
 using System.Threading;
 using TelemetryConsole.Database;
 using TelemetryConsole.GPS;
-using TelemetryConsole.Misc;
+using TelemetryConsole.Src.Misc;
 using TelemetryConsole.Wifi;
 
 namespace TelemetryConsole
@@ -13,7 +13,7 @@ namespace TelemetryConsole
         {
             //Init all the keys from App.config
             Constants.Init();
-
+            Console.ForegroundColor = ConsoleColor.Green;
             Thread databaseHandlerThread = new Thread(TelemetryControl.DatabaseHandler);
             Thread databaseSerializerThread = new Thread(TelemetryControl.DataSerializer);
             Console.WriteLine(DateTime.Now);
@@ -22,7 +22,6 @@ namespace TelemetryConsole
             DataReader.StartListener();
             GpsSerialReceiver.StartListener();
             AsynchronousSocketListener.StartListener();
-            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Application is running and Waiting for data");
             do
             {

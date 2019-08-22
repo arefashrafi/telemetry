@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using static TelemetryConsole.Misc.Constants;
+using static TelemetryConsole.Src.Misc.Constants;
 
 namespace TelemetryConsole.Wifi
 {

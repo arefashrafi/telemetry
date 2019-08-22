@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Telemetry.App;
 using TelemetryDependencies.Models;
-using static TelemetryConsole.Misc.Constants;
+using static TelemetryConsole.Src.Misc.Constants;
 
 namespace TelemetryConsole.Database
 {
